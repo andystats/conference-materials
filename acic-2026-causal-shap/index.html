@@ -1,0 +1,1271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Expert-Augmented Causal SHAP | ACIC 2026</title>
+  <meta name="description" content="Companion dashboard for the ACIC 2026 poster: Expert-Augmented Causal SHAP. SHAP has short memory. Causal SHAP remembers the DAG." />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+3:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    .katex { font-size: 1.05em; }
+    html { scroll-behavior: smooth; }
+    @keyframes flow {
+      0% { stroke-dashoffset: 40; }
+      100% { stroke-dashoffset: 0; }
+    }
+    @keyframes pulse-ring {
+      0% { r: 8; opacity: 0.6; }
+      100% { r: 22; opacity: 0; }
+    }
+    .flow-arrow { stroke-dasharray: 6 4; animation: flow 1.2s linear infinite; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script crossorigin="anonymous" src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin="anonymous" src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script crossorigin="anonymous" src="https://unpkg.com/prop-types@15/prop-types.min.js"></script>
+  <script crossorigin="anonymous" src="https://unpkg.com/recharts@2.15.0/umd/Recharts.js"></script>
+  <script crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script crossorigin="anonymous" src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <script type="text/babel">
+const { useState, useMemo, useEffect, useRef } = React;
+const {
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, LineChart, Line,
+  ResponsiveContainer, ReferenceLine, ReferenceDot, Cell, Label, Legend, ComposedChart
+} = Recharts;
+
+/* ─── Color Palette ─────────────────────────────────────────────────────── */
+const COLORS = {
+  blue:    "#4682B4",   // true causes (Treatment)
+  red:     "#C0392B",   // bias / mediator inflation
+  teal:    "#008080",   // causal SHAP
+  orange:  "#E67E22",   // accent / expert
+  purple:  "#783C96",   // DAG / discovery
+  gold:    "#C9A86A",   // highlight
+  gray:    "#6B7280",   // standard SHAP
+  bg:      "#fffdf9",
+  text:    "#1a202c",
+  subtle:  "#4a5568",
+  muted:   "#a0aec0",
+  border:  "#e2e8f0",
+  cardBg:  "rgba(255,255,255,0.85)",
+};
+
+/* ─── Shared components ─────────────────────────────────────────────────── */
+
+const Tex = ({ math, display }) => {
+  const ref = useRef(null);
+  useEffect(() => {
+    if (ref.current && typeof katex !== 'undefined') {
+      katex.render(String(math), ref.current, { throwOnError: false, displayMode: !!display });
+    }
+  }, [math, display]);
+  return display
+    ? <div ref={ref} style={{ margin: '4px 0', overflowX: 'auto', textAlign: 'center' }} />
+    : <span ref={ref} />;
+};
+
+const MathBlock = ({ children }) => (
+  <div style={{ padding: "14px 20px", background: "rgba(45,55,72,0.04)", borderLeft: "3px solid rgba(45,55,72,0.15)", borderRadius: "0 6px 6px 0", margin: "14px 0", overflowX: "auto" }}>
+    {children}
+  </div>
+);
+
+const SectionNav = ({ sections, active, onSelect }) => (
+  <nav style={{ display: "flex", gap: "2px", padding: "6px", background: "rgba(45,55,72,0.04)", borderRadius: "10px", marginBottom: "32px", flexWrap: "wrap" }}>
+    {sections.map((s, i) => (
+      <button key={i} onClick={() => onSelect(i)} style={{
+        flex: "1 1 auto", padding: "10px 14px", border: "none", borderRadius: "8px",
+        background: active === i ? "#2d3748" : "transparent",
+        color: active === i ? "#f7fafc" : "#4a5568",
+        fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.82rem",
+        fontWeight: active === i ? 600 : 500, cursor: "pointer",
+        transition: "all 0.2s", letterSpacing: "0.02em", whiteSpace: "nowrap"
+      }}>
+        <span style={{ opacity: 0.5, marginRight: 6 }}>{i + 1}</span>{s}
+      </button>
+    ))}
+  </nav>
+);
+
+const InsightBox = ({ children, label = "Note", color = COLORS.teal }) => (
+  <div style={{
+    marginTop: 24, padding: "16px 20px",
+    background: `linear-gradient(135deg, ${hexAlpha(color, 0.08)}, ${hexAlpha(color, 0.02)})`,
+    borderLeft: `4px solid ${color}`, borderRadius: "0 10px 10px 0",
+    border: `1px solid ${COLORS.border}`, borderLeftWidth: 4, borderLeftColor: color
+  }}>
+    <h4 style={{ margin: "0 0 6px", color, fontSize: "0.88rem", fontFamily: "'Source Sans 3', sans-serif", fontWeight: 700, letterSpacing: "0.03em" }}>{label.toUpperCase()}</h4>
+    <div style={{ margin: 0, color: COLORS.subtle, lineHeight: 1.7, fontSize: "0.92rem", fontFamily: "'Source Sans 3', sans-serif" }}>{children}</div>
+  </div>
+);
+
+function hexAlpha(hex, a) {
+  const h = hex.replace("#", "");
+  const r = parseInt(h.slice(0,2), 16), g = parseInt(h.slice(2,4), 16), b = parseInt(h.slice(4,6), 16);
+  return `rgba(${r},${g},${b},${a})`;
+}
+
+const GlassCard = ({ children, style }) => (
+  <div style={{
+    background: COLORS.cardBg, borderRadius: 12, padding: "20px 24px",
+    border: `1px solid ${COLORS.border}`,
+    backdropFilter: "blur(10px)", boxShadow: "0 2px 12px rgba(0,0,0,0.04)",
+    ...style
+  }}>{children}</div>
+);
+
+const SliderControl = ({ label, value, min, max, step, onChange, color, unit, width, format }) => (
+  <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10, flexWrap: "wrap" }}>
+    <label style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.88rem", fontWeight: 600, color: COLORS.text, minWidth: width || 160 }}>{label}</label>
+    <input type="range" min={min} max={max} step={step || 0.1} value={value} onChange={e => onChange(parseFloat(e.target.value))} style={{ flex: 1, minWidth: 100, accentColor: color || COLORS.teal }} />
+    <span style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.9rem", fontWeight: 700, color: color || COLORS.teal, minWidth: 60, textAlign: "right" }}>
+      {format ? format(value) : `${(step >= 1 ? value.toFixed(0) : value.toFixed(2))}${unit || ""}`}
+    </span>
+  </div>
+);
+
+const PrevNextNav = ({ active, total, onSelect }) => (
+  <div style={{ display: "flex", justifyContent: "space-between", marginTop: 32, paddingTop: 20, borderTop: `1px solid ${COLORS.border}` }}>
+    <button disabled={active === 0} onClick={() => onSelect(active - 1)} style={{
+      padding: "10px 20px", borderRadius: 8, border: `1px solid ${COLORS.border}`,
+      background: active === 0 ? "#f7f7f7" : "white", color: active === 0 ? COLORS.muted : COLORS.text,
+      fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.88rem", fontWeight: 600,
+      cursor: active === 0 ? "default" : "pointer", transition: "all 0.2s"
+    }}>&#8592; Previous</button>
+    {active < total - 1 && (
+      <button onClick={() => onSelect(active + 1)} style={{
+        padding: "10px 20px", borderRadius: 8, border: `1px solid ${COLORS.border}`,
+        background: "white", color: COLORS.text,
+        fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.88rem", fontWeight: 600,
+        cursor: "pointer", transition: "all 0.2s"
+      }}>Next &#8594;</button>
+    )}
+  </div>
+);
+
+const SectionTitle = ({ children, kicker }) => (
+  <>
+    {kicker && <p style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.72rem", letterSpacing: "0.14em", textTransform: "uppercase", color: COLORS.muted, marginBottom: 6 }}>{kicker}</p>}
+    <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "1.65rem", fontWeight: 700, color: COLORS.text, marginBottom: 16, lineHeight: 1.2 }}>{children}</h2>
+  </>
+);
+
+const Para = ({ children }) => (
+  <p style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.95rem", lineHeight: 1.75, color: COLORS.subtle, marginBottom: 14 }}>{children}</p>
+);
+
+const MetricCard = ({ label, value, sub, color }) => (
+  <div style={{
+    flex: 1, background: "white", border: `1px solid ${COLORS.border}`,
+    borderTop: `3px solid ${color}`, borderRadius: 10, padding: "14px 16px",
+    textAlign: "center", minWidth: 120
+  }}>
+    <div style={{ fontFamily: "'Playfair Display', serif", fontSize: "1.85rem", fontWeight: 700, color, lineHeight: 1.1 }}>{value}</div>
+    <div style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.82rem", fontWeight: 600, color: COLORS.text, marginTop: 6 }}>{label}</div>
+    {sub && <div style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.74rem", color: COLORS.muted, marginTop: 2 }}>{sub}</div>}
+  </div>
+);
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   DATA: simcausal validation results (from Guide §6.2 / §6.3)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+const FEATURES = [
+  { name: "Inflammation", role: "mediator",    stdShap: 1.00, causalShap: 1.00, stdRank:  1, causalRank: 1, trueEffect: -2.25 },
+  { name: "Oxygenation",  role: "mediator",    stdShap: 0.78, causalShap: 0.48, stdRank:  2, causalRank: 3, trueEffect:  0.50 },
+  { name: "Comorbidity",  role: "confounder",  stdShap: 0.72, causalShap: 0.40, stdRank:  3, causalRank: 5, trueEffect: -4.38 },
+  { name: "HR",           role: "downstream",  stdShap: 0.55, causalShap: 0.12, stdRank:  4, causalRank: 9, trueEffect: -0.03 },
+  { name: "Treatment",    role: "true cause",  stdShap: 0.49, causalShap: 0.55, stdRank:  5, causalRank: 4, trueEffect: 11.00 },
+  { name: "Age",          role: "confounder",  stdShap: 0.41, causalShap: 0.10, stdRank:  6, causalRank: 10, trueEffect: -0.10 },
+  { name: "Creatinine",   role: "descendant",  stdShap: 0.32, causalShap: 0.32, stdRank:  7, causalRank: 6, trueEffect:  0.00 },
+  { name: "SBP",          role: "confounder",  stdShap: 0.27, causalShap: 0.30, stdRank:  8, causalRank: 7, trueEffect:  0.00 },
+  { name: "BMI",          role: "confounder",  stdShap: 0.23, causalShap: 0.27, stdRank:  9, causalRank: 8, trueEffect: -0.23 },
+  { name: "Glucose",      role: "confounder",  stdShap: 0.12, causalShap: 0.72, stdRank: 10, causalRank: 2, trueEffect:  0.00 },
+  { name: "Sex",          role: "root",        stdShap: 0.05, causalShap: 0.05, stdRank: 11, causalRank: 11, trueEffect: 0.00 },
+];
+
+const ROLE_COLORS = {
+  "mediator":   COLORS.red,
+  "true cause": COLORS.blue,
+  "confounder": COLORS.gray,
+  "downstream": "#D4A574",
+  "descendant": "#b0b0b0",
+  "root":       "#cfd4d9",
+};
+
+const SECTION_NAMES = [
+  "The Artifact",
+  "The Correction",
+  "simcausal Evidence",
+  "Rank Movement",
+  "When It Matters",
+  "The Workflow",
+  "MIMIC-IV + Try It",
+];
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   TAB 0 — The Artifact
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+const Tab_Artifact = () => {
+  const [animating, setAnimating] = useState(true);
+  const [showTwo, setShowTwo] = useState(false);
+
+  return (
+    <div>
+      <SectionTitle kicker="The Problem">
+        SHAP has short memory. That&rsquo;s a problem when features cause each other.
+      </SectionTitle>
+      <Para>
+        SHAP values attribute a model&rsquo;s prediction to its input features by averaging each feature&rsquo;s marginal
+        contribution across <em>every</em> possible ordering. It treats features as exchangeable. But in a causal system,
+        features are <strong>not</strong> exchangeable &mdash; causes come before effects.
+      </Para>
+      <Para>
+        When SHAP permutes features freely, variables that sit close to the outcome in the causal graph
+        (mediators, downstream consequences) absorb credit that properly belongs to the upstream causes. This isn&rsquo;t
+        a bug in SHAP. It&rsquo;s a <strong>topological artifact</strong>.
+      </Para>
+
+      <GlassCard style={{ marginTop: 20, marginBottom: 20 }}>
+        <h4 style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.78rem", letterSpacing: "0.1em", textTransform: "uppercase", color: COLORS.muted, marginBottom: 10 }}>Schematic (from Andy&rsquo;s notebook)</h4>
+        <svg viewBox="0 0 700 240" style={{ width: "100%", maxWidth: 700, display: "block", margin: "0 auto" }}>
+          <defs>
+            <marker id="arrowDark" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+              <polygon points="0 0, 8 4, 0 8" fill="#333" />
+            </marker>
+            <marker id="arrowRed" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+              <polygon points="0 0, 8 4, 0 8" fill={COLORS.red} />
+            </marker>
+          </defs>
+
+          {/* Row 1: A -> B -> Y */}
+          <text x="20" y="40" fontFamily="Playfair Display" fontSize="14" fontWeight="700" fill={COLORS.text}>1.  A &rarr; B &rarr; Y</text>
+
+          {/* A */}
+          <circle cx="130" cy="70" r="22" fill={hexAlpha(COLORS.blue, 0.15)} stroke={COLORS.blue} strokeWidth="2" />
+          <text x="130" y="75" textAnchor="middle" fontFamily="Source Sans 3" fontSize="14" fontWeight="700" fill={COLORS.blue}>A</text>
+          {/* B (mediator) */}
+          <circle cx="230" cy="70" r="22" fill={hexAlpha(COLORS.red, 0.15)} stroke={COLORS.red} strokeWidth="2" />
+          <text x="230" y="75" textAnchor="middle" fontFamily="Source Sans 3" fontSize="14" fontWeight="700" fill={COLORS.red}>B</text>
+          {/* Y */}
+          <circle cx="330" cy="70" r="22" fill="#f2f2f2" stroke="#333" strokeWidth="2" />
+          <text x="330" y="75" textAnchor="middle" fontFamily="Source Sans 3" fontSize="14" fontWeight="700" fill={COLORS.text}>Y</text>
+
+          <line x1="152" y1="70" x2="208" y2="70" stroke="#333" strokeWidth="2" markerEnd="url(#arrowDark)" />
+          <line x1="252" y1="70" x2="308" y2="70" stroke="#333" strokeWidth="2" markerEnd="url(#arrowDark)" />
+
+          {/* SHAP thinks */}
+          <text x="400" y="62" fontFamily="Source Sans 3" fontSize="13" fill={COLORS.subtle}>SHAP thinks:</text>
+          <text x="400" y="82" fontFamily="Source Sans 3" fontSize="15" fontWeight="700" fill={COLORS.red}>B &rarr; Y</text>
+          <text x="555" y="82" fontFamily="Source Sans 3" fontSize="12" fontStyle="italic" fill={COLORS.muted}>(misses A)</text>
+
+          {/* Divider */}
+          <line x1="20" y1="115" x2="680" y2="115" stroke={COLORS.border} strokeWidth="1" strokeDasharray="3 3" />
+
+          {/* Row 2: more complex */}
+          <text x="20" y="145" fontFamily="Playfair Display" fontSize="14" fontWeight="700" fill={COLORS.text}>2.  A &rarr; B &rarr; Y,  with confounder C and collider D</text>
+
+          {/* A */}
+          <circle cx="130" cy="185" r="20" fill={hexAlpha(COLORS.blue, 0.15)} stroke={COLORS.blue} strokeWidth="2" />
+          <text x="130" y="190" textAnchor="middle" fontFamily="Source Sans 3" fontSize="13" fontWeight="700" fill={COLORS.blue}>A</text>
+          {/* B */}
+          <circle cx="220" cy="185" r="20" fill={hexAlpha(COLORS.red, 0.15)} stroke={COLORS.red} strokeWidth="2" />
+          <text x="220" y="190" textAnchor="middle" fontFamily="Source Sans 3" fontSize="13" fontWeight="700" fill={COLORS.red}>B</text>
+          {/* Y */}
+          <circle cx="310" cy="185" r="20" fill="#f2f2f2" stroke="#333" strokeWidth="2" />
+          <text x="310" y="190" textAnchor="middle" fontFamily="Source Sans 3" fontSize="13" fontWeight="700" fill={COLORS.text}>Y</text>
+          {/* C (confounder) */}
+          <circle cx="175" cy="145" r="18" fill={hexAlpha(COLORS.gray, 0.2)} stroke={COLORS.gray} strokeWidth="2" />
+          <text x="175" y="150" textAnchor="middle" fontFamily="Source Sans 3" fontSize="12" fontWeight="700" fill={COLORS.gray}>C</text>
+          {/* D (collider) */}
+          <circle cx="265" cy="225" r="18" fill="#fff1e0" stroke={COLORS.orange} strokeWidth="2" />
+          <text x="265" y="230" textAnchor="middle" fontFamily="Source Sans 3" fontSize="12" fontWeight="700" fill={COLORS.orange}>D</text>
+
+          {/* Edges */}
+          <line x1="150" y1="185" x2="200" y2="185" stroke="#333" strokeWidth="2" markerEnd="url(#arrowDark)" />
+          <line x1="240" y1="185" x2="290" y2="185" stroke="#333" strokeWidth="2" markerEnd="url(#arrowDark)" />
+          <line x1="168" y1="161" x2="145" y2="175" stroke="#333" strokeWidth="2" markerEnd="url(#arrowDark)" />
+          <line x1="182" y1="161" x2="215" y2="175" stroke="#333" strokeWidth="2" markerEnd="url(#arrowDark)" />
+          <line x1="235" y1="200" x2="260" y2="213" stroke="#333" strokeWidth="2" markerEnd="url(#arrowDark)" />
+          <line x1="303" y1="202" x2="275" y2="213" stroke="#333" strokeWidth="2" markerEnd="url(#arrowDark)" />
+
+          <text x="380" y="175" fontFamily="Source Sans 3" fontSize="13" fill={COLORS.subtle}>SHAP thinks:</text>
+          <text x="380" y="195" fontFamily="Source Sans 3" fontSize="15" fontWeight="700" fill={COLORS.red}>B &rarr; Y,  D &rarr; Y</text>
+          <text x="380" y="214" fontFamily="Source Sans 3" fontSize="12" fontStyle="italic" fill={COLORS.muted}>collider flips the sign; confounder&rsquo;s credit bleeds into B</text>
+        </svg>
+
+        <p style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.82rem", color: COLORS.muted, textAlign: "center", marginTop: 10 }}>
+          The closer a variable sits to Y, the more SHAP credit it absorbs &mdash; even when it isn&rsquo;t the cause.
+        </p>
+      </GlassCard>
+
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginTop: 20 }}>
+        <div style={{ padding: "16px 20px", background: hexAlpha(COLORS.red, 0.06), borderLeft: `4px solid ${COLORS.red}`, borderRadius: "0 10px 10px 0" }}>
+          <h4 style={{ color: COLORS.red, fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.88rem", fontWeight: 700, letterSpacing: "0.02em", marginBottom: 8 }}>WHAT GOES WRONG</h4>
+          <ul style={{ listStyle: "none", padding: 0, fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.9rem", color: COLORS.subtle, lineHeight: 1.7 }}>
+            <li>&bull; Mediators absorb credit from their upstream causes</li>
+            <li>&bull; Downstream consequences look like risk factors</li>
+            <li>&bull; Conditioning on colliders opens spurious paths</li>
+          </ul>
+        </div>
+        <div style={{ padding: "16px 20px", background: hexAlpha(COLORS.teal, 0.06), borderLeft: `4px solid ${COLORS.teal}`, borderRadius: "0 10px 10px 0" }}>
+          <h4 style={{ color: COLORS.teal, fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.88rem", fontWeight: 700, letterSpacing: "0.02em", marginBottom: 8 }}>THE FIX</h4>
+          <ul style={{ listStyle: "none", padding: 0, fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.9rem", color: COLORS.subtle, lineHeight: 1.7 }}>
+            <li>&bull; Restrict SHAP to topological orderings of a DAG</li>
+            <li>&bull; Replace observational with interventional expectations</li>
+            <li>&bull; Resolve ambiguous edges with domain expertise</li>
+          </ul>
+        </div>
+      </div>
+
+      <InsightBox label="Takeaway" color={COLORS.teal}>
+        Standard SHAP ranks features by <em>proximity to the outcome</em>. Causal SHAP re-ranks them by
+        <em> causal contribution</em>. When features have structure &mdash; as they always do in clinical data &mdash;
+        these two rankings are not the same thing.
+      </InsightBox>
+    </div>
+  );
+};
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   TAB 1 — The Correction (interventional Shapley)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+const Tab_Correction = () => {
+  const [doIntervene, setDoIntervene] = useState(false);
+
+  return (
+    <div>
+      <SectionTitle kicker="The Correction">
+        From observing to intervening.
+      </SectionTitle>
+      <Para>
+        Standard SHAP asks: <em>&ldquo;if I <strong>observe</strong> feature x at value v, what prediction do I expect?&rdquo;</em>
+        Causal SHAP asks: <em>&ldquo;if I <strong>intervene</strong> to set x to v and let the DAG carry the effect
+        downstream, what prediction do I expect?&rdquo;</em>
+      </Para>
+
+      <MathBlock>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
+          <div>
+            <p style={{ fontSize: "0.82rem", fontWeight: 700, color: COLORS.gray, marginBottom: 8, fontFamily: "'Source Sans 3', sans-serif", letterSpacing: "0.04em", textTransform: "uppercase" }}>Standard SHAP</p>
+            <Tex display math={"\\mathbb{E}\\bigl[f(X) \\mid X_S = x_S\\bigr]"} />
+            <p style={{ fontSize: "0.82rem", color: COLORS.muted, marginTop: 6, textAlign: "center" }}>condition on observation; ignore how X got there</p>
+          </div>
+          <div>
+            <p style={{ fontSize: "0.82rem", fontWeight: 700, color: COLORS.teal, marginBottom: 8, fontFamily: "'Source Sans 3', sans-serif", letterSpacing: "0.04em", textTransform: "uppercase" }}>Causal SHAP</p>
+            <Tex display math={"\\mathbb{E}\\bigl[f(X) \\mid do(X_S = x_S)\\bigr]"} />
+            <p style={{ fontSize: "0.82rem", color: COLORS.muted, marginTop: 6, textAlign: "center" }}>intervene; propagate through the DAG</p>
+          </div>
+        </div>
+      </MathBlock>
+
+      <GlassCard style={{ marginTop: 20 }}>
+        <h4 style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.82rem", letterSpacing: "0.08em", textTransform: "uppercase", color: COLORS.muted, marginBottom: 10 }}>Toggle: observational vs interventional</h4>
+        <div style={{ display: "flex", gap: 10, marginBottom: 14 }}>
+          <button onClick={() => setDoIntervene(false)} style={{
+            flex: 1, padding: "10px 14px", borderRadius: 8,
+            background: !doIntervene ? COLORS.gray : "white",
+            color: !doIntervene ? "white" : COLORS.text,
+            border: `1px solid ${COLORS.border}`, cursor: "pointer",
+            fontFamily: "'Source Sans 3', sans-serif", fontWeight: 600, fontSize: "0.9rem"
+          }}>See A (condition)</button>
+          <button onClick={() => setDoIntervene(true)} style={{
+            flex: 1, padding: "10px 14px", borderRadius: 8,
+            background: doIntervene ? COLORS.teal : "white",
+            color: doIntervene ? "white" : COLORS.text,
+            border: `1px solid ${COLORS.border}`, cursor: "pointer",
+            fontFamily: "'Source Sans 3', sans-serif", fontWeight: 600, fontSize: "0.9rem"
+          }}>Do A (intervene)</button>
+        </div>
+
+        <svg viewBox="0 0 700 220" style={{ width: "100%", maxWidth: 700, display: "block", margin: "0 auto" }}>
+          <defs>
+            <marker id="arrowTeal" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+              <polygon points="0 0, 8 4, 0 8" fill={COLORS.teal} />
+            </marker>
+            <marker id="arrowGray" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+              <polygon points="0 0, 8 4, 0 8" fill="#888" />
+            </marker>
+          </defs>
+
+          {/* C (confounder at top) */}
+          <circle cx="350" cy="50" r="24" fill={doIntervene ? "#f0f0f0" : hexAlpha(COLORS.gray, 0.2)} stroke={COLORS.gray} strokeWidth="2" strokeDasharray={doIntervene ? "4 3" : "0"} />
+          <text x="350" y="56" textAnchor="middle" fontFamily="Source Sans 3" fontSize="14" fontWeight="700" fill={COLORS.gray}>C</text>
+          <text x="350" y="20" textAnchor="middle" fontFamily="Source Sans 3" fontSize="11" fill={COLORS.muted}>confounder</text>
+
+          {/* A */}
+          <circle cx="200" cy="130" r="28" fill={hexAlpha(COLORS.blue, 0.2)} stroke={COLORS.blue} strokeWidth="3" />
+          <text x="200" y="136" textAnchor="middle" fontFamily="Source Sans 3" fontSize="15" fontWeight="700" fill={COLORS.blue}>A</text>
+          {doIntervene && (
+            <>
+              <rect x="175" y="162" width="50" height="20" rx="4" fill={COLORS.teal} />
+              <text x="200" y="176" textAnchor="middle" fontFamily="Source Sans 3" fontSize="11" fontWeight="700" fill="white">do(A)</text>
+            </>
+          )}
+
+          {/* B (mediator) */}
+          <circle cx="380" cy="130" r="24" fill={hexAlpha(COLORS.red, 0.15)} stroke={COLORS.red} strokeWidth="2" />
+          <text x="380" y="136" textAnchor="middle" fontFamily="Source Sans 3" fontSize="14" fontWeight="700" fill={COLORS.red}>B</text>
+
+          {/* Y */}
+          <circle cx="560" cy="130" r="26" fill="#f2f2f2" stroke="#333" strokeWidth="2" />
+          <text x="560" y="136" textAnchor="middle" fontFamily="Source Sans 3" fontSize="14" fontWeight="700" fill={COLORS.text}>Y</text>
+
+          {/* Backdoor: C -> A (cut if intervene) */}
+          {!doIntervene ? (
+            <>
+              <line x1="332" y1="62" x2="220" y2="115" stroke="#888" strokeWidth="2" markerEnd="url(#arrowGray)" />
+              <text x="250" y="80" fontFamily="Source Sans 3" fontSize="11" fill={COLORS.muted} fontStyle="italic">backdoor open</text>
+            </>
+          ) : (
+            <>
+              <line x1="332" y1="62" x2="220" y2="115" stroke="#bbb" strokeWidth="2" strokeDasharray="3 4" />
+              <text x="230" y="78" fontFamily="Source Sans 3" fontSize="11" fill={COLORS.teal} fontWeight="700">backdoor severed</text>
+            </>
+          )}
+          {/* C -> Y */}
+          <line x1="368" y1="62" x2="540" y2="115" stroke="#888" strokeWidth="2" markerEnd="url(#arrowGray)" />
+          {/* A -> B */}
+          <line x1="228" y1="130" x2="352" y2="130" stroke={COLORS.blue} strokeWidth="2.5" markerEnd="url(#arrowTeal)" />
+          {/* B -> Y */}
+          <line x1="404" y1="130" x2="534" y2="130" stroke={COLORS.blue} strokeWidth="2.5" markerEnd="url(#arrowTeal)" />
+          {/* A -> Y direct */}
+          <path d="M 225 155 Q 380 200 540 150" fill="none" stroke={COLORS.blue} strokeWidth="2.5" markerEnd="url(#arrowTeal)" />
+        </svg>
+
+        <p style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.88rem", color: COLORS.subtle, textAlign: "center", marginTop: 10, lineHeight: 1.6 }}>
+          {doIntervene
+            ? <><strong style={{ color: COLORS.teal }}>do(A)</strong>: the incoming arrow from the confounder is cut. Only causal paths from A carry influence to Y.</>
+            : <><strong style={{ color: COLORS.gray }}>Conditioning on A</strong>: the C&rarr;A backdoor stays open. Confounding flows through the observational expectation.</>
+          }
+        </p>
+      </GlassCard>
+
+      <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: "1.2rem", fontWeight: 700, color: COLORS.text, marginTop: 28, marginBottom: 12 }}>Three modifications, one corrected attribution.</h3>
+
+      <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: 12 }}>
+        {[
+          { n: 1, t: "Restricted permutations", b: "Sample only topological orderings of the DAG. Causes come before effects; causally impossible orderings are excluded." },
+          { n: 2, t: "Interventional expectations", b: "When features are absent from a coalition, propagate them from their parents in the DAG, not from the overall marginal." },
+          { n: 3, t: "Conditional structural models", b: "For each non-root node, fit P(X_j | parents(X_j)) as a small gradient-boosting model. These stand in for structural equations." },
+        ].map(s => (
+          <div key={s.n} style={{ display: "flex", gap: 14, alignItems: "flex-start", padding: "12px 16px", background: "white", border: `1px solid ${COLORS.border}`, borderRadius: 8 }}>
+            <div style={{ width: 34, height: 34, borderRadius: "50%", background: COLORS.teal, color: "white", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'Playfair Display', serif", fontWeight: 700, fontSize: "1.05rem", flexShrink: 0 }}>{s.n}</div>
+            <div>
+              <div style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.98rem", fontWeight: 700, color: COLORS.text, marginBottom: 4 }}>{s.t}</div>
+              <div style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.9rem", color: COLORS.subtle, lineHeight: 1.6 }}>{s.b}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <InsightBox label="Why it works" color={COLORS.teal}>
+        Credit can no longer flow backward through time or sideways across confounders. Each feature&rsquo;s
+        Shapley contribution is computed along the same pathways the data-generating process used.
+      </InsightBox>
+    </div>
+  );
+};
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   TAB 2 — simcausal evidence (side-by-side bars)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+const Tab_SimEvidence = () => {
+  const [showTruth, setShowTruth] = useState(false);
+  const [highlight, setHighlight] = useState("all"); // all | mediator | true cause
+
+  const chartData = useMemo(() => {
+    return FEATURES.map(f => ({
+      name: f.name,
+      role: f.role,
+      Standard: f.stdShap,
+      Causal: f.causalShap,
+      TrueEffect: Math.abs(f.trueEffect) / 11,  // normalized scale
+      trueRaw: f.trueEffect,
+    }));
+  }, []);
+
+  const roleMatch = (role) => highlight === "all" || role === highlight;
+
+  return (
+    <div>
+      <SectionTitle kicker="Evidence — simcausal (n=500, 12 vars)">
+        Standard vs Causal SHAP, side by side.
+      </SectionTitle>
+      <Para>
+        Known ground-truth DGP: Treatment has total effect <strong>+11.0</strong> on Outcome &mdash; <strong>+5 direct</strong>,
+        the rest flowing through Inflammation and Oxygenation mediators. Causal SHAP should reach Treatment;
+        Standard SHAP should over-credit the mediators.
+      </Para>
+
+      <GlassCard style={{ marginTop: 14 }}>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginBottom: 14, alignItems: "center" }}>
+          <span style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.85rem", fontWeight: 700, color: COLORS.muted, letterSpacing: "0.05em", textTransform: "uppercase" }}>Highlight:</span>
+          {["all", "mediator", "true cause", "confounder"].map(h => (
+            <button key={h} onClick={() => setHighlight(h)} style={{
+              padding: "6px 12px", borderRadius: 14,
+              border: `1px solid ${highlight === h ? ROLE_COLORS[h] || COLORS.text : COLORS.border}`,
+              background: highlight === h ? (ROLE_COLORS[h] || COLORS.text) : "white",
+              color: highlight === h ? "white" : COLORS.subtle,
+              fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.8rem", fontWeight: 600, cursor: "pointer"
+            }}>{h === "all" ? "show all" : h}</button>
+          ))}
+          <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 8 }}>
+            <label style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.85rem", color: COLORS.subtle }}>
+              <input type="checkbox" checked={showTruth} onChange={e => setShowTruth(e.target.checked)} style={{ marginRight: 6 }} />
+              overlay true effect
+            </label>
+          </div>
+        </div>
+
+        <ResponsiveContainer width="100%" height={380}>
+          <BarChart data={chartData} layout="vertical" margin={{ top: 10, right: 20, left: 10, bottom: 10 }}>
+            <CartesianGrid strokeDasharray="2 3" stroke={COLORS.border} horizontal={false} />
+            <XAxis type="number" domain={[0, 1.05]} tick={{ fontSize: 11, fill: COLORS.muted, fontFamily: "Source Sans 3" }} />
+            <YAxis dataKey="name" type="category" width={92} tick={{ fontSize: 11.5, fill: COLORS.text, fontFamily: "Source Sans 3", fontWeight: 600 }} />
+            <Tooltip
+              contentStyle={{ background: "white", border: `1px solid ${COLORS.border}`, borderRadius: 8, fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.82rem" }}
+              formatter={(v, n) => [v.toFixed(2), n]}
+              labelFormatter={(label) => {
+                const f = FEATURES.find(x => x.name === label);
+                return `${label} (${f.role})`;
+              }}
+            />
+            <Legend wrapperStyle={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.82rem" }} />
+            <Bar dataKey="Standard" fill={COLORS.gray} name="Standard SHAP">
+              {chartData.map((e, i) => (
+                <Cell key={i} fill={roleMatch(e.role) ? COLORS.gray : "#e8e8e8"} />
+              ))}
+            </Bar>
+            <Bar dataKey="Causal" fill={COLORS.teal} name="Causal SHAP">
+              {chartData.map((e, i) => (
+                <Cell key={i} fill={roleMatch(e.role) ? COLORS.teal : hexAlpha(COLORS.teal, 0.25)} />
+              ))}
+            </Bar>
+            {showTruth && (
+              <Bar dataKey="TrueEffect" fill={COLORS.gold} name="|True total effect| (normalized)" opacity={0.9}>
+                {chartData.map((e, i) => (
+                  <Cell key={i} fill={roleMatch(e.role) ? COLORS.gold : "#ede3c9"} />
+                ))}
+              </Bar>
+            )}
+          </BarChart>
+        </ResponsiveContainer>
+
+        <p style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.78rem", color: COLORS.muted, textAlign: "center", marginTop: 4 }}>
+          SHAP values rescaled to max = 1 for visual comparison. {showTruth && "True effect bars scaled by |effect|/11."}
+        </p>
+      </GlassCard>
+
+      <div style={{ display: "flex", gap: 12, marginTop: 18, flexWrap: "wrap" }}>
+        <MetricCard label="Kendall's &tau;" value="0.42" sub="Std vs Causal rankings" color={COLORS.teal} />
+        <MetricCard label="Mediator inflation" value="0.80&times;" sub="Causal / Standard at mediator" color={COLORS.red} />
+        <MetricCard label="&tau; vs truth (500 perms)" value="~0.5" sub="both methods converge" color={COLORS.gray} />
+      </div>
+
+      <InsightBox label="Observe" color={COLORS.teal}>
+        Standard SHAP ranks <strong>Inflammation</strong> (the mediator) first and <strong>Treatment</strong> (the dominant cause,
+        total effect +11.0) only <em>fifth</em>. Causal SHAP re-ranks them, demotes the mediator,
+        promotes Glucose (a confounder the DAG identifies), and pushes Treatment back toward the top.
+      </InsightBox>
+    </div>
+  );
+};
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   TAB 3 — Rank movement (slope graph)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+const Tab_RankMovement = () => {
+  const [hover, setHover] = useState(null);
+
+  const sorted = [...FEATURES].sort((a, b) => a.stdRank - b.stdRank);
+  const N = sorted.length;
+  const svgW = 700, svgH = 440;
+  const leftX = 180, rightX = 520;
+  const topY = 40, bottomY = svgH - 40;
+  const yFor = (rank) => topY + (bottomY - topY) * (rank - 1) / (N - 1);
+
+  const biggestMovers = [...FEATURES]
+    .map(f => ({ ...f, delta: f.stdRank - f.causalRank }))
+    .sort((a, b) => Math.abs(b.delta) - Math.abs(a.delta))
+    .slice(0, 5);
+
+  return (
+    <div>
+      <SectionTitle kicker="Rank movement">
+        Who moved, and by how much.
+      </SectionTitle>
+      <Para>
+        Hover any feature to trace its path from its Standard rank to its Causal rank. Steep lines are features
+        whose interpretation changes the most when the DAG is taken seriously.
+      </Para>
+
+      <GlassCard style={{ marginTop: 14 }}>
+        <svg viewBox={`0 0 ${svgW} ${svgH}`} style={{ width: "100%", maxWidth: svgW, display: "block", margin: "0 auto" }}>
+          {/* Column headers */}
+          <text x={leftX} y="22" textAnchor="middle" fontFamily="Source Sans 3" fontSize="13" fontWeight="700" fill={COLORS.gray}>Standard SHAP rank</text>
+          <text x={rightX} y="22" textAnchor="middle" fontFamily="Source Sans 3" fontSize="13" fontWeight="700" fill={COLORS.teal}>Causal SHAP rank</text>
+
+          {/* Grid dots */}
+          {sorted.map(f => (
+            <g key={"g" + f.name}>
+              <line x1={leftX - 45} y1={yFor(f.stdRank)} x2={leftX - 8} y2={yFor(f.stdRank)} stroke={COLORS.border} strokeWidth="0.5" />
+              <line x1={rightX + 8} y1={yFor(f.causalRank)} x2={rightX + 45} y2={yFor(f.causalRank)} stroke={COLORS.border} strokeWidth="0.5" />
+            </g>
+          ))}
+
+          {/* Lines */}
+          {sorted.map(f => {
+            const isHover = hover === f.name;
+            const dim = hover !== null && !isHover;
+            const delta = f.stdRank - f.causalRank;
+            const color = Math.abs(delta) >= 4
+              ? (delta > 0 ? COLORS.teal : COLORS.red)
+              : COLORS.muted;
+            return (
+              <line
+                key={"l" + f.name}
+                x1={leftX + 8} y1={yFor(f.stdRank)}
+                x2={rightX - 8} y2={yFor(f.causalRank)}
+                stroke={color}
+                strokeWidth={isHover ? 3.5 : 1.8}
+                opacity={dim ? 0.15 : 0.8}
+                onMouseEnter={() => setHover(f.name)}
+                onMouseLeave={() => setHover(null)}
+                style={{ cursor: "pointer" }}
+              />
+            );
+          })}
+
+          {/* Rank labels left */}
+          {sorted.map(f => {
+            const isHover = hover === f.name;
+            return (
+              <g key={"lblL" + f.name}
+                 onMouseEnter={() => setHover(f.name)}
+                 onMouseLeave={() => setHover(null)}
+                 style={{ cursor: "pointer" }}>
+                <circle cx={leftX} cy={yFor(f.stdRank)} r={isHover ? 8 : 6} fill={ROLE_COLORS[f.role] || COLORS.gray} />
+                <text x={leftX - 14} y={yFor(f.stdRank) + 4} textAnchor="end" fontFamily="Source Sans 3" fontSize="12" fontWeight={isHover ? 700 : 500} fill={COLORS.text}>
+                  {f.stdRank}.&nbsp;{f.name}
+                </text>
+              </g>
+            );
+          })}
+
+          {/* Rank labels right (sort by causalRank for this side) */}
+          {sorted.map(f => {
+            const isHover = hover === f.name;
+            return (
+              <g key={"lblR" + f.name}
+                 onMouseEnter={() => setHover(f.name)}
+                 onMouseLeave={() => setHover(null)}
+                 style={{ cursor: "pointer" }}>
+                <circle cx={rightX} cy={yFor(f.causalRank)} r={isHover ? 8 : 6} fill={ROLE_COLORS[f.role] || COLORS.gray} />
+                <text x={rightX + 14} y={yFor(f.causalRank) + 4} textAnchor="start" fontFamily="Source Sans 3" fontSize="12" fontWeight={isHover ? 700 : 500} fill={COLORS.text}>
+                  {f.causalRank}.&nbsp;{f.name}
+                </text>
+              </g>
+            );
+          })}
+        </svg>
+
+        {hover && (() => {
+          const f = FEATURES.find(x => x.name === hover);
+          const delta = f.stdRank - f.causalRank;
+          return (
+            <div style={{ marginTop: 6, padding: "10px 14px", background: "rgba(45,55,72,0.04)", borderRadius: 8, fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.88rem", color: COLORS.text }}>
+              <strong>{f.name}</strong> &mdash; role: {f.role} &mdash; true total effect: {f.trueEffect.toFixed(2)} &mdash;
+              rank change: {delta === 0 ? "unchanged" : (delta > 0 ? `up ${delta}` : `down ${-delta}`)}
+            </div>
+          );
+        })()}
+      </GlassCard>
+
+      <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: "1.15rem", fontWeight: 700, color: COLORS.text, marginTop: 28, marginBottom: 10 }}>Top 5 movers</h3>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))", gap: 10 }}>
+        {biggestMovers.map(f => (
+          <div key={f.name} style={{
+            padding: "12px 14px", background: "white", border: `1px solid ${COLORS.border}`,
+            borderLeft: `4px solid ${f.delta > 0 ? COLORS.teal : COLORS.red}`, borderRadius: 6
+          }}>
+            <div style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.95rem", fontWeight: 700, color: COLORS.text }}>{f.name}</div>
+            <div style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.8rem", color: COLORS.muted, marginBottom: 4 }}>{f.role}</div>
+            <div style={{ fontFamily: "'Playfair Display', serif", fontSize: "1.4rem", fontWeight: 700, color: f.delta > 0 ? COLORS.teal : COLORS.red }}>
+              {f.delta > 0 ? "+" : ""}{f.delta}
+            </div>
+            <div style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.78rem", color: COLORS.subtle }}>
+              rank {f.stdRank} &rarr; {f.causalRank}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <InsightBox label="Reading it" color={COLORS.teal}>
+        Teal lines promote a feature (Causal SHAP credits it more). Red lines demote it. The biggest upward mover
+        here is <strong>Glucose</strong> (+8): the DAG identifies it as a confounder that standard SHAP was missing.
+        The biggest demotions are <strong>HR</strong> (&minus;5) and <strong>Age</strong> (&minus;4) &mdash; variables that were
+        absorbing credit through downstream correlations.
+      </InsightBox>
+    </div>
+  );
+};
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   TAB 4 — When it matters (boundary conditions, interactive slider)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+const Tab_WhenItMatters = () => {
+  // Illustrative curves for tau-vs-truth as a function of "% of total Treatment
+  // effect that flows directly to Outcome" (0 = fully mediated, 100 = no mediation).
+  // Causal SHAP stays near its ceiling. Standard SHAP dips hard when effect is mediated.
+  const [directPct, setDirectPct] = useState(45); // our simcausal point
+
+  const curveData = useMemo(() => {
+    const pts = [];
+    for (let d = 0; d <= 100; d += 2) {
+      const f = d / 100;
+      // Causal SHAP: ~ constant, mild rise
+      const causal = 0.62 + 0.08 * f + 0.04 * Math.sin(f * 3);
+      // Standard SHAP: recovers only when direct effect dominates
+      const std = 0.08 + 0.65 * f + 0.12 * f * (1 - f);
+      pts.push({ d, Standard: Math.min(0.95, std), Causal: Math.min(0.95, causal) });
+    }
+    return pts;
+  }, []);
+
+  const atPoint = (pct) => curveData.reduce((prev, p) => Math.abs(p.d - pct) < Math.abs(prev.d - pct) ? p : prev, curveData[0]);
+  const here = atPoint(directPct);
+  const gap = here.Causal - here.Standard;
+  const scenario =
+    directPct <= 15 ? { label: "Fully mediated", note: "Treatment works entirely through downstream mediators. Standard SHAP gives Treatment almost zero credit.", color: COLORS.teal } :
+    directPct <= 45 ? { label: "Mixed effect", note: "Realistic clinical setting (e.g., our simcausal DGP at 45%). Causal correction meaningful but not dramatic.", color: COLORS.orange } :
+    directPct <= 80 ? { label: "Mostly direct", note: "Treatment reaches Outcome primarily through its own direct edge. Mediators still absorb some credit, but both methods track the ranking well.", color: COLORS.gold } :
+                      { label: "No mediation", note: "Treatment has essentially no mediated pathway. The causal correction has nothing to correct.", color: COLORS.gray };
+
+  return (
+    <div>
+      <SectionTitle kicker="Boundary condition">
+        Causal SHAP isn&rsquo;t always worth the cost. Here&rsquo;s when it is.
+      </SectionTitle>
+      <Para>
+        The honest finding from our simcausal validation: at 500 permutations, both methods converge
+        to Kendall&rsquo;s &tau; &approx; 0.5 against the true causal ranking. Why? Because our DGP&rsquo;s
+        Treatment has a <strong>strong direct effect</strong> &mdash; about 45% of its +11 total flows directly
+        to Outcome. Standard SHAP catches that without needing a DAG.
+      </Para>
+      <Para>
+        The correction matters most in the <em>opposite</em> regime: where treatment operates through mediators,
+        or where confounding dominates. Drag the slider to see the divergence.
+      </Para>
+
+      <GlassCard style={{ marginTop: 14 }}>
+        <SliderControl
+          label="% of Treatment effect that is direct"
+          value={directPct}
+          min={0}
+          max={100}
+          step={1}
+          onChange={setDirectPct}
+          color={scenario.color}
+          format={v => `${v.toFixed(0)}%`}
+        />
+
+        <div style={{ padding: "10px 14px", background: hexAlpha(scenario.color, 0.08), borderLeft: `4px solid ${scenario.color}`, borderRadius: "0 8px 8px 0", marginBottom: 12 }}>
+          <div style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.82rem", letterSpacing: "0.08em", textTransform: "uppercase", color: scenario.color, fontWeight: 700, marginBottom: 4 }}>
+            Scenario &middot; {scenario.label}
+          </div>
+          <div style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.9rem", color: COLORS.subtle, lineHeight: 1.55 }}>
+            {scenario.note}
+          </div>
+        </div>
+
+        <ResponsiveContainer width="100%" height={320}>
+          <LineChart data={curveData} margin={{ top: 20, right: 32, left: 10, bottom: 36 }}>
+            <CartesianGrid strokeDasharray="2 3" stroke={COLORS.border} />
+            <XAxis type="number" dataKey="d" domain={[0, 100]}
+              tick={{ fontSize: 11, fill: COLORS.muted, fontFamily: "Source Sans 3" }}>
+              <Label value="% of Treatment total effect that is direct" offset={-18} position="insideBottom" fontSize="12" fontFamily="Source Sans 3" fill={COLORS.subtle} />
+            </XAxis>
+            <YAxis domain={[0, 1]} tick={{ fontSize: 11, fill: COLORS.muted, fontFamily: "Source Sans 3" }}>
+              <Label value="Kendall's τ vs truth" angle={-90} position="insideLeft" style={{ textAnchor: "middle" }} fontSize="12" fontFamily="Source Sans 3" fill={COLORS.subtle} />
+            </YAxis>
+            <Tooltip
+              contentStyle={{ background: "white", border: `1px solid ${COLORS.border}`, borderRadius: 8, fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.82rem" }}
+              formatter={(v) => v.toFixed(3)}
+              labelFormatter={v => `Direct share: ${v}%`}
+            />
+            <Legend wrapperStyle={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.82rem" }} />
+            <ReferenceLine x={45} stroke={COLORS.orange} strokeDasharray="5 4" strokeWidth={1.5}>
+              <Label value="our simcausal point" position="insideTopRight" fontSize="10" fontFamily="Source Sans 3" fill={COLORS.orange} />
+            </ReferenceLine>
+            <ReferenceLine x={directPct} stroke={scenario.color} strokeWidth={2} />
+            <Line type="monotone" dataKey="Causal" stroke={COLORS.teal} strokeWidth={2.5} dot={false} name="Causal SHAP" />
+            <Line type="monotone" dataKey="Standard" stroke={COLORS.gray} strokeWidth={2.5} dot={false} strokeDasharray="6 4" name="Standard SHAP" />
+            <ReferenceDot x={directPct} y={here.Causal} r={6} fill={COLORS.teal} stroke="white" strokeWidth={2} />
+            <ReferenceDot x={directPct} y={here.Standard} r={6} fill={COLORS.gray} stroke="white" strokeWidth={2} />
+          </LineChart>
+        </ResponsiveContainer>
+
+        <div style={{ display: "flex", gap: 12, marginTop: 12 }}>
+          <MetricCard label="Causal SHAP" value={here.Causal.toFixed(2)} sub="τ vs truth at this point" color={COLORS.teal} />
+          <MetricCard label="Standard SHAP" value={here.Standard.toFixed(2)} sub="τ vs truth at this point" color={COLORS.gray} />
+          <MetricCard label="Gap" value={(gap >= 0 ? "+" : "") + gap.toFixed(2)} sub={gap > 0.1 ? "causal correction meaningful" : "methods roughly tie"} color={gap > 0.1 ? scenario.color : COLORS.muted} />
+        </div>
+
+        <p style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.78rem", color: COLORS.muted, textAlign: "center", marginTop: 10, fontStyle: "italic" }}>
+          Illustrative curves grounded in simcausal validation + theoretical limits. Not a full simulation sweep.
+        </p>
+      </GlassCard>
+
+      <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: "1.15rem", fontWeight: 700, color: COLORS.text, marginTop: 28, marginBottom: 10 }}>When is causal SHAP the right tool?</h3>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+        <div style={{ padding: "14px 16px", background: hexAlpha(COLORS.teal, 0.06), border: `1px solid ${hexAlpha(COLORS.teal, 0.25)}`, borderRadius: 10 }}>
+          <h4 style={{ color: COLORS.teal, fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.9rem", fontWeight: 700, marginBottom: 8 }}>✓ Worth it when</h4>
+          <ul style={{ listStyle: "none", padding: 0, fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.9rem", color: COLORS.subtle, lineHeight: 1.7 }}>
+            <li>&bull; Treatment acts primarily through mediators</li>
+            <li>&bull; Strong confounding (treatment-by-indication)</li>
+            <li>&bull; Colliders included in the feature set</li>
+            <li>&bull; Long mediator chains between treatment and outcome</li>
+          </ul>
+        </div>
+        <div style={{ padding: "14px 16px", background: hexAlpha(COLORS.gray, 0.06), border: `1px solid ${COLORS.border}`, borderRadius: 10 }}>
+          <h4 style={{ color: COLORS.gray, fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.9rem", fontWeight: 700, marginBottom: 8 }}>≈ Ties with standard SHAP when</h4>
+          <ul style={{ listStyle: "none", padding: 0, fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.9rem", color: COLORS.subtle, lineHeight: 1.7 }}>
+            <li>&bull; Treatment has a strong direct effect</li>
+            <li>&bull; Features are weakly correlated</li>
+            <li>&bull; Only a handful of variables are in the graph</li>
+          </ul>
+        </div>
+      </div>
+
+      <InsightBox label="The honest headline" color={COLORS.orange}>
+        The correction is real but the improvement is structure-dependent. Causal SHAP is not universally better
+        than standard SHAP &mdash; it&rsquo;s the right tool for problems where the <em>topology of causation</em> actually
+        drives which features matter.
+      </InsightBox>
+    </div>
+  );
+};
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   TAB 5 — The workflow
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+const Tab_Workflow = () => {
+  const [step, setStep] = useState(0);
+
+  const STEPS = [
+    {
+      title: "1. Data",
+      color: COLORS.blue,
+      body: "Start with your design matrix X and outcome Y. No causal assumptions yet — just the columns you intend to feed the ML model.",
+      viz: (
+        <svg viewBox="0 0 500 120">
+          <rect x="20" y="30" width="140" height="60" rx="6" fill={hexAlpha(COLORS.blue, 0.12)} stroke={COLORS.blue} strokeWidth="2" />
+          <text x="90" y="55" textAnchor="middle" fontFamily="Source Sans 3" fontSize="14" fontWeight="700" fill={COLORS.blue}>Dataset</text>
+          <text x="90" y="75" textAnchor="middle" fontFamily="Source Sans 3" fontSize="11" fill={COLORS.muted}>n = 500, p = 12</text>
+        </svg>
+      ),
+    },
+    {
+      title: "2. Discover",
+      color: COLORS.purple,
+      body: "Run a constraint-based algorithm (PC, GES) or a functional causal model (DirectLiNGAM) to learn a skeleton. Output: a CPDAG with some edges oriented and others ambiguous.",
+      viz: (
+        <svg viewBox="0 0 500 120">
+          <defs>
+            <marker id="aw5-1" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><polygon points="0 0, 6 3, 0 6" fill={COLORS.purple} /></marker>
+          </defs>
+          {[{x:40,y:60,l:"X1"},{x:120,y:30,l:"X2"},{x:120,y:90,l:"X3"},{x:200,y:60,l:"X4"},{x:280,y:60,l:"Y"}].map((n,i) => (
+            <g key={i}>
+              <circle cx={n.x} cy={n.y} r="16" fill="white" stroke={COLORS.purple} strokeWidth="1.8" />
+              <text x={n.x} y={n.y+4} textAnchor="middle" fontFamily="Source Sans 3" fontSize="11" fontWeight="700" fill={COLORS.purple}>{n.l}</text>
+            </g>
+          ))}
+          {/* directed */}
+          <line x1="56" y1="55" x2="104" y2="34" stroke={COLORS.purple} strokeWidth="1.5" markerEnd="url(#aw5-1)" />
+          <line x1="135" y1="44" x2="184" y2="56" stroke={COLORS.purple} strokeWidth="1.5" markerEnd="url(#aw5-1)" />
+          <line x1="216" y1="60" x2="264" y2="60" stroke={COLORS.purple} strokeWidth="1.5" markerEnd="url(#aw5-1)" />
+          {/* undirected */}
+          <line x1="56" y1="65" x2="104" y2="86" stroke={COLORS.purple} strokeWidth="1.5" strokeDasharray="3 3" />
+          <line x1="135" y1="76" x2="184" y2="64" stroke={COLORS.purple} strokeWidth="1.5" strokeDasharray="3 3" />
+          <text x="330" y="65" fontFamily="Source Sans 3" fontSize="12" fill={COLORS.subtle}>CPDAG</text>
+          <text x="330" y="82" fontFamily="Source Sans 3" fontSize="10" fill={COLORS.muted}>dashed = undirected</text>
+        </svg>
+      ),
+    },
+    {
+      title: "3. Expert resolves",
+      color: COLORS.orange,
+      body: "Specify required edges (must exist) and forbidden edges (cannot exist). The app enforces these as hard constraints — guaranteed in the final DAG, not just soft hints during search.",
+      viz: (
+        <svg viewBox="0 0 500 120">
+          <rect x="20" y="20" width="220" height="80" rx="8" fill="white" stroke={COLORS.orange} strokeWidth="1.5" />
+          <text x="130" y="40" textAnchor="middle" fontFamily="Source Sans 3" fontSize="11" fontWeight="700" fill={COLORS.orange} letterSpacing="0.05em">CONSTRAINT SPEC</text>
+          <text x="30" y="60" fontFamily="monospace" fontSize="11" fill={COLORS.subtle}>required: Treatment,Outcome</text>
+          <text x="30" y="76" fontFamily="monospace" fontSize="11" fill={COLORS.subtle}>forbidden: Outcome,Age</text>
+          <text x="30" y="92" fontFamily="monospace" fontSize="11" fill={COLORS.subtle}>forbidden: Mediator,Treatment</text>
+
+          <text x="260" y="63" fontFamily="Source Sans 3" fontSize="22" fill={COLORS.orange}>&rarr;</text>
+
+          <rect x="290" y="20" width="190" height="80" rx="8" fill={hexAlpha(COLORS.orange, 0.08)} stroke={COLORS.orange} strokeWidth="2" />
+          <text x="385" y="48" textAnchor="middle" fontFamily="Source Sans 3" fontSize="12" fontWeight="700" fill={COLORS.orange}>Resolved DAG</text>
+          <text x="385" y="66" textAnchor="middle" fontFamily="Source Sans 3" fontSize="10" fill={COLORS.muted}>all edges directed,</text>
+          <text x="385" y="80" textAnchor="middle" fontFamily="Source Sans 3" fontSize="10" fill={COLORS.muted}>constraints enforced,</text>
+          <text x="385" y="94" textAnchor="middle" fontFamily="Source Sans 3" fontSize="10" fill={COLORS.muted}>cycles removed</text>
+        </svg>
+      ),
+    },
+    {
+      title: "4. Causal SHAP",
+      color: COLORS.teal,
+      body: "Fit the prediction model. Compute Shapley values with (a) permutations restricted to topological orderings and (b) interventional expectations sampled through the DAG. Also compute adjustment-set SHAP as a second check.",
+      viz: (
+        <svg viewBox="0 0 500 120">
+          <rect x="20" y="30" width="140" height="60" rx="8" fill="white" stroke={COLORS.teal} strokeWidth="1.5" />
+          <text x="90" y="52" textAnchor="middle" fontFamily="Source Sans 3" fontSize="13" fontWeight="700" fill={COLORS.teal}>Resolved DAG</text>
+          <text x="90" y="72" textAnchor="middle" fontFamily="Source Sans 3" fontSize="10" fill={COLORS.muted}>+ fitted f(X)</text>
+          <text x="180" y="63" fontFamily="Source Sans 3" fontSize="22" fill={COLORS.teal}>&rarr;</text>
+          <rect x="210" y="15" width="150" height="40" rx="6" fill={hexAlpha(COLORS.teal, 0.1)} stroke={COLORS.teal} strokeWidth="1.3" />
+          <text x="285" y="39" textAnchor="middle" fontFamily="Source Sans 3" fontSize="11.5" fontWeight="700" fill={COLORS.teal}>DAG-constrained SHAP</text>
+          <rect x="210" y="65" width="150" height="40" rx="6" fill={hexAlpha(COLORS.teal, 0.1)} stroke={COLORS.teal} strokeWidth="1.3" />
+          <text x="285" y="89" textAnchor="middle" fontFamily="Source Sans 3" fontSize="11.5" fontWeight="700" fill={COLORS.teal}>Adjustment-set SHAP</text>
+          <text x="380" y="63" fontFamily="Source Sans 3" fontSize="22" fill={COLORS.teal}>&rarr;</text>
+          <rect x="410" y="30" width="80" height="60" rx="6" fill={hexAlpha(COLORS.gold, 0.15)} stroke={COLORS.gold} strokeWidth="1.5" />
+          <text x="450" y="58" textAnchor="middle" fontFamily="Source Sans 3" fontSize="11" fontWeight="700" fill={COLORS.subtle}>attributions</text>
+          <text x="450" y="74" textAnchor="middle" fontFamily="Source Sans 3" fontSize="10" fill={COLORS.muted}>(rankings)</text>
+        </svg>
+      ),
+    },
+    {
+      title: "5. Review & iterate",
+      color: COLORS.red,
+      body: "Does the attribution make clinical sense? Does Treatment rise and the mediator fall? If the ranking disagrees with both intuition and the data, revisit the DAG. Discovery → expert → SHAP is a loop, not a line.",
+      viz: (
+        <svg viewBox="0 0 500 120">
+          <path d="M 100 60 Q 250 10 400 60 Q 250 110 100 60 Z" fill="none" stroke={COLORS.red} strokeWidth="2" strokeDasharray="4 3" />
+          <defs>
+            <marker id="aw5-loop" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><polygon points="0 0, 8 4, 0 8" fill={COLORS.red} /></marker>
+          </defs>
+          <path d="M 80 50 Q 60 70 90 85" fill="none" stroke={COLORS.red} strokeWidth="2" markerEnd="url(#aw5-loop)" />
+          {[
+            { x: 100, y: 60, l: "Discover" },
+            { x: 250, y: 22, l: "Expert" },
+            { x: 400, y: 60, l: "Causal SHAP" },
+            { x: 250, y: 98, l: "Review" },
+          ].map((n, i) => (
+            <g key={i}>
+              <circle cx={n.x} cy={n.y} r="22" fill="white" stroke={COLORS.red} strokeWidth="1.5" />
+              <text x={n.x} y={n.y+4} textAnchor="middle" fontFamily="Source Sans 3" fontSize="10" fontWeight="700" fill={COLORS.red}>{n.l}</text>
+            </g>
+          ))}
+        </svg>
+      ),
+    },
+  ];
+
+  return (
+    <div>
+      <SectionTitle kicker="The workflow">
+        Discover, resolve, attribute, review. Repeat.
+      </SectionTitle>
+      <Para>
+        The app (Python Shiny) threads these five steps into a single interactive environment. Click a step to expand.
+      </Para>
+
+      <div style={{ display: "flex", gap: 6, marginBottom: 18, flexWrap: "wrap" }}>
+        {STEPS.map((s, i) => (
+          <button key={i} onClick={() => setStep(i)} style={{
+            flex: "1 1 140px", padding: "10px 12px",
+            borderRadius: 8, border: `1.5px solid ${step === i ? s.color : COLORS.border}`,
+            background: step === i ? s.color : "white",
+            color: step === i ? "white" : COLORS.text,
+            fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.84rem", fontWeight: 600,
+            cursor: "pointer", transition: "all 0.2s"
+          }}>{s.title}</button>
+        ))}
+      </div>
+
+      <GlassCard>
+        <div style={{ minHeight: 280 }}>
+          <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: "1.3rem", color: STEPS[step].color, fontWeight: 700, marginBottom: 8 }}>{STEPS[step].title}</h3>
+          <Para>{STEPS[step].body}</Para>
+          <div style={{ marginTop: 12, padding: "8px", background: "rgba(45,55,72,0.03)", borderRadius: 8 }}>
+            {STEPS[step].viz}
+          </div>
+        </div>
+      </GlassCard>
+
+      <InsightBox label="The loop is the point" color={COLORS.orange}>
+        No existing tool formalizes this iterative expert-in-the-loop refinement from CPDAG to resolved DAG to
+        causal attribution. The value isn&rsquo;t any single step &mdash; it&rsquo;s the cycle, with immediate visual feedback
+        on how DAG edits change the attributions.
+      </InsightBox>
+    </div>
+  );
+};
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   TAB 6 — MIMIC-IV + Try It
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+const Tab_MimicAndTry = () => {
+  const [showVaso, setShowVaso] = useState(true);
+
+  // Simplified expert DAG layout: demographics -> labs -> vitals -> interventions -> PRI
+  const layers = [
+    { x: 60,  label: "Demographics", nodes: ["Age", "Sex", "BMI"] },
+    { x: 190, label: "Labs",         nodes: ["Creatinine", "Hgb", "WBC"] },
+    { x: 320, label: "Vitals",       nodes: ["MAP", "HR", "SpO2"] },
+    { x: 460, label: "Interventions", nodes: ["Vasopressors", "Mech Vent"] },
+    { x: 610, label: "Outcome",      nodes: ["PRI"] },
+  ];
+
+  const nodePos = {};
+  layers.forEach(layer => {
+    const gap = 260 / Math.max(1, layer.nodes.length + 1);
+    layer.nodes.forEach((n, i) => {
+      nodePos[n] = { x: layer.x, y: 40 + (i + 1) * gap };
+    });
+  });
+
+  const edges = [
+    ["Age","Creatinine"], ["Age","MAP"], ["Age","PRI"],
+    ["Sex","Hgb"], ["BMI","MAP"], ["BMI","PRI"],
+    ["Creatinine","MAP"], ["Hgb","SpO2"], ["WBC","MAP"],
+    ["MAP","Vasopressors"], ["HR","Vasopressors"], ["SpO2","Mech Vent"],
+    ["Vasopressors","PRI"], ["Mech Vent","PRI"],
+    ["Age","Vasopressors"], ["BMI","Vasopressors"],
+  ];
+
+  return (
+    <div>
+      <SectionTitle kicker="MIMIC-IV application">
+        Treatment-by-indication, illustrated.
+      </SectionTitle>
+      <Para>
+        In the MIMIC-IV pressure-injury cohort (n=22,717, 33 variables), standard SHAP ranks vasopressor use
+        near the top of the feature importance list. Vasopressors are administered to the sickest patients &mdash;
+        those with hemodynamic instability, sepsis, prolonged immobility. Vasopressor use is a consequence of
+        severity, not a cause of injury.
+      </Para>
+      <Para>
+        The expert DAG (40 directed edges) encodes the temporal clinical pathway:
+        demographics &rarr; labs &rarr; vitals &rarr; interventions &rarr; outcome. Causal SHAP with this DAG
+        routes credit back to the upstream severity drivers instead of the downstream intervention.
+      </Para>
+
+      <GlassCard>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10, flexWrap: "wrap", gap: 10 }}>
+          <h4 style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.85rem", letterSpacing: "0.08em", textTransform: "uppercase", color: COLORS.muted }}>Expert DAG (simplified)</h4>
+          <label style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.85rem", color: COLORS.subtle, display: "inline-flex", alignItems: "center", gap: 6 }}>
+            <input type="checkbox" checked={showVaso} onChange={e => setShowVaso(e.target.checked)} />
+            highlight vasopressor&rarr;PRI path
+          </label>
+        </div>
+
+        <svg viewBox="0 0 680 320" style={{ width: "100%", maxWidth: 680, display: "block", margin: "0 auto" }}>
+          <defs>
+            <marker id="arrGrey" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><polygon points="0 0, 7 3.5, 0 7" fill="#888" /></marker>
+            <marker id="arrHigh" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><polygon points="0 0, 7 3.5, 0 7" fill={COLORS.red} /></marker>
+          </defs>
+
+          {/* layer labels */}
+          {layers.map(l => (
+            <text key={l.label} x={l.x} y="20" textAnchor="middle" fontFamily="Source Sans 3" fontSize="10.5" fontWeight="700" fill={COLORS.muted} letterSpacing="0.05em">{l.label.toUpperCase()}</text>
+          ))}
+
+          {/* edges */}
+          {edges.map(([a, b], i) => {
+            const p1 = nodePos[a], p2 = nodePos[b];
+            const highlight = showVaso && (
+              (b === "PRI" && (a === "Vasopressors" || a === "MAP" || a === "HR")) ||
+              (b === "Vasopressors" && (a === "MAP" || a === "HR" || a === "Age" || a === "BMI"))
+            );
+            const color = highlight ? COLORS.red : "#bbb";
+            const width = highlight ? 2 : 1;
+            const mark = highlight ? "url(#arrHigh)" : "url(#arrGrey)";
+            // Offset so arrows stop at node edge
+            const dx = p2.x - p1.x, dy = p2.y - p1.y, len = Math.sqrt(dx*dx+dy*dy);
+            const r = 22;
+            return (
+              <line key={i}
+                x1={p1.x + dx/len * r} y1={p1.y + dy/len * r}
+                x2={p2.x - dx/len * r} y2={p2.y - dy/len * r}
+                stroke={color} strokeWidth={width} markerEnd={mark}
+                opacity={highlight ? 0.95 : 0.45}
+              />
+            );
+          })}
+
+          {/* nodes */}
+          {Object.entries(nodePos).map(([name, pos]) => {
+            const isPath = showVaso && (name === "Vasopressors" || name === "PRI" || name === "MAP" || name === "HR");
+            const fill = name === "PRI" ? hexAlpha(COLORS.red, 0.15) : (isPath ? hexAlpha(COLORS.red, 0.08) : "white");
+            const stroke = name === "PRI" ? COLORS.red : (isPath ? COLORS.red : "#888");
+            return (
+              <g key={name}>
+                <rect x={pos.x - 40} y={pos.y - 14} width="80" height="28" rx="14" fill={fill} stroke={stroke} strokeWidth={isPath ? 1.8 : 1.2} />
+                <text x={pos.x} y={pos.y + 4} textAnchor="middle" fontFamily="Source Sans 3" fontSize="11" fontWeight={isPath ? 700 : 600} fill={isPath ? COLORS.red : COLORS.text}>{name}</text>
+              </g>
+            );
+          })}
+        </svg>
+
+        <p style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.78rem", color: COLORS.muted, textAlign: "center", marginTop: 6 }}>
+          Simplified to &tilde;14 variables for display. The full expert DAG has 40 edges across 33 clinical variables.
+        </p>
+      </GlassCard>
+
+      <InsightBox label="Consider" color={COLORS.red}>
+        A feature importance plot built on standard SHAP would lead a clinician to ask &ldquo;do vasopressors
+        <em> cause</em> pressure injuries?&rdquo; The DAG-grounded attribution reframes the question: vasopressors
+        are a <em>marker of severity</em>. The real drivers are upstream &mdash; MAP instability, hemodynamic
+        compromise, prolonged immobility &mdash; all of which SHAP also sees, just through a distorted lens.
+      </InsightBox>
+
+      {/* Try It section */}
+      <div style={{ marginTop: 40 }}>
+        <SectionTitle kicker="Try it yourself">
+          The application and reading list.
+        </SectionTitle>
+
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 14 }}>
+          <GlassCard>
+            <div style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.78rem", letterSpacing: "0.1em", textTransform: "uppercase", color: COLORS.purple, fontWeight: 700, marginBottom: 6 }}>Application</div>
+            <div style={{ fontFamily: "'Playfair Display', serif", fontSize: "1.1rem", fontWeight: 700, color: COLORS.text, marginBottom: 8 }}>Causal Discovery Playground</div>
+            <Para>Python Shiny app: discovery, constraint specification, interventional SHAP, Shrier-Platt adjustment sets. All three algorithms (PC, DirectLiNGAM, GES via causal-learn).</Para>
+            <code style={{ display: "block", padding: "8px 10px", background: "rgba(45,55,72,0.06)", borderRadius: 6, fontSize: "0.82rem", color: COLORS.text, fontFamily: "Menlo, monospace" }}>
+              pip install causal-learn shap scikit-learn shiny<br/>
+              python -m shiny run app.py
+            </code>
+          </GlassCard>
+
+          <GlassCard>
+            <div style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.78rem", letterSpacing: "0.1em", textTransform: "uppercase", color: COLORS.teal, fontWeight: 700, marginBottom: 6 }}>Datasets</div>
+            <div style={{ fontFamily: "'Playfair Display', serif", fontSize: "1.1rem", fontWeight: 700, color: COLORS.text, marginBottom: 8 }}>simcausal + MIMIC-IV PRI</div>
+            <Para>
+              <strong>simcausal</strong>: n=500, 12 variables, ground-truth DAG from R `simcausal`.
+            </Para>
+            <Para>
+              <strong>MIMIC-IV PRI</strong>: n=22,717, 33 variables, hospital-acquired pressure injury outcome.
+              Requires MIMIC-IV credentialed access.
+            </Para>
+          </GlassCard>
+        </div>
+
+        <GlassCard style={{ marginTop: 14, background: "rgba(45,55,72,0.03)" }}>
+          <h4 style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.82rem", fontWeight: 700, color: COLORS.muted, letterSpacing: "0.05em", marginBottom: 8, textTransform: "uppercase" }}>Key references</h4>
+          <div style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.84rem", color: COLORS.subtle, lineHeight: 1.8 }}>
+            <div>Heskes, Bucur &amp; Claassen (2020). Causal Shapley values. <em>NeurIPS 33</em>.</div>
+            <div>Janzing, Minorics &amp; Bl&ouml;baum (2020). Feature relevance quantification: A causal problem. <em>AISTATS</em>.</div>
+            <div>Frye, Rowat &amp; Feige (2020). Asymmetric Shapley values. <em>NeurIPS 33</em>.</div>
+            <div>Wang, Wiens &amp; Lundberg (2021). Shapley Flow. <em>AISTATS</em>.</div>
+            <div>Shrier &amp; Platt (2008). Reducing bias through directed acyclic graphs. <em>BMC Med Res Meth</em>.</div>
+            <div>VanderWeele &amp; Shpitser (2011). A new criterion for confounder selection. <em>Biometrics</em>.</div>
+            <div>Alderden et al. (2024). XAI for early prediction of pressure injury risk. <em>AJCC</em>.</div>
+            <div>Johnson et al. (2023). MIMIC-IV. <em>Scientific Data</em>.</div>
+          </div>
+        </GlassCard>
+
+        <div style={{ marginTop: 18, padding: "16px 20px", background: "linear-gradient(135deg, rgba(120,60,150,0.06), rgba(70,130,180,0.04))", borderRadius: 10, border: `1px solid ${COLORS.border}` }}>
+          <div style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.78rem", letterSpacing: "0.1em", textTransform: "uppercase", color: COLORS.muted, fontWeight: 700, marginBottom: 6 }}>Authors</div>
+          <div style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.92rem", color: COLORS.text, lineHeight: 1.7 }}>
+            <strong>Lexi Pasi</strong> (Lucidity Sciences) &middot; <strong>Aimee Harrison</strong> (Tao of RWD / Navidence) &middot; <strong>Justin Ross</strong> (University of Utah) &middot; <strong>Jenny Alderden</strong> (Boise State University) &middot; <strong>Andy Wilson</strong> (University of Utah &amp; Tao of RWD)
+          </div>
+          <div style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.85rem", color: COLORS.muted, marginTop: 8 }}>
+            ACIC 2026 &middot; Salt Lake City, Utah &middot; Poster Session 2 &middot; Wed May 13 2026
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   App shell
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+const App = () => {
+  const [tab, setTab] = useState(0);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [tab]);
+
+  const renderTab = () => {
+    switch (tab) {
+      case 0: return <Tab_Artifact />;
+      case 1: return <Tab_Correction />;
+      case 2: return <Tab_SimEvidence />;
+      case 3: return <Tab_RankMovement />;
+      case 4: return <Tab_WhenItMatters />;
+      case 5: return <Tab_Workflow />;
+      case 6: return <Tab_MimicAndTry />;
+      default: return null;
+    }
+  };
+
+  return (
+    <div style={{ minHeight: "100vh", background: COLORS.bg, fontFamily: "'Source Sans 3', sans-serif" }}>
+      <header style={{
+        background: "linear-gradient(135deg, #1a202c 0%, #2d3748 100%)",
+        padding: "32px 24px 26px", textAlign: "center", position: "relative", overflow: "hidden"
+      }}>
+        {/* Decorative SHAP schematic in the corner */}
+        <svg style={{ position: "absolute", right: 24, top: 22, opacity: 0.15 }} width="120" height="60" viewBox="0 0 120 60">
+          <circle cx="20" cy="30" r="10" fill="none" stroke="#fff" strokeWidth="1.5" />
+          <circle cx="60" cy="30" r="10" fill="none" stroke="#fff" strokeWidth="1.5" />
+          <circle cx="100" cy="30" r="10" fill="none" stroke="#fff" strokeWidth="1.5" />
+          <line x1="30" y1="30" x2="50" y2="30" stroke="#fff" strokeWidth="1.5" />
+          <line x1="70" y1="30" x2="90" y2="30" stroke="#fff" strokeWidth="1.5" />
+        </svg>
+
+        <div style={{ maxWidth: 920, margin: "0 auto", position: "relative", zIndex: 1 }}>
+          <p style={{ fontSize: "0.78rem", color: "rgba(255,255,255,0.55)", letterSpacing: "0.14em", textTransform: "uppercase", marginBottom: 8 }}>
+            ACIC 2026 &nbsp;&bull;&nbsp; Poster Session 2 &nbsp;&bull;&nbsp; Salt Lake City, Utah
+          </p>
+          <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "2rem", fontWeight: 700, color: "#f7fafc", lineHeight: 1.22, margin: 0 }}>
+            SHAP has short memory.<br/>Causal SHAP remembers the DAG.
+          </h1>
+          <p style={{ fontSize: "0.95rem", color: "rgba(255,255,255,0.72)", marginTop: 10, lineHeight: 1.55, maxWidth: 720, marginLeft: "auto", marginRight: "auto" }}>
+            Expert-Augmented Causal SHAP: recovering DAG-consistent feature importance via iterative causal discovery and domain knowledge.
+          </p>
+          <p style={{ fontSize: "0.82rem", color: "rgba(255,255,255,0.55)", marginTop: 12, lineHeight: 1.55 }}>
+            Pasi &middot; Harrison &middot; Ross &middot; Alderden &middot; Wilson
+          </p>
+        </div>
+      </header>
+
+      <main style={{ maxWidth: 920, margin: "0 auto", padding: "32px 24px 48px" }}>
+        <SectionNav sections={SECTION_NAMES} active={tab} onSelect={setTab} />
+        {renderTab()}
+        <PrevNextNav active={tab} total={SECTION_NAMES.length} onSelect={setTab} />
+      </main>
+
+      <footer style={{
+        textAlign: "center", padding: "24px",
+        borderTop: `1px solid ${COLORS.border}`,
+        fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.78rem", color: COLORS.muted
+      }}>
+        ACIC 2026 companion dashboard &nbsp;&bull;&nbsp; May 13, 2026 &nbsp;&bull;&nbsp; Salt Lake City Marriott Downtown
+      </footer>
+    </div>
+  );
+};
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>
