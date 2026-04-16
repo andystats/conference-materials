@@ -1,0 +1,15 @@
+Abstract, "Expert-Augmented Causal SHAP: Recovering DAG-Consistent Feature Importance via Iterative Causal Discovery and Domain Knowledge," was accepted for a poster presentation at the 2026 American Causal Inference Conference (ACIC).
+
+Poster Presentation Details
+
+Session: We are scheduled for Poster Session 2.
+Date & Time: Wednesday, May 13, 2026, from 5:30pm to 6:30pm.
+Location: Salt Lake City Marriott Downtown at City Creek, Salt Lake City, Utah.
+Format: Printed poster, landscape orientation, maximum size 42″ × 42″ (recommended 42″ × 40″).
+
+Important Deadlines
+
+Participation Confirmation: Required by Friday, April 10, 2026.
+Early Registration: Deadline is Monday, April 13, 2026.
+
+Conference Registration: https://sci-info.org/annual-meeting/meeting-registration/

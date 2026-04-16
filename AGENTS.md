@@ -6,7 +6,7 @@ Project-level rules for AI agents working in this repository.
 
 This repo hosts the **complementary website** plus **source components, figures, and text blocks** for printed conference posters. The repo is deployed via GitHub Pages; posters link to it via QR codes.
 
-The user compiles printed posters themselves in PowerPoint. Do not add PPTX files, `build_poster.py`, `export_pdf.py`, or similar compilation scripts unless explicitly asked. The repo's job is the website + raw source material; the poster artifact itself lives outside the repo.
+The user compiles printed posters themselves in PowerPoint. Poster PPTX/PDF files and build scripts live in a `poster/` subfolder within each conference when the user has chosen to port them. The repo is now the single source of truth — Box is retired as the working copy.
 
 ## Source of in-progress materials
 
