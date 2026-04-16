@@ -6,13 +6,31 @@ Static site hosting companion dashboards, posters, and supplementary material fo
 
 ```
 site/
-├── index.html                        # Landing page (list of all conferences)
+├── index.html                                   # Landing page (list of all conferences)
 ├── acic-2026-causal-shap/
-│   └── index.html                    # Interactive dashboard for the ACIC 2026 poster
-└── README.md                         # This file
+│   ├── index.html                               # Interactive dashboard for the ACIC 2026 poster
+│   ├── figures/                                 # Source figures (SVG, PNG, .drawio where applicable)
+│   ├── components/                              # Reusable HTML/JSX snippets for dashboard + poster
+│   └── text/                                    # Markdown fragments for poster sections
+├── ispor-2026-causal-discovery/
+│   ├── index.html                               # Interactive dashboard for the ISPOR 2026 poster
+│   ├── figures/                                 # Source figures (SVG, PNG, .drawio where applicable)
+│   ├── components/                              # Reusable HTML/JSX snippets for dashboard + poster
+│   └── text/                                    # Markdown fragments for poster sections
+└── README.md                                    # This file
 ```
 
 Each conference/poster gets its own subdirectory. The landing page at `/` lists them. QR codes on the posters point to the subdirectory URL (e.g., `https://<user>.github.io/<repo>/acic-2026-causal-shap/`).
+
+## Per-conference scaffolding
+
+Each conference folder follows the same three-subfolder convention so the repo is the canonical home for the website *and* the source material for the printed poster (which is compiled separately in PowerPoint):
+
+- **`figures/`** — Source figures. SVG + PNG rasters for anything the dashboard embeds; `.drawio` files for figures under active iteration so they can be edited directly without a build step.
+- **`components/`** — Reusable HTML/JSX snippets that can be pasted into the dashboard or lifted into PowerPoint shapes. See the folder's `README.md` for filename convention.
+- **`text/`** — Plain Markdown fragments, one per poster section (headline, abstract, column copy, captions). Feed these into PowerPoint when composing the printed poster.
+
+New folders start empty with a `README.md` stub describing the convention. Real poster work drives the first entries.
 
 ## Dependencies
 
