@@ -722,8 +722,11 @@ const SECTION_NAMES = [
 const App = () => {
   const [tab, setTab] = useState(0);
 
+  const mainRef = useRef(null);
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    if (mainRef.current) {
+      mainRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
   }, [tab]);
 
   const renderTab = () => {
@@ -740,26 +743,72 @@ const App = () => {
   return (
     <div style={{ minHeight: "100vh", background: COLORS.bg, fontFamily: "'Source Sans 3', sans-serif" }}>
       <header style={{
-        background: `linear-gradient(135deg, ${COLORS.navy} 0%, #001A4D 100%)`,
-        padding: "36px 24px 30px", textAlign: "center", position: "relative", overflow: "hidden"
+        background: "#ffffff",
+        padding: "48px 24px 44px", textAlign: "center", position: "relative",
+        borderBottom: `3px solid ${COLORS.navy}`
       }}>
-        <div style={{ maxWidth: 1100, margin: "0 auto", position: "relative", zIndex: 1 }}>
-          <p style={{ fontSize: "0.78rem", color: "rgba(255,255,255,0.6)", letterSpacing: "0.14em", textTransform: "uppercase", marginBottom: 10, fontFamily: "'Source Sans 3', sans-serif" }}>
+        <div style={{ maxWidth: 1100, margin: "0 auto" }}>
+          <div style={{ marginBottom: 24 }}>
+            <img src="./figures/ISPOR_Logo.png" alt="ISPOR" style={{ height: 52, display: "block", margin: "0 auto" }} />
+          </div>
+          <p style={{ fontSize: "0.88rem", color: COLORS.muted, letterSpacing: "0.14em", textTransform: "uppercase", marginBottom: 14, fontFamily: "'Source Sans 3', sans-serif" }}>
             ISPOR 2026 &nbsp;&bull;&nbsp; MSR72 &nbsp;&bull;&nbsp; Poster Session 2 &nbsp;&bull;&nbsp; Mon May 18 &nbsp;&bull;&nbsp; Philadelphia
           </p>
-          <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "2.05rem", fontWeight: 700, color: "#f7fafc", lineHeight: 1.22, margin: 0 }}>
+          <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "2.3rem", fontWeight: 700, color: COLORS.navy, lineHeight: 1.22, margin: 0 }}>
             Object-Centric Causal Discovery in MIMIC-IV
           </h1>
-          <p style={{ fontSize: "0.98rem", color: "rgba(255,255,255,0.72)", marginTop: 10, lineHeight: 1.55, maxWidth: 820, marginLeft: "auto", marginRight: "auto", fontFamily: "'Source Sans 3', sans-serif" }}>
+          <p style={{ fontSize: "1.1rem", color: COLORS.subtle, marginTop: 14, lineHeight: 1.55, maxWidth: 820, marginLeft: "auto", marginRight: "auto", fontFamily: "'Source Sans 3', sans-serif" }}>
             A paradigm shift for identifying risk factors for hospital-acquired pressure injuries in real-world clinical data.
           </p>
-          <p style={{ fontSize: "0.82rem", color: "rgba(255,255,255,0.58)", marginTop: 12, lineHeight: 1.55, fontFamily: "'Source Sans 3', sans-serif" }}>
-            Alderden &middot; Haft &middot; Wilson
-          </p>
+
+          <div style={{ marginTop: 32, display: "flex", justifyContent: "center", gap: 48, flexWrap: "wrap", alignItems: "flex-start" }}>
+            <div style={{ textAlign: "center", minWidth: 180 }}>
+              <img src="./figures/BoiseState_Logo.png" alt="Boise State University" style={{ height: 48, marginBottom: 10 }} />
+              <p style={{ fontSize: "1rem", color: COLORS.text, fontWeight: 800, fontFamily: "'Source Sans 3', sans-serif", margin: 0 }}>Jenny G. Alderden, PhD, RN, FAAN</p>
+              <p style={{ fontSize: "0.86rem", color: COLORS.muted, fontFamily: "'Source Sans 3', sans-serif", margin: 0 }}>Boise State University</p>
+            </div>
+            <div style={{ textAlign: "center", minWidth: 180 }}>
+              <img src="./figures/xplaindata_logo.png" alt="Xplain Data" style={{ height: 48, marginBottom: 10, objectFit: "contain" }} />
+              <p style={{ fontSize: "1rem", color: COLORS.text, fontWeight: 600, fontFamily: "'Source Sans 3', sans-serif", margin: 0 }}>Michael Haft, PhD</p>
+              <p style={{ fontSize: "0.86rem", color: COLORS.muted, fontFamily: "'Source Sans 3', sans-serif", margin: 0 }}>Xplain Data, Munich</p>
+            </div>
+            <div style={{ textAlign: "center", minWidth: 180 }}>
+              <img src="./figures/Utah_Logo.jpg" alt="University of Utah" style={{ height: 48, marginBottom: 10 }} />
+              <p style={{ fontSize: "1rem", color: COLORS.text, fontWeight: 600, fontFamily: "'Source Sans 3', sans-serif", margin: 0 }}>Andy Wilson, PhD, MStat</p>
+              <p style={{ fontSize: "0.86rem", color: COLORS.muted, fontFamily: "'Source Sans 3', sans-serif", margin: 0 }}>University of Utah</p>
+            </div>
+          </div>
         </div>
       </header>
 
-      <main style={{ maxWidth: 1100, margin: "0 auto", padding: "32px 24px 48px" }}>
+      {/* Abstract landing section */}
+      <section style={{ maxWidth: 1100, margin: "0 auto", padding: "32px 24px 0" }}>
+        <GlassCard style={{ marginBottom: 28 }}>
+          <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "1.5rem", fontWeight: 700, color: COLORS.navy, marginBottom: 20 }}>Abstract</h2>
+
+          <h4 style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.9rem", fontWeight: 700, color: COLORS.navy, letterSpacing: "0.06em", textTransform: "uppercase", marginBottom: 8, marginTop: 0 }}>Background / Objective</h4>
+          <p style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "1rem", lineHeight: 1.75, color: COLORS.subtle, marginBottom: 20 }}>
+            Traditional causal discovery algorithms face critical limitations in healthcare: they assume &ldquo;flat&rdquo; datasets, struggle with EHR relational complexity, and yield equivalence classes rather than fully-oriented graphs. We present an object-centric approach that encodes clinical constraints (temporal precedence, relational structure, informative missingness) while enabling data-driven discovery within that structure. We applied this method to identify causal factors for hospital-acquired pressure injuries (HAPrI) in MIMIC-IV (v3.1).
+          </p>
+
+          <h4 style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.9rem", fontWeight: 700, color: COLORS.navy, letterSpacing: "0.06em", textTransform: "uppercase", marginBottom: 8 }}>Methods</h4>
+          <p style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "1rem", lineHeight: 1.75, color: COLORS.subtle, marginBottom: 20 }}>
+            Using MIMIC-IV adult ICU admissions, we represented patient journeys as temporally ordered &ldquo;objects&rdquo; (admissions, procedures, medications, labs) and applied a causal discovery algorithm operating directly on this relational structure without flattening. Domain knowledge constrained the search space, enforcing temporal precedence to minimize target leakage and encoding missingness mechanisms, while the algorithm screened millions of candidate dependencies to construct a sparse causal graph.
+          </p>
+
+          <h4 style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.9rem", fontWeight: 700, color: COLORS.navy, letterSpacing: "0.06em", textTransform: "uppercase", marginBottom: 8 }}>Results</h4>
+          <p style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "1rem", lineHeight: 1.75, color: COLORS.subtle, marginBottom: 20 }}>
+            The algorithm identified hypoalbuminemia as a significant upstream driver of HAPrI, supporting albumin&rsquo;s potential protective benefit&mdash;a relationship frequently obscured by confounding in conventional analyses. It also rediscovered established risk factors (immobility, moisture, hemodynamic instability, mechanical ventilation) without manual feature engineering, validating clinical plausibility. Object-centric search condensed millions of correlations into interpretable causal structure, surfacing under-recognized factors including fluid management patterns and albumin timing.
+          </p>
+
+          <h4 style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.9rem", fontWeight: 700, color: COLORS.navy, letterSpacing: "0.06em", textTransform: "uppercase", marginBottom: 8 }}>Conclusions</h4>
+          <p style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.92rem", lineHeight: 1.7, color: COLORS.subtle, margin: 0 }}>
+            Object-centric causal discovery offers a middle path between purely data-driven search and expert-specified DAGs: clinical knowledge disciplines the algorithm, while the algorithm surfaces relationships experts might overlook. Future work will engage clinicians to refine the graph and employ modern causal estimators (TMLE, longitudinal g-methods) to quantify effects of albumin and other interventions on HAPrI risk.
+          </p>
+        </GlassCard>
+      </section>
+
+      <main ref={mainRef} style={{ maxWidth: 1100, margin: "0 auto", padding: "0 24px 48px" }}>
         <SectionNav sections={SECTION_NAMES} active={tab} onSelect={setTab} />
         {renderTab()}
         <PrevNextNav active={tab} total={SECTION_NAMES.length} onSelect={setTab} />
