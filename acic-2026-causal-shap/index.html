@@ -1192,8 +1192,6 @@ const Tab_Workflow = () => {
    ═══════════════════════════════════════════════════════════════════════════ */
 
 const Tab_MimicAndTry = () => {
-
-  // Simplified expert DAG layout: demographics -> labs -> vitals -> interventions -> PRI
   return (
     <div>
       <SectionTitle kicker="Try it yourself">
@@ -1205,52 +1203,51 @@ const Tab_MimicAndTry = () => {
         and the MIMIC-IV pressure-injury cohort.
       </Para>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 14 }}>
-          <GlassCard>
-            <div style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.78rem", letterSpacing: "0.1em", textTransform: "uppercase", color: COLORS.purple, fontWeight: 700, marginBottom: 6 }}>Application</div>
-            <div style={{ fontFamily: "'Playfair Display', serif", fontSize: "1.1rem", fontWeight: 700, color: COLORS.text, marginBottom: 8 }}>Causal Discovery Playground</div>
-            <Para>Python Shiny app: discovery, constraint specification, interventional SHAP, Shrier-Platt adjustment sets. All three algorithms (PC, DirectLiNGAM, GES via causal-learn).</Para>
-            <code style={{ display: "block", padding: "8px 10px", background: "rgba(45,55,72,0.06)", borderRadius: 6, fontSize: "0.82rem", color: COLORS.text, fontFamily: "Menlo, monospace" }}>
-              pip install causal-learn shap scikit-learn shiny<br/>
-              python -m shiny run app.py
-            </code>
-          </GlassCard>
-
-          <GlassCard>
-            <div style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.78rem", letterSpacing: "0.1em", textTransform: "uppercase", color: COLORS.teal, fontWeight: 700, marginBottom: 6 }}>Datasets</div>
-            <div style={{ fontFamily: "'Playfair Display', serif", fontSize: "1.1rem", fontWeight: 700, color: COLORS.text, marginBottom: 8 }}>simcausal + MIMIC-IV PRI</div>
-            <Para>
-              <strong>simcausal</strong>: n=500, 12 variables, ground-truth DAG from R `simcausal`.
-            </Para>
-            <Para>
-              <strong>MIMIC-IV PRI</strong>: n=22,717, 33 variables, hospital-acquired pressure injury outcome.
-              Requires MIMIC-IV credentialed access.
-            </Para>
-          </GlassCard>
-        </div>
-
-        <GlassCard style={{ marginTop: 14, background: "rgba(45,55,72,0.03)" }}>
-          <h4 style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.82rem", fontWeight: 700, color: COLORS.muted, letterSpacing: "0.05em", marginBottom: 8, textTransform: "uppercase" }}>Key references</h4>
-          <div style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.84rem", color: COLORS.subtle, lineHeight: 1.8 }}>
-            <div>Heskes, Bucur &amp; Claassen (2020). Causal Shapley values. <em>NeurIPS 33</em>.</div>
-            <div>Janzing, Minorics &amp; Bl&ouml;baum (2020). Feature relevance quantification: A causal problem. <em>AISTATS</em>.</div>
-            <div>Frye, Rowat &amp; Feige (2020). Asymmetric Shapley values. <em>NeurIPS 33</em>.</div>
-            <div>Wang, Wiens &amp; Lundberg (2021). Shapley Flow. <em>AISTATS</em>.</div>
-            <div>Shrier &amp; Platt (2008). Reducing bias through directed acyclic graphs. <em>BMC Med Res Meth</em>.</div>
-            <div>VanderWeele &amp; Shpitser (2011). A new criterion for confounder selection. <em>Biometrics</em>.</div>
-            <div>Alderden et al. (2024). XAI for early prediction of pressure injury risk. <em>AJCC</em>.</div>
-            <div>Johnson et al. (2023). MIMIC-IV. <em>Scientific Data</em>.</div>
-          </div>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 14 }}>
+        <GlassCard>
+          <div style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.78rem", letterSpacing: "0.1em", textTransform: "uppercase", color: COLORS.purple, fontWeight: 700, marginBottom: 6 }}>Application</div>
+          <div style={{ fontFamily: "'Playfair Display', serif", fontSize: "1.1rem", fontWeight: 700, color: COLORS.text, marginBottom: 8 }}>Causal Discovery Playground</div>
+          <Para>Python Shiny app: discovery, constraint specification, interventional SHAP, Shrier-Platt adjustment sets. All three algorithms (PC, DirectLiNGAM, GES via causal-learn).</Para>
+          <code style={{ display: "block", padding: "8px 10px", background: "rgba(45,55,72,0.06)", borderRadius: 6, fontSize: "0.82rem", color: COLORS.text, fontFamily: "Menlo, monospace" }}>
+            pip install causal-learn shap scikit-learn shiny<br/>
+            python -m shiny run app.py
+          </code>
         </GlassCard>
 
-        <div style={{ marginTop: 18, padding: "16px 20px", background: "linear-gradient(135deg, rgba(120,60,150,0.06), rgba(70,130,180,0.04))", borderRadius: 10, border: `1px solid ${COLORS.border}` }}>
-          <div style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.78rem", letterSpacing: "0.1em", textTransform: "uppercase", color: COLORS.muted, fontWeight: 700, marginBottom: 6 }}>Authors</div>
-          <div style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.92rem", color: COLORS.text, lineHeight: 1.7 }}>
-            <strong>Lexi Pasi</strong> (Lucidity Sciences) &middot; <strong>Aimee Harrison</strong> (Tao of RWD / Navidence) &middot; <strong>Justin Ross</strong> (University of Utah) &middot; <strong>Jenny Alderden</strong> (Boise State University) &middot; <strong>Andy Wilson</strong> (University of Utah &amp; Tao of RWD)
-          </div>
-          <div style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.85rem", color: COLORS.muted, marginTop: 8 }}>
-            ACIC 2026 &middot; Salt Lake City, Utah &middot; Poster Session 2 &middot; Wed May 13 2026
-          </div>
+        <GlassCard>
+          <div style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.78rem", letterSpacing: "0.1em", textTransform: "uppercase", color: COLORS.teal, fontWeight: 700, marginBottom: 6 }}>Datasets</div>
+          <div style={{ fontFamily: "'Playfair Display', serif", fontSize: "1.1rem", fontWeight: 700, color: COLORS.text, marginBottom: 8 }}>simcausal + MIMIC-IV PRI</div>
+          <Para>
+            <strong>simcausal</strong>: n=500, 12 variables, ground-truth DAG from R `simcausal`.
+          </Para>
+          <Para>
+            <strong>MIMIC-IV PRI</strong>: n=22,717, 33 variables, hospital-acquired pressure injury outcome.
+            Requires MIMIC-IV credentialed access.
+          </Para>
+        </GlassCard>
+      </div>
+
+      <GlassCard style={{ marginTop: 14, background: "rgba(45,55,72,0.03)" }}>
+        <h4 style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.82rem", fontWeight: 700, color: COLORS.muted, letterSpacing: "0.05em", marginBottom: 8, textTransform: "uppercase" }}>Key references</h4>
+        <div style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.84rem", color: COLORS.subtle, lineHeight: 1.8 }}>
+          <div>Heskes, Bucur &amp; Claassen (2020). Causal Shapley values. <em>NeurIPS 33</em>.</div>
+          <div>Janzing, Minorics &amp; Bl&ouml;baum (2020). Feature relevance quantification: A causal problem. <em>AISTATS</em>.</div>
+          <div>Frye, Rowat &amp; Feige (2020). Asymmetric Shapley values. <em>NeurIPS 33</em>.</div>
+          <div>Wang, Wiens &amp; Lundberg (2021). Shapley Flow. <em>AISTATS</em>.</div>
+          <div>Shrier &amp; Platt (2008). Reducing bias through directed acyclic graphs. <em>BMC Med Res Meth</em>.</div>
+          <div>VanderWeele &amp; Shpitser (2011). A new criterion for confounder selection. <em>Biometrics</em>.</div>
+          <div>Alderden et al. (2024). XAI for early prediction of pressure injury risk. <em>AJCC</em>.</div>
+          <div>Johnson et al. (2023). MIMIC-IV. <em>Scientific Data</em>.</div>
+        </div>
+      </GlassCard>
+
+      <div style={{ marginTop: 18, padding: "16px 20px", background: "linear-gradient(135deg, rgba(120,60,150,0.06), rgba(70,130,180,0.04))", borderRadius: 10, border: `1px solid ${COLORS.border}` }}>
+        <div style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.78rem", letterSpacing: "0.1em", textTransform: "uppercase", color: COLORS.muted, fontWeight: 700, marginBottom: 6 }}>Authors</div>
+        <div style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.92rem", color: COLORS.text, lineHeight: 1.7 }}>
+          <strong>Lexi Pasi</strong> (Lucidity Sciences) &middot; <strong>Aimee Harrison</strong> (Tao of RWD / Navidence) &middot; <strong>Justin Ross</strong> (University of Utah) &middot; <strong>Jenny Alderden</strong> (Boise State University) &middot; <strong>Andy Wilson</strong> (University of Utah &amp; Tao of RWD)
+        </div>
+        <div style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.85rem", color: COLORS.muted, marginTop: 8 }}>
+          ACIC 2026 &middot; Salt Lake City, Utah &middot; Poster Session 2 &middot; Wed May 13 2026
         </div>
       </div>
     </div>
