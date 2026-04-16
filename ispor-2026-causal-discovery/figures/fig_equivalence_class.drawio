@@ -1,0 +1,71 @@
+<mxfile host="app.diagrams.net" modified="2026-04-15" type="device">
+  <diagram name="Equivalence Class" id="equiv-class">
+    <mxGraphModel dx="900" dy="500" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="800" pageHeight="400">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <!-- DAG 1: X → Y → Z -->
+        <mxCell id="d1label" value="DAG 1" style="text;html=1;align=center;verticalAlign=middle;strokeColor=none;fillColor=none;fontColor=#0033A0;fontSize=13;fontFamily=Arial;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="30" width="120" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="x1" value="X" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#0033A0;strokeWidth=2;fontSize=14;fontFamily=Arial;fontStyle=1;fontColor=#0033A0;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="20" y="70" width="50" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="y1" value="Y" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#0033A0;strokeWidth=2;fontSize=14;fontFamily=Arial;fontStyle=1;fontColor=#0033A0;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="95" y="70" width="50" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="z1" value="Z" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#0033A0;strokeWidth=2;fontSize=14;fontFamily=Arial;fontStyle=1;fontColor=#0033A0;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="170" y="70" width="50" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_x1y1" style="endArrow=classic;strokeColor=#005DAA;strokeWidth=2;endSize=4;" edge="1" source="x1" target="y1" parent="1"/>
+        <mxCell id="e_y1z1" style="endArrow=classic;strokeColor=#005DAA;strokeWidth=2;endSize=4;" edge="1" source="y1" target="z1" parent="1"/>
+
+        <!-- DAG 2: X ← Y → Z -->
+        <mxCell id="d2label" value="DAG 2" style="text;html=1;align=center;verticalAlign=middle;strokeColor=none;fillColor=none;fontColor=#0033A0;fontSize=13;fontFamily=Arial;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="310" y="30" width="120" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="x2" value="X" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#0033A0;strokeWidth=2;fontSize=14;fontFamily=Arial;fontStyle=1;fontColor=#0033A0;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="270" y="70" width="50" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="y2" value="Y" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#0033A0;strokeWidth=2;fontSize=14;fontFamily=Arial;fontStyle=1;fontColor=#0033A0;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="345" y="70" width="50" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="z2" value="Z" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#0033A0;strokeWidth=2;fontSize=14;fontFamily=Arial;fontStyle=1;fontColor=#0033A0;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="420" y="70" width="50" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_y2x2" style="endArrow=classic;strokeColor=#005DAA;strokeWidth=2;endSize=4;" edge="1" source="y2" target="x2" parent="1"/>
+        <mxCell id="e_y2z2" style="endArrow=classic;strokeColor=#005DAA;strokeWidth=2;endSize=4;" edge="1" source="y2" target="z2" parent="1"/>
+
+        <!-- DAG 3: X ← Y ← Z -->
+        <mxCell id="d3label" value="DAG 3" style="text;html=1;align=center;verticalAlign=middle;strokeColor=none;fillColor=none;fontColor=#0033A0;fontSize=13;fontFamily=Arial;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="560" y="30" width="120" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="x3" value="X" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#0033A0;strokeWidth=2;fontSize=14;fontFamily=Arial;fontStyle=1;fontColor=#0033A0;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="520" y="70" width="50" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="y3" value="Y" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#0033A0;strokeWidth=2;fontSize=14;fontFamily=Arial;fontStyle=1;fontColor=#0033A0;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="595" y="70" width="50" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="z3" value="Z" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#0033A0;strokeWidth=2;fontSize=14;fontFamily=Arial;fontStyle=1;fontColor=#0033A0;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="670" y="70" width="50" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_y3x3" style="endArrow=classic;strokeColor=#005DAA;strokeWidth=2;endSize=4;" edge="1" source="y3" target="x3" parent="1"/>
+        <mxCell id="e_z3y3" style="endArrow=classic;strokeColor=#005DAA;strokeWidth=2;endSize=4;" edge="1" source="z3" target="y3" parent="1"/>
+
+        <!-- Bracket label -->
+        <mxCell id="bracket" value="Same CPDAG — indistinguishable without time" style="text;html=1;align=center;verticalAlign=middle;strokeColor=none;fillColor=none;fontColor=#8a94a6;fontSize=14;fontFamily=Arial;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="150" y="160" width="460" height="30" as="geometry"/>
+        </mxCell>
+
+        <!-- Bracket line -->
+        <mxCell id="bracketL" style="endArrow=none;strokeColor=#CDCDCD;strokeWidth=2;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="45" y="145" as="sourcePoint"/>
+            <mxPoint x="695" y="145" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

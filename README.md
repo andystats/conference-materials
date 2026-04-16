@@ -26,7 +26,7 @@ Each conference/poster gets its own subdirectory. The landing page at `/` lists 
 
 Each conference folder follows the same three-subfolder convention so the repo is the canonical home for the website *and* the source material for the printed poster (which is compiled separately in PowerPoint):
 
-- **`figures/`** — Source figures. SVG + PNG rasters for anything the dashboard embeds; `.drawio` files for figures under active iteration so they can be edited directly without a build step.
+- **`figures/`** — Source figures. SVG + PNG rasters for anything the dashboard embeds; `.drawio` files for figures under active iteration so they can be edited directly in draw.io and re-exported as SVG. Both ACIC and ISPOR conferences carry `.drawio` sources alongside their SVG/PNG exports.
 - **`components/`** — Reusable HTML/JSX snippets that can be pasted into the dashboard or lifted into PowerPoint shapes. See the folder's `README.md` for filename convention.
 - **`text/`** — Plain Markdown fragments, one per poster section (headline, abstract, column copy, captions). Feed these into PowerPoint when composing the printed poster.
 

@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="24in" height="12in" viewBox="0 0 2400 1200" font-family="Arial, sans-serif">
   <defs>
-    <marker id="arrowNavy" markerWidth="14" markerHeight="14" refX="12" refY="7" orient="auto">
-      <polygon points="0 0, 14 7, 0 14" fill="#005DAA"/>
+    <marker id="arrowNavy" markerWidth="5" markerHeight="5" refX="4.5" refY="2.5" orient="auto">
+      <polygon points="0 0, 5 2.5, 0 5" fill="#005DAA"/>
     </marker>
-    <marker id="arrowInk" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
-      <polygon points="0 0, 10 5, 0 10" fill="#3F4444"/>
+    <marker id="arrowInk" markerWidth="4" markerHeight="4" refX="3.5" refY="2" orient="auto">
+      <polygon points="0 0, 4 2, 0 4" fill="#3F4444"/>
     </marker>
-    <marker id="arrowOrange" markerWidth="14" markerHeight="14" refX="12" refY="7" orient="auto">
-      <polygon points="0 0, 14 7, 0 14" fill="#D64309"/>
+    <marker id="arrowOrange" markerWidth="5" markerHeight="5" refX="4.5" refY="2.5" orient="auto">
+      <polygon points="0 0, 5 2.5, 0 5" fill="#D64309"/>
     </marker>
   </defs>
 

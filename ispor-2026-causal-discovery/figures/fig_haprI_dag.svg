@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="10in" height="10in" viewBox="0 0 1000 1000" font-family="Arial, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" width="10in" height="10in" viewBox="-40 -20 1080 1080" font-family="Arial, sans-serif">
   <defs>
-    <marker id="arrNavy" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
-      <polygon points="0 0, 10 5, 0 10" fill="#005DAA"/>
+    <marker id="arrNavy" markerWidth="6" markerHeight="6" refX="5.5" refY="3" orient="auto">
+      <polygon points="0 0, 6 3, 0 6" fill="#005DAA"/>
     </marker>
-    <marker id="arrOrange" markerWidth="12" markerHeight="12" refX="11" refY="6" orient="auto">
-      <polygon points="0 0, 12 6, 0 12" fill="#D64309"/>
+    <marker id="arrOrange" markerWidth="7" markerHeight="7" refX="6.5" refY="3.5" orient="auto">
+      <polygon points="0 0, 7 3.5, 0 7" fill="#D64309"/>
     </marker>
-    <marker id="arrGray" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
-      <polygon points="0 0, 8 4, 0 8" fill="#CDCDCD"/>
+    <marker id="arrGray" markerWidth="5" markerHeight="5" refX="4.5" refY="2.5" orient="auto">
+      <polygon points="0 0, 5 2.5, 0 5" fill="#CDCDCD"/>
     </marker>
   </defs>
 
@@ -114,7 +114,7 @@
 
   <!-- Hypoalbuminemia -> HAPrI (THICK ORANGE headline edge) -->
   <g>
-    <line x1="800" y1="540" x2="838" y2="540" stroke="#D64309" stroke-width="9" marker-end="url(#arrOrange)"/>
+    <line x1="800" y1="540" x2="835" y2="540" stroke="#D64309" stroke-width="4" marker-end="url(#arrOrange)"/>
     <text x="820" y="620" text-anchor="middle" font-size="13" font-weight="700" fill="#D64309">candidate</text>
     <text x="820" y="636" text-anchor="middle" font-size="13" font-weight="700" fill="#D64309">upstream edge</text>
   </g>

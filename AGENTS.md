@@ -23,7 +23,7 @@ When porting a conference into the repo, copy only what the website needs — ty
 Each conference lives in a top-level folder named `<conference>-<year>-<method-slug>/` (method-centric, not disease-centric — matches existing ACIC and ISPOR entries). Inside each:
 
 - `index.html` — single-file React+CDN dashboard, no build step.
-- `figures/` — SVG, PNG, `.drawio` sources. The dashboard's `./figures/...` relative paths must resolve here.
+- `figures/` — SVG, PNG, and `.drawio` sources. The dashboard's `./figures/...` relative paths must resolve here. Drawio is the preferred format for figures the user iterates on — they edit in draw.io and export SVG back into this folder. When creating new figures, provide both a `.drawio` source and an SVG export.
 - `components/` — reusable HTML/JSX snippets for dashboard + poster.
 - `text/` — Markdown fragments (one per poster section).
 

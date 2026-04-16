@@ -192,19 +192,6 @@ const CardHeader = ({ title, badge }) => (
 const Tab_Hypoalbuminemia = () => {
   const [reading, setReading] = useState("upstream");
 
-  // Illustrative albumin trajectory in the days before a HAPrI event.
-  // These values are NOT from study data — they anchor the shape of the narrative.
-  const trajectory = [
-    { day: -14, albumin: 3.8 },
-    { day: -12, albumin: 3.6 },
-    { day: -10, albumin: 3.4 },
-    { day:  -8, albumin: 3.1 },
-    { day:  -6, albumin: 2.9 },
-    { day:  -4, albumin: 2.7 },
-    { day:  -2, albumin: 2.5 },
-    { day:   0, albumin: 2.4 },
-  ];
-
   const readings = {
     upstream:   { label: "Upstream driver",  color: COLORS.orange, text: "Low albumin impairs capillary integrity, wound healing, and tissue oxygenation, pushing an at-risk patient into injury. This is the hypothesis the algorithm prioritized." },
     confound:   { label: "Confounded",       color: COLORS.blue,   text: "Critical illness drives both hypoalbuminemia and HAPrI. The association looks causal but is the shadow of an unmeasured common cause." },
@@ -228,14 +215,14 @@ const Tab_Hypoalbuminemia = () => {
         <CardHeader title="Candidate structure (zoomed subgraph)" />
         <svg viewBox="0 0 720 240" style={{ width: "100%", display: "block", maxHeight: 280 }}>
           <defs>
-            <marker id="arrNavySub" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
-              <polygon points="0 0, 10 5, 0 10" fill={COLORS.blue} />
+            <marker id="arrNavySub" markerWidth="6" markerHeight="6" refX="5.5" refY="3" orient="auto">
+              <polygon points="0 0, 6 3, 0 6" fill={COLORS.blue} />
             </marker>
-            <marker id="arrOrangeSub" markerWidth="12" markerHeight="12" refX="11" refY="6" orient="auto">
-              <polygon points="0 0, 12 6, 0 12" fill={COLORS.orange} />
+            <marker id="arrOrangeSub" markerWidth="7" markerHeight="7" refX="6.5" refY="3.5" orient="auto">
+              <polygon points="0 0, 7 3.5, 0 7" fill={COLORS.orange} />
             </marker>
-            <marker id="arrGraySub" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
-              <polygon points="0 0, 10 5, 0 10" fill={COLORS.muted} />
+            <marker id="arrGraySub" markerWidth="6" markerHeight="6" refX="5.5" refY="3" orient="auto">
+              <polygon points="0 0, 6 3, 0 6" fill={COLORS.muted} />
             </marker>
           </defs>
 
@@ -266,7 +253,7 @@ const Tab_Hypoalbuminemia = () => {
           {reading === "upstream" && (
             <>
               <line x1="192" y1="120" x2="254" y2="120" stroke={COLORS.blue} strokeWidth="3" markerEnd="url(#arrNavySub)" />
-              <line x1="464" y1="120" x2="556" y2="120" stroke={COLORS.orange} strokeWidth="8" markerEnd="url(#arrOrangeSub)" />
+              <line x1="464" y1="120" x2="552" y2="120" stroke={COLORS.orange} strokeWidth="4" markerEnd="url(#arrOrangeSub)" />
             </>
           )}
 
@@ -288,7 +275,7 @@ const Tab_Hypoalbuminemia = () => {
           {reading === "reverse" && (
             <>
               <line x1="192" y1="120" x2="254" y2="120" stroke={COLORS.blue} strokeWidth="3" markerEnd="url(#arrNavySub)" opacity="0.5" />
-              <line x1="556" y1="120" x2="466" y2="120" stroke={COLORS.muted} strokeWidth="6" markerEnd="url(#arrGraySub)" />
+              <line x1="552" y1="120" x2="466" y2="120" stroke={COLORS.muted} strokeWidth="3" markerEnd="url(#arrGraySub)" />
             </>
           )}
         </svg>
@@ -313,28 +300,6 @@ const Tab_Hypoalbuminemia = () => {
         </div>
       </GlassCard>
 
-      <GlassCard style={{ marginTop: 24 }}>
-        <CardHeader title="Serum albumin in the two weeks before HAPrI onset" badge={<IllustrativeBadge />} />
-        <ResponsiveContainer width="100%" height={280}>
-          <LineChart data={trajectory} margin={{ top: 10, right: 24, left: 0, bottom: 10 }}>
-            <CartesianGrid stroke={COLORS.border} strokeDasharray="3 3" />
-            <XAxis dataKey="day" tick={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: 12, fill: COLORS.subtle }}>
-              <Label value="Days before HAPrI onset" position="insideBottom" offset={-6} style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: 12, fill: COLORS.subtle }} />
-            </XAxis>
-            <YAxis domain={[2, 4.2]} tick={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: 12, fill: COLORS.subtle }}>
-              <Label value="Albumin (g/dL)" angle={-90} position="insideLeft" style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: 12, fill: COLORS.subtle, textAnchor: "middle" }} />
-            </YAxis>
-            <Tooltip contentStyle={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: 12 }} />
-            <ReferenceArea y1={3.5} y2={4.2} fill={COLORS.blue} fillOpacity={0.06} />
-            <ReferenceLine y={3.5} stroke={COLORS.muted} strokeDasharray="4 4" label={{ value: "normal floor 3.5", position: "right", style: { fontSize: 11, fill: COLORS.muted, fontFamily: "'Source Sans 3', sans-serif" } }} />
-            <Line type="monotone" dataKey="albumin" stroke={COLORS.orange} strokeWidth={3} dot={{ fill: COLORS.orange, r: 4 }} />
-          </LineChart>
-        </ResponsiveContainer>
-        <p style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.78rem", color: COLORS.muted, marginTop: 10, fontStyle: "italic", textAlign: "center" }}>
-          Schematic trajectory shaping the narrative. Study-level summaries are being prepared for the confirmatory analysis.
-        </p>
-      </GlassCard>
-
       <InsightBox label="Takeaway" color={COLORS.orange}>
         The algorithm <strong>prioritized</strong> hypoalbuminemia among thousands of candidate dependencies and
         placed it as an upstream node in the graph for HAPrI. That is a <em>prioritization for confirmatory analysis</em>,
@@ -357,7 +322,7 @@ const Tab_Hypoalbuminemia = () => {
    ═══════════════════════════════════════════════════════════════════════════ */
 
 const Tab_ClassicStall = () => {
-  const [timeRevealed, setTimeRevealed] = useState(0);
+  const [timeRevealed, setTimeRevealed] = useState(false);
 
   const withoutTime = {
     label: "No temporal ordering",
@@ -373,7 +338,7 @@ const Tab_ClassicStall = () => {
     text: "Once time is in the data, only the first DAG (X → Y → Z) is consistent with the observed order. The equivalence class collapses to a single oriented DAG, and the identifying formula for P(Y | do(X)) applies."
   };
 
-  const state = timeRevealed >= 0.5 ? withTime : withoutTime;
+  const state = timeRevealed ? withTime : withoutTime;
 
   return (
     <div>
@@ -394,17 +359,17 @@ const Tab_ClassicStall = () => {
 
       <GlassCard style={{ marginTop: 24 }}>
         <CardHeader title="What time adds" />
-        <SliderControl
-          label="Reveal temporal order"
-          value={timeRevealed}
-          min={0}
-          max={1}
-          step={1}
-          onChange={setTimeRevealed}
-          color={state.color}
-          format={v => v >= 0.5 ? "with time" : "no time"}
-          width={220}
-        />
+        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
+          <span style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.88rem", fontWeight: 600, color: COLORS.text }}>Reveal temporal order</span>
+          <button onClick={() => setTimeRevealed(!timeRevealed)} style={{
+            padding: "8px 20px", borderRadius: 20,
+            border: `1.5px solid ${state.color}`,
+            background: timeRevealed ? state.color : "white",
+            color: timeRevealed ? "white" : state.color,
+            fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.84rem",
+            fontWeight: 600, cursor: "pointer", transition: "all 0.2s"
+          }}>{timeRevealed ? "With time" : "No time"}</button>
+        </div>
 
         <div style={{
           marginTop: 18, padding: "18px 22px",
@@ -602,8 +567,124 @@ const Tab_Structure = () => {
         management timing) are <strong>flagged</strong> for follow-on confirmatory analysis.
       </Para>
 
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginTop: 20 }}>
+        <GlassCard>
+          <CardHeader title="PC on flat data (stand-in)" badge={<IllustrativeBadge />} />
+          <svg viewBox="0 0 420 320" style={{ width: "100%", display: "block" }}>
+            <defs>
+              <marker id="arrPCnavy" markerWidth="6" markerHeight="6" refX="5.5" refY="3" orient="auto">
+                <polygon points="0 0, 6 3, 0 6" fill={COLORS.muted} />
+              </marker>
+            </defs>
+            {/* Nodes — same concepts but no clear hierarchy */}
+            <rect x="10" y="20" width="120" height="44" rx="8" fill="#fff" stroke={COLORS.muted} strokeWidth="2" />
+            <text x="70" y="47" textAnchor="middle" fontFamily="Arial" fontSize="11" fontWeight="700" fill={COLORS.ink}>Critical illness</text>
+
+            <rect x="160" y="8" width="100" height="44" rx="8" fill="#fff" stroke={COLORS.muted} strokeWidth="2" />
+            <text x="210" y="35" textAnchor="middle" fontFamily="Arial" fontSize="11" fontWeight="700" fill={COLORS.ink}>Mech. vent</text>
+
+            <rect x="290" y="30" width="120" height="44" rx="8" fill="#fff" stroke={COLORS.muted} strokeWidth="2" />
+            <text x="350" y="57" textAnchor="middle" fontFamily="Arial" fontSize="11" fontWeight="700" fill={COLORS.ink}>Immobility</text>
+
+            <rect x="30" y="130" width="110" height="44" rx="8" fill="#fff" stroke={COLORS.muted} strokeWidth="2" />
+            <text x="85" y="157" textAnchor="middle" fontFamily="Arial" fontSize="11" fontWeight="700" fill={COLORS.ink}>Hemodynamic</text>
+
+            <rect x="170" y="120" width="110" height="44" rx="8" fill="#fff" stroke={COLORS.muted} strokeWidth="2" />
+            <text x="225" y="147" textAnchor="middle" fontFamily="Arial" fontSize="11" fontWeight="700" fill={COLORS.ink}>Hypoalbumin.</text>
+
+            <rect x="310" y="130" width="100" height="44" rx="8" fill="#fff" stroke={COLORS.muted} strokeWidth="2" />
+            <text x="360" y="157" textAnchor="middle" fontFamily="Arial" fontSize="11" fontWeight="700" fill={COLORS.ink}>Moisture</text>
+
+            <circle cx="210" cy="250" r="34" fill="#fff" stroke={COLORS.muted} strokeWidth="2.5" />
+            <text x="210" y="254" textAnchor="middle" fontFamily="Arial" fontSize="13" fontWeight="700" fill={COLORS.ink}>HAPrI</text>
+
+            {/* Dense undirected edges (dashed = can't orient) */}
+            <line x1="130" y1="42" x2="160" y2="30" stroke={COLORS.muted} strokeWidth="1.8" strokeDasharray="4 3" />
+            <line x1="70" y1="64" x2="85" y2="130" stroke={COLORS.muted} strokeWidth="1.8" strokeDasharray="4 3" />
+            <line x1="130" y1="42" x2="290" y2="52" stroke={COLORS.muted} strokeWidth="1.8" strokeDasharray="4 3" />
+            <line x1="260" y1="30" x2="290" y2="42" stroke={COLORS.muted} strokeWidth="1.8" strokeDasharray="4 3" />
+            <line x1="210" y1="52" x2="225" y2="120" stroke={COLORS.muted} strokeWidth="1.8" strokeDasharray="4 3" />
+            <line x1="140" y1="152" x2="170" y2="142" stroke={COLORS.muted} strokeWidth="1.8" strokeDasharray="4 3" />
+            <line x1="280" y1="142" x2="310" y2="142" stroke={COLORS.muted} strokeWidth="1.8" strokeDasharray="4 3" />
+            <line x1="350" y1="74" x2="360" y2="130" stroke={COLORS.muted} strokeWidth="1.8" strokeDasharray="4 3" />
+            <line x1="85" y1="174" x2="190" y2="222" stroke={COLORS.muted} strokeWidth="1.8" strokeDasharray="4 3" />
+            <line x1="225" y1="164" x2="215" y2="216" stroke={COLORS.muted} strokeWidth="1.8" strokeDasharray="4 3" />
+            <line x1="360" y1="174" x2="235" y2="225" stroke={COLORS.muted} strokeWidth="1.8" strokeDasharray="4 3" />
+            <line x1="350" y1="74" x2="225" y2="120" stroke={COLORS.muted} strokeWidth="1.5" strokeDasharray="4 3" />
+            <line x1="70" y1="64" x2="210" y2="216" stroke={COLORS.muted} strokeWidth="1.5" strokeDasharray="4 3" />
+
+            {/* Label */}
+            <text x="210" y="308" textAnchor="middle" fontFamily="Arial" fontSize="11" fill={COLORS.muted} fontStyle="italic">
+              CPDAG — most edges undirected
+            </text>
+          </svg>
+          <p style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.82rem", color: COLORS.muted, marginTop: 8, lineHeight: 1.5 }}>
+            Without temporal structure, the PC algorithm returns a CPDAG where most edges
+            cannot be oriented. Clinically implausible paths survive; the graph is too dense to act on.
+          </p>
+        </GlassCard>
+
+        <GlassCard>
+          <CardHeader title="Object-centric discovery" />
+          <svg viewBox="0 0 420 320" style={{ width: "100%", display: "block" }}>
+            <defs>
+              <marker id="arrOCnavy" markerWidth="6" markerHeight="6" refX="5.5" refY="3" orient="auto">
+                <polygon points="0 0, 6 3, 0 6" fill={COLORS.blue} />
+              </marker>
+              <marker id="arrOCorange" markerWidth="7" markerHeight="7" refX="6.5" refY="3.5" orient="auto">
+                <polygon points="0 0, 7 3.5, 0 7" fill={COLORS.orange} />
+              </marker>
+            </defs>
+            {/* Clean hierarchy — time flows left to right */}
+            <rect x="10" y="110" width="100" height="44" rx="8" fill={COLORS.navy} stroke={COLORS.navy} strokeWidth="2" />
+            <text x="60" y="132" textAnchor="middle" fontFamily="Arial" fontSize="10" fontWeight="700" fill="#fff">Critical illness</text>
+            <text x="60" y="146" textAnchor="middle" fontFamily="Arial" fontSize="8" fill="#fff" opacity="0.8">ICU admission</text>
+
+            <rect x="150" y="20" width="100" height="36" rx="8" fill="#fff" stroke={COLORS.blue} strokeWidth="2" />
+            <text x="200" y="43" textAnchor="middle" fontFamily="Arial" fontSize="10" fontWeight="700" fill={COLORS.navy}>Mech. vent</text>
+
+            <rect x="150" y="72" width="100" height="36" rx="8" fill="#fff" stroke={COLORS.blue} strokeWidth="2" />
+            <text x="200" y="95" textAnchor="middle" fontFamily="Arial" fontSize="10" fontWeight="700" fill={COLORS.navy}>Hemodynamic</text>
+
+            <rect x="150" y="148" width="100" height="36" rx="8" fill="#fff" stroke={COLORS.blue} strokeWidth="2" />
+            <text x="200" y="171" textAnchor="middle" fontFamily="Arial" fontSize="10" fontWeight="700" fill={COLORS.navy}>Immobility</text>
+
+            <rect x="150" y="200" width="100" height="36" rx="8" fill="#fff" stroke={COLORS.blue} strokeWidth="2" />
+            <text x="200" y="223" textAnchor="middle" fontFamily="Arial" fontSize="10" fontWeight="700" fill={COLORS.navy}>Moisture</text>
+
+            <rect x="170" y="260" width="110" height="42" rx="8" fill={COLORS.orange} stroke={COLORS.orange} strokeWidth="2" />
+            <text x="225" y="280" textAnchor="middle" fontFamily="Arial" fontSize="10" fontWeight="700" fill="#fff">Hypoalbumin.</text>
+            <text x="225" y="294" textAnchor="middle" fontFamily="Arial" fontSize="8" fill="#fff" opacity="0.9">candidate</text>
+
+            <circle cx="360" cy="150" r="34" fill="#fff" stroke={COLORS.navy} strokeWidth="3" />
+            <circle cx="360" cy="150" r="27" fill="#fff" stroke={COLORS.navy} strokeWidth="1.5" />
+            <text x="360" y="154" textAnchor="middle" fontFamily="Arial" fontSize="13" fontWeight="700" fill={COLORS.navy}>HAPrI</text>
+
+            {/* Directed edges — all oriented by time */}
+            <line x1="110" y1="122" x2="150" y2="42" stroke={COLORS.blue} strokeWidth="1.8" markerEnd="url(#arrOCnavy)" />
+            <line x1="110" y1="128" x2="150" y2="86" stroke={COLORS.blue} strokeWidth="1.8" markerEnd="url(#arrOCnavy)" />
+            <line x1="110" y1="138" x2="150" y2="162" stroke={COLORS.blue} strokeWidth="1.8" markerEnd="url(#arrOCnavy)" />
+            <line x1="110" y1="142" x2="150" y2="214" stroke={COLORS.blue} strokeWidth="1.8" markerEnd="url(#arrOCnavy)" />
+            <line x1="250" y1="38" x2="330" y2="125" stroke={COLORS.blue} strokeWidth="1.8" markerEnd="url(#arrOCnavy)" />
+            <line x1="250" y1="90" x2="330" y2="135" stroke={COLORS.blue} strokeWidth="1.8" markerEnd="url(#arrOCnavy)" />
+            <line x1="250" y1="166" x2="330" y2="155" stroke={COLORS.blue} strokeWidth="1.8" markerEnd="url(#arrOCnavy)" />
+            <line x1="250" y1="218" x2="330" y2="168" stroke={COLORS.blue} strokeWidth="1.8" markerEnd="url(#arrOCnavy)" />
+            <line x1="280" y1="275" x2="328" y2="170" stroke={COLORS.orange} strokeWidth="2.5" markerEnd="url(#arrOCorange)" />
+
+            {/* Label */}
+            <text x="210" y="316" textAnchor="middle" fontFamily="Arial" fontSize="11" fill={COLORS.navy} fontWeight="600">
+              Oriented DAG — time resolves edges
+            </text>
+          </svg>
+          <p style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.82rem", color: COLORS.subtle, marginTop: 8, lineHeight: 1.5 }}>
+            Temporal precedence orients every edge. The graph is sparse and clinically
+            interpretable; hypoalbuminemia is flagged as a candidate upstream driver.
+          </p>
+        </GlassCard>
+      </div>
+
       <GlassCard style={{ marginTop: 20 }}>
-        <CardHeader title="Discovered causal structure (schematic)" badge={<IllustrativeBadge />} />
+        <CardHeader title="Full discovered structure (schematic)" badge={<IllustrativeBadge />} />
         <img className="figure-asset" src="./figures/fig_haprI_dag.svg" alt="Schematic DAG: Critical illness on the left, a column of rediscovered known risk factors (mechanical ventilation, hemodynamic instability, immobility, moisture exposure) and flagged albumin-pathway nodes (albumin administration, fluid management) in the middle, hypoalbuminemia as an orange highlighted upstream node, and HAPrI as the double-ring outcome on the right. A thick orange candidate-upstream edge connects hypoalbuminemia to HAPrI." style={{ maxWidth: 760 }} />
         <p style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.82rem", color: COLORS.muted, fontStyle: "italic", textAlign: "center", marginTop: 10 }}>
           Edge weights and node placements are schematic. The graph illustrates the topology the algorithm
