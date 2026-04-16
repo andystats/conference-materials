@@ -1200,8 +1200,11 @@ const Tab_MimicAndTry = () => {
 const App = () => {
   const [tab, setTab] = useState(0);
 
+  const mainRef = useRef(null);
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    if (mainRef.current) {
+      mainRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
   }, [tab]);
 
   const renderTab = () => {
@@ -1220,35 +1223,75 @@ const App = () => {
   return (
     <div style={{ minHeight: "100vh", background: COLORS.bg, fontFamily: "'Source Sans 3', sans-serif" }}>
       <header style={{
-        background: "linear-gradient(135deg, #1a202c 0%, #2d3748 100%)",
-        padding: "32px 24px 26px", textAlign: "center", position: "relative", overflow: "hidden"
+        background: "#ffffff",
+        padding: "48px 24px 44px", textAlign: "center", position: "relative",
+        borderBottom: `3px solid ${COLORS.blue}`
       }}>
-        {/* Decorative SHAP schematic in the corner */}
-        <svg style={{ position: "absolute", right: 24, top: 22, opacity: 0.15 }} width="120" height="60" viewBox="0 0 120 60">
-          <circle cx="20" cy="30" r="10" fill="none" stroke="#fff" strokeWidth="1.5" />
-          <circle cx="60" cy="30" r="10" fill="none" stroke="#fff" strokeWidth="1.5" />
-          <circle cx="100" cy="30" r="10" fill="none" stroke="#fff" strokeWidth="1.5" />
-          <line x1="30" y1="30" x2="50" y2="30" stroke="#fff" strokeWidth="1.5" />
-          <line x1="70" y1="30" x2="90" y2="30" stroke="#fff" strokeWidth="1.5" />
-        </svg>
-
-        <div style={{ maxWidth: 920, margin: "0 auto", position: "relative", zIndex: 1 }}>
-          <p style={{ fontSize: "0.78rem", color: "rgba(255,255,255,0.55)", letterSpacing: "0.14em", textTransform: "uppercase", marginBottom: 8 }}>
-            ACIC 2026 &nbsp;&bull;&nbsp; Poster Session 2 &nbsp;&bull;&nbsp; Salt Lake City, Utah
+        <div style={{ maxWidth: 1040, margin: "0 auto" }}>
+          <p style={{ fontSize: "0.88rem", color: COLORS.muted, letterSpacing: "0.14em", textTransform: "uppercase", marginBottom: 14, fontFamily: "'Source Sans 3', sans-serif" }}>
+            ACIC 2026 &nbsp;&bull;&nbsp; Poster Session 2 &nbsp;&bull;&nbsp; Wed May 13, 2026 &nbsp;&bull;&nbsp; Salt Lake City, Utah
           </p>
-          <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "2rem", fontWeight: 700, color: "#f7fafc", lineHeight: 1.22, margin: 0 }}>
+          <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "2.3rem", fontWeight: 700, color: COLORS.text, lineHeight: 1.22, margin: 0 }}>
             SHAP has short memory.<br/>Causal SHAP remembers the DAG.
           </h1>
-          <p style={{ fontSize: "0.95rem", color: "rgba(255,255,255,0.72)", marginTop: 10, lineHeight: 1.55, maxWidth: 720, marginLeft: "auto", marginRight: "auto" }}>
+          <p style={{ fontSize: "1.1rem", color: COLORS.subtle, marginTop: 14, lineHeight: 1.55, maxWidth: 820, marginLeft: "auto", marginRight: "auto", fontFamily: "'Source Sans 3', sans-serif" }}>
             Expert-Augmented Causal SHAP: recovering DAG-consistent feature importance via iterative causal discovery and domain knowledge.
           </p>
-          <p style={{ fontSize: "0.82rem", color: "rgba(255,255,255,0.55)", marginTop: 12, lineHeight: 1.55 }}>
-            Pasi &middot; Harrison &middot; Ross &middot; Alderden &middot; Wilson
-          </p>
+
+          <div style={{ marginTop: 32, display: "flex", justifyContent: "center", gap: 28, flexWrap: "wrap", alignItems: "flex-start" }}>
+            <div style={{ textAlign: "center", minWidth: 170 }}>
+              <div style={{ height: 48, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 10 }}>
+                <span style={{ fontFamily: "'Playfair Display', serif", fontSize: "1rem", color: COLORS.teal, fontWeight: 600 }}>Lucidity</span>
+              </div>
+              <p style={{ fontSize: "1rem", color: COLORS.text, fontWeight: 800, fontFamily: "'Source Sans 3', sans-serif", margin: 0 }}>Lexi Pasi</p>
+              <p style={{ fontSize: "0.86rem", color: COLORS.muted, fontFamily: "'Source Sans 3', sans-serif", margin: 0 }}>Lucidity Sciences</p>
+            </div>
+            <div style={{ textAlign: "center", minWidth: 170 }}>
+              <div style={{ height: 48, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 10 }}>
+                <span style={{ fontFamily: "'Playfair Display', serif", fontSize: "1rem", color: COLORS.teal, fontWeight: 600 }}>Tao of RWD</span>
+              </div>
+              <p style={{ fontSize: "1rem", color: COLORS.text, fontWeight: 600, fontFamily: "'Source Sans 3', sans-serif", margin: 0 }}>Aimee Harrison</p>
+              <p style={{ fontSize: "0.86rem", color: COLORS.muted, fontFamily: "'Source Sans 3', sans-serif", margin: 0 }}>Tao of RWD &middot; Navidence</p>
+            </div>
+            <div style={{ textAlign: "center", minWidth: 170 }}>
+              <img src="./figures/Utah_Logo.jpg" alt="University of Utah" style={{ height: 48, marginBottom: 10 }} />
+              <p style={{ fontSize: "1rem", color: COLORS.text, fontWeight: 600, fontFamily: "'Source Sans 3', sans-serif", margin: 0 }}>Justin Ross</p>
+              <p style={{ fontSize: "0.86rem", color: COLORS.muted, fontFamily: "'Source Sans 3', sans-serif", margin: 0 }}>University of Utah</p>
+            </div>
+            <div style={{ textAlign: "center", minWidth: 170 }}>
+              <img src="./figures/BoiseState_Logo.png" alt="Boise State University" style={{ height: 48, marginBottom: 10 }} />
+              <p style={{ fontSize: "1rem", color: COLORS.text, fontWeight: 600, fontFamily: "'Source Sans 3', sans-serif", margin: 0 }}>Jenny G. Alderden, PhD, RN, FAAN</p>
+              <p style={{ fontSize: "0.86rem", color: COLORS.muted, fontFamily: "'Source Sans 3', sans-serif", margin: 0 }}>Boise State University</p>
+            </div>
+            <div style={{ textAlign: "center", minWidth: 170 }}>
+              <img src="./figures/Utah_Logo.jpg" alt="University of Utah" style={{ height: 48, marginBottom: 10 }} />
+              <p style={{ fontSize: "1rem", color: COLORS.text, fontWeight: 600, fontFamily: "'Source Sans 3', sans-serif", margin: 0 }}>Andy Wilson, PhD, MStat</p>
+              <p style={{ fontSize: "0.86rem", color: COLORS.muted, fontFamily: "'Source Sans 3', sans-serif", margin: 0 }}>Utah &middot; Tao of RWD</p>
+            </div>
+          </div>
         </div>
       </header>
 
-      <main style={{ maxWidth: 920, margin: "0 auto", padding: "32px 24px 48px" }}>
+      {/* Abstract landing section */}
+      <section style={{ maxWidth: 920, margin: "0 auto", padding: "32px 24px 0" }}>
+        <GlassCard style={{ marginBottom: 28 }}>
+          <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "1.5rem", fontWeight: 700, color: COLORS.text, marginBottom: 20 }}>Abstract</h2>
+
+          <p style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "1rem", lineHeight: 1.75, color: COLORS.subtle, marginBottom: 16 }}>
+            Feature importance methods such as SHAP are widely used to help explain machine learning models in health research and other areas. Yet these methods can misattribute feature importance when features have causal structure. Specifically, mediators can absorb credit from upstream causes &mdash; a topological artifact that inflates their apparent importance at the expense of upstream causal drivers.
+          </p>
+
+          <p style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "1rem", lineHeight: 1.75, color: COLORS.subtle, marginBottom: 16 }}>
+            We propose an expert-augmented workflow for DAG-consistent feature attribution that combines constrained causal discovery with an interactive DAG interface to resolve ambiguous edges before computing causal SHAP. The workflow supports iterative refinement through required and forbidden edges and compares standard, DAG-constrained, and adjustment-set SHAP.
+          </p>
+
+          <p style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "1rem", lineHeight: 1.75, color: COLORS.subtle, margin: 0 }}>
+            We evaluated the approach in synthetic data generated under known DAGs using the R package <em>simcausal</em> and in real-world MIMIC-IV data. In simulations, standard SHAP over-attributed importance to mediators, whereas causal SHAP re-ranked features (Kendall&rsquo;s &tau;=0.42 between methods) and reduced mediator inflation. In MIMIC-IV, the expert-informed DAG helped distinguish upstream severity drivers from downstream interventions. These results support expert-guided DAG refinement as a practical route to more causally coherent explanations in structured clinical machine learning.
+          </p>
+        </GlassCard>
+      </section>
+
+      <main ref={mainRef} style={{ maxWidth: 920, margin: "0 auto", padding: "0 24px 48px" }}>
         <SectionNav sections={SECTION_NAMES} active={tab} onSelect={setTab} />
         {renderTab()}
         <PrevNextNav active={tab} total={SECTION_NAMES.length} onSelect={setTab} />
