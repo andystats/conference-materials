@@ -217,6 +217,30 @@ const FlipFoot = ({ children, color }) => (
   <p style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.74rem", color: color || COLORS.muted, fontStyle: "italic", margin: "10px 0 0", textAlign: "right" }}>{children}</p>
 );
 
+/* Friendly animated human: upturned smile, blinking eyes, gently waving raised arm.
+   phaseOffset staggers the animations so two humans side-by-side don't blink in sync. */
+const HappyHuman = ({ color, transform, phaseOffset = 0 }) => (
+  <g transform={transform}>
+    <circle cx="0" cy="0" r="14" fill="#fdf6ec" stroke={color} strokeWidth="2.5" />
+    <ellipse cx="-4" cy="-2" rx="1.5" ry="1.5" fill={color}>
+      <animate attributeName="ry" values="1.5;1.5;0.15;1.5;1.5" keyTimes="0;0.46;0.5;0.54;1" dur="4.2s" begin={`${phaseOffset}s`} repeatCount="indefinite" />
+    </ellipse>
+    <ellipse cx="4" cy="-2" rx="1.5" ry="1.5" fill={color}>
+      <animate attributeName="ry" values="1.5;1.5;0.15;1.5;1.5" keyTimes="0;0.46;0.5;0.54;1" dur="4.2s" begin={`${phaseOffset}s`} repeatCount="indefinite" />
+    </ellipse>
+    <path d="M -6 4 Q 0 9, 6 4" stroke={color} strokeWidth="1.8" fill="none" strokeLinecap="round" />
+    <line x1="0" y1="14" x2="0" y2="42" stroke={color} strokeWidth="2.5" strokeLinecap="round" />
+    <line x1="0" y1="22" x2="-14" y2="32" stroke={color} strokeWidth="2.5" strokeLinecap="round" />
+    {/* raised, waving arm: rotates gently around the shoulder (0, 22) */}
+    <g>
+      <line x1="0" y1="22" x2="14" y2="8" stroke={color} strokeWidth="2.5" strokeLinecap="round" />
+      <animateTransform attributeName="transform" type="rotate" values="-10 0 22; 14 0 22; -10 0 22" keyTimes="0;0.5;1" dur="1.9s" begin={`${phaseOffset}s`} repeatCount="indefinite" />
+    </g>
+    <line x1="0" y1="42" x2="-10" y2="58" stroke={color} strokeWidth="2.5" strokeLinecap="round" />
+    <line x1="0" y1="42" x2="10" y2="58" stroke={color} strokeWidth="2.5" strokeLinecap="round" />
+  </g>
+);
+
 /* ═══════════════════════════════════════════════════════════════════════════
    DATA: simcausal validation results (from Guide §6.2 / §6.3)
    ═══════════════════════════════════════════════════════════════════════════ */
@@ -264,18 +288,18 @@ const Tab_Artifact = () => {
 
   return (
     <div>
-      <SectionTitle kicker="The Problem">
-        SHAP has short memory. That&rsquo;s a problem when features cause each other.
+      <SectionTitle kicker="The problem">
+        Downstream variables hog the glory. SHAP helps the theft along.
       </SectionTitle>
       <Para>
-        SHAP values attribute a model&rsquo;s prediction to its input features by averaging each feature&rsquo;s marginal
-        contribution across <em>every</em> possible ordering. It treats features as exchangeable. But in a causal system,
-        features are <strong>not</strong> exchangeable &mdash; causes come before effects.
+        SHAP attributes a model&rsquo;s prediction by averaging each feature&rsquo;s marginal contribution across <em>every</em>
+        possible ordering of the features. It treats them as exchangeable. In a causal system they are not:
+        causes come before effects, and shuffling that order is how credit gets stolen.
       </Para>
       <Para>
-        When SHAP permutes features freely, variables that sit close to the outcome in the causal graph
-        (mediators, downstream consequences) absorb credit that properly belongs to the upstream causes. This isn&rsquo;t
-        a bug in SHAP. It&rsquo;s a <strong>topological artifact</strong>.
+        Variables that sit close to the outcome, mediators and downstream consequences, absorb credit that
+        belongs to upstream causes. This isn&rsquo;t a bug. It&rsquo;s a <strong>topological artifact</strong> of feeding a
+        causal system into a method that assumes features are a flat, exchangeable bag.
       </Para>
 
       <GlassCard style={{ marginTop: 28, marginBottom: 28, padding: "32px 32px 28px" }}>
@@ -682,7 +706,7 @@ const Tab_SimEvidence = () => {
   return (
     <div>
       <SectionTitle kicker="Evidence — simcausal (n=500, 12 vars)">
-        Standard vs Causal SHAP, side by side.
+        Where the credit actually belongs.
       </SectionTitle>
       <Para>
         Known ground-truth DGP: Treatment has total effect <strong>+11.0</strong> on Outcome &mdash; <strong>+5 direct</strong>,
@@ -786,7 +810,7 @@ const Tab_RankMovement = () => {
   return (
     <div>
       <SectionTitle kicker="Rank movement">
-        Who moved, and by how much.
+        Who was hogging the glory, and who earned it.
       </SectionTitle>
       <Para>
         Hover any feature to trace its path from its Standard rank to its Causal rank. Steep lines are features
@@ -1047,6 +1071,23 @@ const Tab_WhenItMatters = () => {
 
 const Tab_Workflow = () => {
   const [step, setStep] = useState(0);
+  const [phase, setPhase] = useState(0);
+  const timersRef = useRef([]);
+
+  const playCascade = () => {
+    timersRef.current.forEach(clearTimeout);
+    setPhase(0);
+    timersRef.current = [
+      setTimeout(() => setPhase(1), 400),   // algorithm-only cascade lights up
+      setTimeout(() => setPhase(2), 2900),  // expert steps in and reroutes
+      setTimeout(() => setPhase(3), 5100),  // expert-informed ranking settles
+    ];
+  };
+
+  useEffect(() => {
+    playCascade();
+    return () => timersRef.current.forEach(clearTimeout);
+  }, []);
 
   const STEPS = [
     {
@@ -1170,16 +1211,25 @@ const Tab_Workflow = () => {
         environment.
       </Para>
 
-      {/* ===== Hand-drawn human-in-the-loop figure ===== */}
-      <GlassCard style={{ marginTop: 24, marginBottom: 24, padding: "28px 24px 24px" }}>
+      {/* ===== Animated human-in-the-loop figure ===== */}
+      <GlassCard style={{ marginTop: 24, marginBottom: 24, padding: "28px 24px 24px", position: "relative" }}>
+        <button onClick={playCascade} style={{
+          position: "absolute", top: 18, right: 18, zIndex: 2,
+          padding: "6px 14px", borderRadius: 20,
+          border: `1px solid ${COLORS.border}`, background: "white",
+          color: COLORS.subtle, fontSize: "0.76rem", fontWeight: 600,
+          cursor: "pointer", fontFamily: "'Source Sans 3', sans-serif",
+          letterSpacing: "0.05em", textTransform: "uppercase"
+        }}>&#9658; Replay</button>
+
         <div style={{ textAlign: "center", marginBottom: 18 }}>
           <h4 style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.78rem", letterSpacing: "0.16em", textTransform: "uppercase", color: COLORS.muted, marginBottom: 6 }}>The central loop</h4>
-          <h3 style={{ fontFamily: "'Caveat', cursive", fontSize: "2rem", color: COLORS.text, fontWeight: 600, margin: 0 }}>
-            The expert closes the loop
+          <h3 style={{ fontFamily: "'Caveat', cursive", fontSize: "2rem", color: COLORS.text, fontWeight: 600, margin: 0, minHeight: "2.4rem", transition: "color 0.5s" }}>
+            {phase < 2 ? "Algorithms alone skip the hard edges" : "The expert closes the loop"}
           </h3>
         </div>
 
-        <svg viewBox="0 0 900 440" style={{ width: "100%", maxWidth: 900, display: "block", margin: "0 auto" }}>
+        <svg viewBox="0 0 900 460" style={{ width: "100%", maxWidth: 900, display: "block", margin: "0 auto" }}>
           <defs>
             <marker id="wfArrowInk" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
               <polygon points="0 0, 8 4, 0 8" fill={COLORS.text} />
@@ -1187,91 +1237,102 @@ const Tab_Workflow = () => {
             <marker id="wfArrowOrange" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto">
               <polygon points="0 0, 9 4.5, 0 9" fill={COLORS.orange} />
             </marker>
-            <marker id="wfArrowRed" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto">
-              <polygon points="0 0, 9 4.5, 0 9" fill={COLORS.red} />
+            <marker id="wfArrowGray" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+              <polygon points="0 0, 8 4, 0 8" fill={COLORS.gray} />
             </marker>
           </defs>
 
-          {/* ===== Top row: 5 stages ===== */}
-
-          {/* Node 1: Data */}
-          <circle cx="80" cy="170" r="48" fill={hexAlpha(COLORS.blue, 0.1)} stroke={COLORS.blue} strokeWidth="3" strokeLinecap="round" />
-          <text x="80" y="166" textAnchor="middle" fontFamily="'Caveat', cursive" fontSize="24" fontWeight="700" fill={COLORS.blue}>Data</text>
-          <text x="80" y="190" textAnchor="middle" fontFamily="'Caveat', cursive" fontSize="15" fill={COLORS.subtle}>X, Y</text>
-
-          {/* Node 2: Discover */}
-          <circle cx="260" cy="170" r="54" fill={hexAlpha(COLORS.purple, 0.1)} stroke={COLORS.purple} strokeWidth="3" strokeLinecap="round" />
-          <text x="260" y="165" textAnchor="middle" fontFamily="'Caveat', cursive" fontSize="22" fontWeight="700" fill={COLORS.purple}>Discover</text>
-          <text x="260" y="188" textAnchor="middle" fontFamily="'Caveat', cursive" fontSize="14" fill={COLORS.subtle}>PC / GES</text>
-          <text x="260" y="206" textAnchor="middle" fontFamily="'Caveat', cursive" fontSize="13" fill={COLORS.muted} fontStyle="italic">(algorithm)</text>
-
-          {/* Node 3: Expert — LARGER + person */}
-          <circle cx="460" cy="170" r="66" fill={hexAlpha(COLORS.orange, 0.14)} stroke={COLORS.orange} strokeWidth="4" strokeLinecap="round" />
-          <text x="460" y="156" textAnchor="middle" fontFamily="'Caveat', cursive" fontSize="26" fontWeight="700" fill={COLORS.orange}>Expert</text>
-          <text x="460" y="184" textAnchor="middle" fontFamily="'Caveat', cursive" fontSize="16" fill={COLORS.orange}>resolves edges</text>
-
-          {/* Stick person above Expert */}
-          <g transform="translate(460, 68)">
-            <circle cx="0" cy="0" r="14" fill="#fdf6ec" stroke={COLORS.orange} strokeWidth="2.5" />
-            <circle cx="-4" cy="-2" r="1.5" fill={COLORS.orange} />
-            <circle cx="4" cy="-2" r="1.5" fill={COLORS.orange} />
-            <path d="M -5 5 Q 0 8, 5 5" stroke={COLORS.orange} strokeWidth="1.5" fill="none" strokeLinecap="round" />
-            <line x1="0" y1="14" x2="0" y2="42" stroke={COLORS.orange} strokeWidth="2.5" strokeLinecap="round" />
-            <line x1="0" y1="22" x2="-14" y2="32" stroke={COLORS.orange} strokeWidth="2.5" strokeLinecap="round" />
-            <line x1="0" y1="22" x2="14" y2="32" stroke={COLORS.orange} strokeWidth="2.5" strokeLinecap="round" />
-            <line x1="0" y1="42" x2="-10" y2="58" stroke={COLORS.orange} strokeWidth="2.5" strokeLinecap="round" />
-            <line x1="0" y1="42" x2="10" y2="58" stroke={COLORS.orange} strokeWidth="2.5" strokeLinecap="round" />
-          </g>
-          {/* Thought bubble for Expert */}
+          {/* ===== Node: Data (always bright) ===== */}
           <g>
+            <circle cx="80" cy="170" r="48" fill={hexAlpha(COLORS.blue, 0.1)} stroke={COLORS.blue} strokeWidth="3" strokeLinecap="round" />
+            <text x="80" y="166" textAnchor="middle" fontFamily="'Caveat', cursive" fontSize="24" fontWeight="700" fill={COLORS.blue}>Data</text>
+            <text x="80" y="190" textAnchor="middle" fontFamily="'Caveat', cursive" fontSize="15" fill={COLORS.subtle}>X, Y</text>
+          </g>
+
+          {/* ===== Arrow: Data → Discover ===== */}
+          <path d="M 130 168 Q 170 162, 205 168" stroke={COLORS.text} strokeWidth="2.5" fill="none" strokeLinecap="round" markerEnd="url(#wfArrowInk)" style={{ opacity: phase >= 1 ? 1 : 0.2, transition: "opacity 0.5s" }} />
+
+          {/* ===== Node: Discover (bright from phase 1) ===== */}
+          <g style={{ opacity: phase >= 1 ? 1 : 0.25, transition: "opacity 0.5s" }}>
+            <circle cx="260" cy="170" r="54" fill={hexAlpha(COLORS.purple, 0.1)} stroke={COLORS.purple} strokeWidth="3" strokeLinecap="round" />
+            <text x="260" y="165" textAnchor="middle" fontFamily="'Caveat', cursive" fontSize="22" fontWeight="700" fill={COLORS.purple}>Discover</text>
+            <text x="260" y="188" textAnchor="middle" fontFamily="'Caveat', cursive" fontSize="14" fill={COLORS.subtle}>PC / GES</text>
+            <text x="260" y="206" textAnchor="middle" fontFamily="'Caveat', cursive" fontSize="13" fill={COLORS.muted} fontStyle="italic">(algorithm)</text>
+          </g>
+
+          {/* ===== Skip edge: Discover → Causal SHAP (algorithm-only path) ===== */}
+          <g style={{ opacity: phase === 1 ? 1 : (phase >= 2 ? 0.18 : 0), transition: "opacity 0.7s" }}>
+            <path d="M 314 148 Q 470 90, 626 148" stroke={COLORS.gray} strokeWidth="2.5" fill="none" strokeLinecap="round" strokeDasharray="7 5" markerEnd="url(#wfArrowGray)" />
+            <text x="470" y="84" textAnchor="middle" fontFamily="'Caveat', cursive" fontSize="16" fill={COLORS.gray} fontStyle="italic">algorithm-only: skip the expert</text>
+          </g>
+
+          {/* ===== Node: Causal SHAP (bright from phase 1) ===== */}
+          <g style={{ opacity: phase >= 1 ? 1 : 0.25, transition: "opacity 0.5s" }}>
+            <circle cx="680" cy="170" r="54" fill={hexAlpha(COLORS.teal, 0.1)} stroke={COLORS.teal} strokeWidth="3" strokeLinecap="round" />
+            <text x="680" y="165" textAnchor="middle" fontFamily="'Caveat', cursive" fontSize="22" fontWeight="700" fill={COLORS.teal}>Causal</text>
+            <text x="680" y="188" textAnchor="middle" fontFamily="'Caveat', cursive" fontSize="22" fontWeight="700" fill={COLORS.teal}>SHAP</text>
+            <text x="680" y="210" textAnchor="middle" fontFamily="'Caveat', cursive" fontSize="13" fill={COLORS.muted} fontStyle="italic">(algorithm)</text>
+          </g>
+
+          {/* ===== Arrow: Causal SHAP → Review ===== */}
+          <path d="M 736 168 Q 760 162, 768 168" stroke={COLORS.text} strokeWidth="2.5" fill="none" strokeLinecap="round" markerEnd="url(#wfArrowInk)" style={{ opacity: phase >= 1 ? 1 : 0.2, transition: "opacity 0.5s" }} />
+
+          {/* ===== Node: Review + happy human ===== */}
+          <g style={{ opacity: phase >= 1 ? 1 : 0.3, transition: "opacity 0.5s" }}>
+            <circle cx="830" cy="170" r="60" fill={hexAlpha(COLORS.red, 0.12)} stroke={COLORS.red} strokeWidth="4" strokeLinecap="round" />
+            <text x="830" y="160" textAnchor="middle" fontFamily="'Caveat', cursive" fontSize="24" fontWeight="700" fill={COLORS.red}>Review</text>
+            <text x="830" y="186" textAnchor="middle" fontFamily="'Caveat', cursive" fontSize="15" fill={COLORS.red}>&amp; iterate</text>
+            <HappyHuman color={COLORS.red} transform="translate(830, 68)" phaseOffset={0.9} />
+          </g>
+
+          {/* ===== Review thought bubble (content changes by phase) ===== */}
+          <g style={{ opacity: phase >= 1 ? 1 : 0, transition: "opacity 0.6s" }}>
+            <path d="M 750 75 Q 730 70, 710 80 L 650 80 Q 635 80, 635 92 L 635 108 Q 635 122, 655 122 L 710 122 Q 735 122, 745 115 L 750 125 Z" fill="#fff" stroke={COLORS.red} strokeWidth="1.8" strokeLinejoin="round" />
+            {phase >= 3 ? (
+              <>
+                <text x="690" y="98" textAnchor="middle" fontFamily="'Caveat', cursive" fontSize="15" fill={COLORS.red}>treatment is #1!</text>
+                <text x="690" y="116" textAnchor="middle" fontFamily="'Caveat', cursive" fontSize="15" fill={COLORS.red}>that matches the clinic</text>
+              </>
+            ) : (
+              <>
+                <text x="690" y="98" textAnchor="middle" fontFamily="'Caveat', cursive" fontSize="15" fill={COLORS.red}>hmm, mediators</text>
+                <text x="690" y="116" textAnchor="middle" fontFamily="'Caveat', cursive" fontSize="15" fill={COLORS.red}>outrank treatment?</text>
+              </>
+            )}
+          </g>
+
+          {/* ===== Arrow: Discover → Expert (bright from phase 2) ===== */}
+          <path d="M 316 192 Q 365 220, 393 202" stroke={COLORS.text} strokeWidth="2.5" fill="none" strokeLinecap="round" markerEnd="url(#wfArrowInk)" style={{ opacity: phase >= 2 ? 1 : 0.15, transition: "opacity 0.7s" }} />
+
+          {/* ===== Node: Expert + happy human ===== */}
+          <g style={{ opacity: phase >= 2 ? 1 : 0.28, transition: "opacity 0.7s" }}>
+            <circle cx="460" cy="170" r="66" fill={hexAlpha(COLORS.orange, 0.14)} stroke={COLORS.orange} strokeWidth="4" strokeLinecap="round" />
+            <text x="460" y="156" textAnchor="middle" fontFamily="'Caveat', cursive" fontSize="26" fontWeight="700" fill={COLORS.orange}>Expert</text>
+            <text x="460" y="184" textAnchor="middle" fontFamily="'Caveat', cursive" fontSize="16" fill={COLORS.orange}>resolves edges</text>
+            <HappyHuman color={COLORS.orange} transform="translate(460, 68)" phaseOffset={0} />
+          </g>
+
+          {/* ===== Expert thought bubble ===== */}
+          <g style={{ opacity: phase >= 2 ? 1 : 0, transition: "opacity 0.7s" }}>
             <path d="M 540 75 Q 560 70, 580 80 L 660 80 Q 680 80, 680 95 L 680 110 Q 680 125, 660 125 L 580 125 Q 560 125, 552 115 L 540 125 Z" fill="#fff" stroke={COLORS.orange} strokeWidth="1.8" strokeLinejoin="round" />
             <text x="618" y="100" textAnchor="middle" fontFamily="'Caveat', cursive" fontSize="15" fill={COLORS.orange}>which edges</text>
             <text x="618" y="118" textAnchor="middle" fontFamily="'Caveat', cursive" fontSize="15" fill={COLORS.orange}>make sense?</text>
           </g>
 
-          {/* Node 4: Causal SHAP */}
-          <circle cx="680" cy="170" r="54" fill={hexAlpha(COLORS.teal, 0.1)} stroke={COLORS.teal} strokeWidth="3" strokeLinecap="round" />
-          <text x="680" y="165" textAnchor="middle" fontFamily="'Caveat', cursive" fontSize="22" fontWeight="700" fill={COLORS.teal}>Causal</text>
-          <text x="680" y="188" textAnchor="middle" fontFamily="'Caveat', cursive" fontSize="22" fontWeight="700" fill={COLORS.teal}>SHAP</text>
-          <text x="680" y="210" textAnchor="middle" fontFamily="'Caveat', cursive" fontSize="13" fill={COLORS.muted} fontStyle="italic">(algorithm)</text>
+          {/* ===== Arrow: Expert → Causal SHAP (bright from phase 2) ===== */}
+          <path d="M 528 202 Q 580 220, 624 192" stroke={COLORS.text} strokeWidth="2.5" fill="none" strokeLinecap="round" markerEnd="url(#wfArrowInk)" style={{ opacity: phase >= 2 ? 1 : 0.15, transition: "opacity 0.7s" }} />
 
-          {/* Node 5: Review — LARGER + person */}
-          <circle cx="830" cy="170" r="60" fill={hexAlpha(COLORS.red, 0.12)} stroke={COLORS.red} strokeWidth="4" strokeLinecap="round" />
-          <text x="830" y="160" textAnchor="middle" fontFamily="'Caveat', cursive" fontSize="24" fontWeight="700" fill={COLORS.red}>Review</text>
-          <text x="830" y="186" textAnchor="middle" fontFamily="'Caveat', cursive" fontSize="15" fill={COLORS.red}>&amp; iterate</text>
-
-          {/* Stick person above Review */}
-          <g transform="translate(830, 68)">
-            <circle cx="0" cy="0" r="14" fill="#fdf6ec" stroke={COLORS.red} strokeWidth="2.5" />
-            <circle cx="-4" cy="-2" r="1.5" fill={COLORS.red} />
-            <circle cx="4" cy="-2" r="1.5" fill={COLORS.red} />
-            <path d="M -5 6 Q 0 3, 5 6" stroke={COLORS.red} strokeWidth="1.5" fill="none" strokeLinecap="round" />
-            <line x1="0" y1="14" x2="0" y2="42" stroke={COLORS.red} strokeWidth="2.5" strokeLinecap="round" />
-            <line x1="0" y1="22" x2="-14" y2="32" stroke={COLORS.red} strokeWidth="2.5" strokeLinecap="round" />
-            <line x1="0" y1="22" x2="14" y2="32" stroke={COLORS.red} strokeWidth="2.5" strokeLinecap="round" />
-            <line x1="0" y1="42" x2="-10" y2="58" stroke={COLORS.red} strokeWidth="2.5" strokeLinecap="round" />
-            <line x1="0" y1="42" x2="10" y2="58" stroke={COLORS.red} strokeWidth="2.5" strokeLinecap="round" />
+          {/* ===== Feedback loop (bright from phase 3) ===== */}
+          <g style={{ opacity: phase >= 3 ? 1 : 0.25, transition: "opacity 0.8s" }}>
+            <path d="M 830 232 Q 830 360, 650 390 Q 460 415, 460 240" stroke={COLORS.orange} strokeWidth="3.5" fill="none" strokeLinecap="round" strokeDasharray="8 5" markerEnd="url(#wfArrowOrange)" />
+            <text x="640" y="432" textAnchor="middle" fontFamily="'Caveat', cursive" fontSize="20" fontWeight="700" fill={COLORS.orange} fontStyle="italic">iterate &mdash; the loop is the point</text>
           </g>
-          {/* Thought bubble for Review */}
-          <g>
-            <path d="M 750 75 Q 730 70, 710 80 L 650 80 Q 635 80, 635 92 L 635 108 Q 635 122, 655 122 L 710 122 Q 735 122, 745 115 L 750 125 Z" fill="#fff" stroke={COLORS.red} strokeWidth="1.8" strokeLinejoin="round" />
-            <text x="690" y="98" textAnchor="middle" fontFamily="'Caveat', cursive" fontSize="15" fill={COLORS.red}>does this match</text>
-            <text x="690" y="116" textAnchor="middle" fontFamily="'Caveat', cursive" fontSize="15" fill={COLORS.red}>the clinic?</text>
-          </g>
-
-          {/* ===== Forward arrows (hand-drawn curves) ===== */}
-          <path d="M 130 168 Q 170 162, 205 168" stroke={COLORS.text} strokeWidth="2.5" fill="none" strokeLinecap="round" markerEnd="url(#wfArrowInk)" />
-          <path d="M 316 172 Q 365 180, 393 172" stroke={COLORS.text} strokeWidth="2.5" fill="none" strokeLinecap="round" markerEnd="url(#wfArrowInk)" />
-          <path d="M 528 172 Q 580 180, 624 172" stroke={COLORS.text} strokeWidth="2.5" fill="none" strokeLinecap="round" markerEnd="url(#wfArrowInk)" />
-          <path d="M 736 168 Q 760 162, 768 168" stroke={COLORS.text} strokeWidth="2.5" fill="none" strokeLinecap="round" markerEnd="url(#wfArrowInk)" />
-
-          {/* ===== Feedback loop — BIG curved arrow from Review back to Expert ===== */}
-          <path d="M 830 232 Q 830 340, 650 370 Q 460 395, 460 240" stroke={COLORS.orange} strokeWidth="3.5" fill="none" strokeLinecap="round" strokeDasharray="8 5" markerEnd="url(#wfArrowOrange)" />
-          <text x="640" y="405" textAnchor="middle" fontFamily="'Caveat', cursive" fontSize="20" fontWeight="700" fill={COLORS.orange} fontStyle="italic">iterate — the loop is the point</text>
         </svg>
 
-        <p style={{ fontFamily: "'Caveat', cursive", fontSize: "1.3rem", color: COLORS.subtle, textAlign: "center", marginTop: 16, lineHeight: 1.4 }}>
-          Two algorithms bookend two people. The people are not optional.
+        <p style={{ fontFamily: "'Caveat', cursive", fontSize: "1.3rem", color: COLORS.subtle, textAlign: "center", marginTop: 16, lineHeight: 1.4, transition: "color 0.5s" }}>
+          {phase < 2
+            ? "Without the expert, mediators and downstream variables hog the credit."
+            : "Two algorithms bookend two people. The people are not optional."}
         </p>
       </GlassCard>
 
@@ -1308,46 +1369,229 @@ const Tab_Workflow = () => {
 };
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   TAB 6 — MIMIC-IV + Try It
+   TAB 6 — Try It (interactive simcausal DAG voting)
    ═══════════════════════════════════════════════════════════════════════════ */
 
-const Tab_MimicAndTry = () => {
+/* Stylized attribution panel for the interactive demo. stdShap mirrors the
+   mediator-inflation pattern; target is the true-effect-magnitude ranking that
+   causal SHAP approximates as the DAG resolves. */
+const DEMO_FEATURES = [
+  { name: "Treatment",    role: "true cause", stdShap: 0.35, target: 1.00 },
+  { name: "Comorbidity",  role: "confounder", stdShap: 0.65, target: 0.40 },
+  { name: "Inflammation", role: "mediator",   stdShap: 1.00, target: 0.20 },
+  { name: "Oxygenation",  role: "mediator",   stdShap: 0.85, target: 0.05 },
+  { name: "HR",           role: "downstream", stdShap: 0.60, target: 0.00 },
+  { name: "BMI",          role: "confounder", stdShap: 0.25, target: 0.02 },
+];
+
+const TRYIT_VOTES = [
+  {
+    prompt: "Does inflammation cause hypoxia, or does hypoxia cause inflammation?",
+    optA: "Inflammation \u2192 Oxygenation",
+    optB: "Oxygenation \u2192 Inflammation",
+  },
+  {
+    prompt: "Does comorbidity drive treatment, or does treatment create comorbidity?",
+    optA: "Comorbidity \u2192 Treatment",
+    optB: "Treatment \u2192 Comorbidity",
+  },
+  {
+    prompt: "Does treatment reach outcome directly, or only through mediators?",
+    optA: "Direct: Treatment \u2192 Outcome",
+    optB: "Only via inflammation / oxygenation",
+  },
+];
+
+const Tab_TryIt = () => {
+  const [votes, setVotes] = useState([null, null, null]);
+  const correctCount = votes.filter(v => v === "A").length;
+  const answered = votes.filter(v => v !== null).length;
+  const w = correctCount / 3;
+  const setVote = (i, v) => setVotes(prev => prev.map((p, j) => (j === i ? v : p)));
+  const reset = () => setVotes([null, null, null]);
+
+  const bars = DEMO_FEATURES
+    .map(f => ({ ...f, shown: f.stdShap + (f.target - f.stdShap) * w }))
+    .sort((a, b) => b.shown - a.shown);
+  const maxShown = Math.max(...bars.map(b => b.shown));
+
+  const NODE = {
+    Com: { x: 90,  y: 70,  label: "Comorbidity",  color: COLORS.gray, r: 32 },
+    BMI: { x: 500, y: 70,  label: "BMI",          color: COLORS.gray, r: 28 },
+    Tx:  { x: 90,  y: 220, label: "Treatment",    color: COLORS.blue, r: 34 },
+    Inf: { x: 300, y: 220, label: "Inflammation", color: COLORS.red,  r: 34 },
+    Oxy: { x: 500, y: 220, label: "Oxygenation",  color: COLORS.red,  r: 34 },
+    Out: { x: 300, y: 360, label: "Outcome",      color: COLORS.text, r: 32 },
+  };
+
+  const cardKicker = { fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.78rem", letterSpacing: "0.12em", textTransform: "uppercase", color: COLORS.muted, fontWeight: 700, margin: 0 };
+
   return (
     <div>
       <SectionTitle kicker="Try it yourself">
-        The application and reading list.
+        Vote your DAG. Watch the injustice reverse.
       </SectionTitle>
       <Para>
-        Everything on this dashboard is runnable. The Python Shiny app below implements the full
-        discover &rarr; resolve &rarr; attribute &rarr; review loop against the simcausal benchmark
-        and the MIMIC-IV pressure-injury cohort.
+        We can&rsquo;t give you MIMIC in a browser tab: the cohort is credentialed and the models are heavy.
+        But we can give you the next best thing. A simcausal DAG where we know the ground truth, three
+        ambiguous edges the discovery algorithm can&rsquo;t orient on its own, and a live feature-attribution
+        ranking that updates with every vote.
+      </Para>
+      <Para>
+        Each vote is a place where your clinical judgement would override the algorithm, the same way it
+        would inside the Shiny app. Start with every edge unresolved and plain SHAP underneath; watch the
+        ranking rearrange as the DAG comes into focus.
       </Para>
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 14 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "1.05fr 1fr", gap: 16, marginTop: 20 }}>
+        {/* Resolved DAG */}
         <GlassCard>
-          <div style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.78rem", letterSpacing: "0.1em", textTransform: "uppercase", color: COLORS.purple, fontWeight: 700, marginBottom: 6 }}>Application</div>
-          <div style={{ fontFamily: "'Playfair Display', serif", fontSize: "1.1rem", fontWeight: 700, color: COLORS.text, marginBottom: 8 }}>Causal Discovery Playground</div>
-          <Para>Python Shiny app: discovery, constraint specification, interventional SHAP, Shrier-Platt adjustment sets. All three algorithms (PC, DirectLiNGAM, GES via causal-learn).</Para>
-          <code style={{ display: "block", padding: "8px 10px", background: "rgba(45,55,72,0.06)", borderRadius: 6, fontSize: "0.82rem", color: COLORS.text, fontFamily: "Menlo, monospace" }}>
-            pip install causal-learn shap scikit-learn shiny<br/>
-            python -m shiny run app.py
-          </code>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 10 }}>
+            <h4 style={cardKicker}>Resolved DAG</h4>
+            <span style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.78rem", color: COLORS.muted }}>{answered}/3 voted</span>
+          </div>
+          <svg viewBox="0 0 600 420" style={{ width: "100%", display: "block" }}>
+            <defs>
+              <marker id="trArrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+                <polygon points="0 0, 8 4, 0 8" fill={COLORS.text} />
+              </marker>
+              <marker id="trArrowTeal" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto">
+                <polygon points="0 0, 9 4.5, 0 9" fill={COLORS.teal} />
+              </marker>
+              <marker id="trArrowRed" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto">
+                <polygon points="0 0, 9 4.5, 0 9" fill={COLORS.red} />
+              </marker>
+            </defs>
+
+            {/* Fixed edges (always drawn) */}
+            <line x1="110" y1="94"  x2="278" y2="196" stroke={COLORS.text} strokeWidth="2" markerEnd="url(#trArrow)" opacity="0.7" />
+            <line x1="478" y1="92"  x2="324" y2="196" stroke={COLORS.text} strokeWidth="2" markerEnd="url(#trArrow)" opacity="0.7" />
+            <line x1="124" y1="220" x2="266" y2="220" stroke={COLORS.text} strokeWidth="2" markerEnd="url(#trArrow)" opacity="0.7" />
+            <line x1="300" y1="254" x2="300" y2="328" stroke={COLORS.text} strokeWidth="2" markerEnd="url(#trArrow)" opacity="0.7" />
+            <line x1="478" y1="244" x2="332" y2="346" stroke={COLORS.text} strokeWidth="2" markerEnd="url(#trArrow)" opacity="0.7" />
+
+            {/* Vote 1: Inflammation <-> Oxygenation */}
+            {votes[0] === null && <line x1="334" y1="220" x2="466" y2="220" stroke={COLORS.muted} strokeWidth="2" strokeDasharray="6 4" />}
+            {votes[0] === "A" && <line x1="334" y1="220" x2="466" y2="220" stroke={COLORS.teal} strokeWidth="2.8" markerEnd="url(#trArrowTeal)" />}
+            {votes[0] === "B" && <line x1="466" y1="220" x2="334" y2="220" stroke={COLORS.red}  strokeWidth="2.8" markerEnd="url(#trArrowRed)" />}
+
+            {/* Vote 2: Comorbidity <-> Treatment */}
+            {votes[1] === null && <line x1="90" y1="102" x2="90" y2="186" stroke={COLORS.muted} strokeWidth="2" strokeDasharray="6 4" />}
+            {votes[1] === "A" && <line x1="90" y1="102" x2="90" y2="186" stroke={COLORS.teal} strokeWidth="2.8" markerEnd="url(#trArrowTeal)" />}
+            {votes[1] === "B" && <line x1="90" y1="186" x2="90" y2="102" stroke={COLORS.red}  strokeWidth="2.8" markerEnd="url(#trArrowRed)" />}
+
+            {/* Vote 3: Treatment -> Outcome (present or absent) */}
+            {votes[2] === null && <path d="M 100 250 Q 140 330, 272 356" fill="none" stroke={COLORS.muted} strokeWidth="2" strokeDasharray="6 4" />}
+            {votes[2] === "A" && <path d="M 100 250 Q 140 330, 272 356" fill="none" stroke={COLORS.teal} strokeWidth="2.8" markerEnd="url(#trArrowTeal)" />}
+
+            {/* Nodes on top */}
+            {Object.entries(NODE).map(([k, n]) => (
+              <g key={k}>
+                <circle cx={n.x} cy={n.y} r={n.r} fill={hexAlpha(n.color, 0.14)} stroke={n.color} strokeWidth="2" />
+                <text x={n.x} y={n.y+4} textAnchor="middle" fontFamily="'Source Sans 3', sans-serif" fontSize="11" fontWeight="700" fill={n.color}>{n.label}</text>
+              </g>
+            ))}
+          </svg>
+          <p style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.78rem", color: COLORS.muted, textAlign: "center", marginTop: 6 }}>
+            Dashed = unresolved. <span style={{ color: COLORS.teal, fontWeight: 700 }}>Teal</span> = matches truth. <span style={{ color: COLORS.red, fontWeight: 700 }}>Red</span> = contradicts truth.
+          </p>
         </GlassCard>
 
+        {/* Votes */}
         <GlassCard>
-          <div style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.78rem", letterSpacing: "0.1em", textTransform: "uppercase", color: COLORS.teal, fontWeight: 700, marginBottom: 6 }}>Datasets</div>
-          <div style={{ fontFamily: "'Playfair Display', serif", fontSize: "1.1rem", fontWeight: 700, color: COLORS.text, marginBottom: 8 }}>simcausal + MIMIC-IV PRI</div>
-          <Para>
-            <strong>simcausal</strong>: n=500, 12 variables, ground-truth DAG from R `simcausal`.
-          </Para>
-          <Para>
-            <strong>MIMIC-IV PRI</strong>: n=22,717, 33 variables, hospital-acquired pressure injury outcome.
-            Requires MIMIC-IV credentialed access.
-          </Para>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 12 }}>
+            <h4 style={cardKicker}>Your votes</h4>
+            <button onClick={reset} style={{
+              padding: "4px 10px", borderRadius: 6,
+              border: `1px solid ${COLORS.border}`, background: "white", color: COLORS.subtle,
+              fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.75rem", cursor: "pointer"
+            }}>Reset</button>
+          </div>
+          {TRYIT_VOTES.map((v, i) => (
+            <div key={i} style={{ marginBottom: 14 }}>
+              <p style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.86rem", fontWeight: 600, color: COLORS.text, margin: "0 0 6px" }}>
+                {i+1}. {v.prompt}
+              </p>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6 }}>
+                {["A", "B"].map(key => {
+                  const label = key === "A" ? v.optA : v.optB;
+                  const isSelected = votes[i] === key;
+                  const bg = isSelected ? (key === "A" ? COLORS.teal : COLORS.red) : "white";
+                  const txt = isSelected ? "white" : COLORS.text;
+                  return (
+                    <button key={key} onClick={() => setVote(i, key)} style={{
+                      padding: "8px 10px", borderRadius: 6,
+                      border: `1px solid ${isSelected ? bg : COLORS.border}`,
+                      background: bg, color: txt,
+                      fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.78rem", fontWeight: 600,
+                      cursor: "pointer", textAlign: "left", transition: "all 0.2s", lineHeight: 1.3
+                    }}>{label}</button>
+                  );
+                })}
+              </div>
+              {votes[i] !== null && (
+                <p style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.78rem", color: votes[i] === "A" ? COLORS.teal : COLORS.red, margin: "4px 0 0", fontStyle: "italic" }}>
+                  {votes[i] === "A" ? "\u2713 matches ground truth." : "\u2717 not how the DGP was written."}
+                </p>
+              )}
+            </div>
+          ))}
+          <div style={{ padding: "10px 14px", background: hexAlpha(COLORS.teal, 0.08), borderRadius: 8, marginTop: 8, border: `1px solid ${hexAlpha(COLORS.teal, 0.25)}` }}>
+            <p style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.9rem", color: COLORS.text, fontWeight: 700, margin: 0 }}>
+              Score: {correctCount} / 3 correct
+            </p>
+          </div>
         </GlassCard>
       </div>
 
-      <GlassCard style={{ marginTop: 14, background: "rgba(45,55,72,0.03)" }}>
+      {/* Live ranking */}
+      <GlassCard style={{ marginTop: 16 }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 12 }}>
+          <h4 style={cardKicker}>Top feature attributions (live)</h4>
+          <span style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.78rem", color: COLORS.muted }}>
+            plain SHAP &rarr; causal SHAP (blend: {Math.round(w * 100)}%)
+          </span>
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+          {bars.map((b, i) => {
+            const pct = (b.shown / maxShown) * 100;
+            const roleColor = ROLE_COLORS[b.role] || COLORS.gray;
+            return (
+              <div key={b.name} style={{ display: "grid", gridTemplateColumns: "140px 1fr 50px", gap: 10, alignItems: "center" }}>
+                <div style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.86rem", fontWeight: 600, color: COLORS.text, textAlign: "right" }}>
+                  <span style={{ color: COLORS.muted, fontSize: "0.76rem", marginRight: 4 }}>{i+1}.</span>
+                  {b.name}
+                  <span style={{ display: "block", fontSize: "0.7rem", color: COLORS.muted, fontWeight: 500, fontStyle: "italic" }}>{b.role}</span>
+                </div>
+                <div style={{ background: "rgba(45,55,72,0.06)", borderRadius: 4, height: 24, overflow: "hidden" }}>
+                  <div style={{
+                    width: `${pct}%`, height: "100%", background: roleColor,
+                    borderRadius: 4, transition: "width 0.7s cubic-bezier(0.4, 0, 0.2, 1)"
+                  }} />
+                </div>
+                <div style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.82rem", color: COLORS.subtle, fontVariantNumeric: "tabular-nums" }}>
+                  {b.shown.toFixed(2)}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+        <p style={{ fontFamily: "'Caveat', cursive", fontSize: "1.3rem", color: COLORS.subtle, textAlign: "center", marginTop: 14, lineHeight: 1.4 }}>
+          {answered === 0 && <>Plain SHAP: mediators and downstream variables hog the top. Treatment sits below inflammation &mdash; the injustice in plain sight.</>}
+          {answered > 0 && correctCount === 0 && <>Wrong votes don&rsquo;t help. The attribution stays stuck on mediators.</>}
+          {correctCount > 0 && correctCount < 3 && <>Treatment is climbing as edges resolve. {3 - correctCount} to go.</>}
+          {correctCount === 3 && <>All three. Treatment takes first place; mediators fall where they belong. The injustice is reversed.</>}
+        </p>
+      </GlassCard>
+
+      <InsightBox label="The remedy in miniature" color={COLORS.teal}>
+        This is causal SHAP in miniature: a discovery algorithm that can&rsquo;t settle every edge, an expert
+        who votes where they know, and an attribution that re-ranks live as the DAG gets resolved.
+        Downstream variables hog the glory until the DAG arrives. Causal SHAP is how the injustice gets
+        reversed.
+      </InsightBox>
+
+      <GlassCard style={{ marginTop: 18, background: "rgba(45,55,72,0.03)" }}>
         <h4 style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.82rem", fontWeight: 700, color: COLORS.muted, letterSpacing: "0.05em", marginBottom: 8, textTransform: "uppercase" }}>Key references</h4>
         <div style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.84rem", color: COLORS.subtle, lineHeight: 1.8 }}>
           <div>Heskes, Bucur &amp; Claassen (2020). Causal Shapley values. <em>NeurIPS 33</em>.</div>
@@ -1357,7 +1601,7 @@ const Tab_MimicAndTry = () => {
           <div>Shrier &amp; Platt (2008). Reducing bias through directed acyclic graphs. <em>BMC Med Res Meth</em>.</div>
           <div>VanderWeele &amp; Shpitser (2011). A new criterion for confounder selection. <em>Biometrics</em>.</div>
           <div>Alderden et al. (2024). XAI for early prediction of pressure injury risk. <em>AJCC</em>.</div>
-          <div>Johnson et al. (2023). MIMIC-IV. <em>Scientific Data</em>.</div>
+          <div>Sofrygin, Neugebauer &amp; van der Laan (2017). simcausal: Simulating longitudinal data. <em>R package</em>.</div>
         </div>
       </GlassCard>
 
@@ -1396,7 +1640,7 @@ const App = () => {
       case 3: return <Tab_RankMovement />;
       case 4: return <Tab_WhenItMatters />;
       case 5: return <Tab_Workflow />;
-      case 6: return <Tab_MimicAndTry />;
+      case 6: return <Tab_TryIt />;
       default: return null;
     }
   };
