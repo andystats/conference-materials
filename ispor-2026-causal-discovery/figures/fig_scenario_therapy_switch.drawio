@@ -1,0 +1,159 @@
+<mxfile host="app.diagrams.net" modified="2026-04-20" type="device">
+  <diagram name="Scenario 2 — Therapy switch" id="scn-therapy-switch">
+    <mxGraphModel dx="1680" dy="960" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1680" pageHeight="960">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <mxCell id="titleBg" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F6F8FC;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="0" y="0" width="1680" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="titleKicker" value="SCENARIO 2" style="text;html=1;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;fontColor=#0033A0;fontSize=20;fontFamily=Arial;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="20" width="180" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="titleMain" value="Drug switch &amp; adverse event" style="text;html=1;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;fontColor=#3F4444;fontSize=22;fontFamily=Arial;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="220" y="20" width="700" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="titleNote" value="pharmacovigilance via therapy-journey objects" style="text;html=1;align=right;verticalAlign=middle;strokeColor=none;fillColor=none;fontColor=#8a94a6;fontSize=14;fontFamily=Arial;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="1080" y="20" width="560" height="30" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="flatHead" value="FLAT · CROSS-SECTIONAL" style="text;html=1;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;fontColor=#8a94a6;fontSize=16;fontFamily=Arial;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="95" width="620" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="flatSub" value="drug exposure summarized as binary flags" style="text;html=1;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;fontColor=#3F4444;fontSize=14;fontFamily=Arial;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="40" y="125" width="620" height="20" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="tblHead" value="patient_id &amp;nbsp; | &amp;nbsp; drug_A &amp;nbsp; | &amp;nbsp; drug_B &amp;nbsp; | &amp;nbsp; ADR" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#0033A0;fontColor=#ffffff;strokeColor=#0033A0;fontSize=13;fontFamily=Arial;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="40" y="160" width="620" height="32" as="geometry"/>
+        </mxCell>
+        <mxCell id="tblRows" value="P-2041 &amp;nbsp;&amp;nbsp; 1 &amp;nbsp;&amp;nbsp; 1 &amp;nbsp;&amp;nbsp; 1 &lt;br/&gt;P-2107 &amp;nbsp;&amp;nbsp; 1 &amp;nbsp;&amp;nbsp; 0 &amp;nbsp;&amp;nbsp; 0 &lt;br/&gt;P-2188 &amp;nbsp;&amp;nbsp; 0 &amp;nbsp;&amp;nbsp; 1 &amp;nbsp;&amp;nbsp; 1 &lt;br/&gt;P-2256 &amp;nbsp;&amp;nbsp; 1 &amp;nbsp;&amp;nbsp; 1 &amp;nbsp;&amp;nbsp; 1 &lt;br/&gt;P-2331 &amp;nbsp;&amp;nbsp; 1 &amp;nbsp;&amp;nbsp; 0 &amp;nbsp;&amp;nbsp; 1 &lt;br/&gt;· · ·" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;fontColor=#3F4444;strokeColor=#CDCDCD;fontSize=13;fontFamily=Arial;align=center;" vertex="1" parent="1">
+          <mxGeometry x="40" y="192" width="620" height="160" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="cpdagBox" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#CDCDCD;strokeWidth=2;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="40" y="380" width="620" height="220" as="geometry"/>
+        </mxCell>
+        <mxCell id="cpdagTitle" value="THREE CANDIDATE DAGS · CPDAG" style="text;html=1;align=center;verticalAlign=middle;strokeColor=none;fillColor=none;fontColor=#3F4444;fontSize=14;fontFamily=Arial;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="395" width="620" height="30" as="geometry"/>
+        </mxCell>
+
+        <!-- DAG 1 A → ADR → B -->
+        <mxCell id="A1" value="A" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#0033A0;strokeWidth=2;fontSize=13;fontFamily=Arial;fontStyle=1;fontColor=#0033A0;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="80" y="460" width="36" height="36" as="geometry"/>
+        </mxCell>
+        <mxCell id="ADR1" value="ADR" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#0033A0;strokeWidth=2;fontSize=11;fontFamily=Arial;fontStyle=1;fontColor=#0033A0;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="150" y="460" width="36" height="36" as="geometry"/>
+        </mxCell>
+        <mxCell id="B1" value="B" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#0033A0;strokeWidth=2;fontSize=13;fontFamily=Arial;fontStyle=1;fontColor=#0033A0;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="220" y="460" width="36" height="36" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_A1_ADR1" style="endArrow=classic;strokeColor=#005DAA;strokeWidth=2;endSize=4;" edge="1" source="A1" target="ADR1" parent="1"/>
+        <mxCell id="e_ADR1_B1" style="endArrow=classic;strokeColor=#005DAA;strokeWidth=2;endSize=4;" edge="1" source="ADR1" target="B1" parent="1"/>
+        <mxCell id="lab1" value="A caused ADR → switch to B" style="text;html=1;align=center;verticalAlign=middle;strokeColor=none;fillColor=none;fontColor=#3F4444;fontSize=11;fontFamily=Arial;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="40" y="510" width="240" height="18" as="geometry"/>
+        </mxCell>
+
+        <!-- DAG 2 A ← ADR ← B -->
+        <mxCell id="A2" value="A" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#0033A0;strokeWidth=2;fontSize=13;fontFamily=Arial;fontStyle=1;fontColor=#0033A0;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="300" y="460" width="36" height="36" as="geometry"/>
+        </mxCell>
+        <mxCell id="ADR2" value="ADR" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#0033A0;strokeWidth=2;fontSize=11;fontFamily=Arial;fontStyle=1;fontColor=#0033A0;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="370" y="460" width="36" height="36" as="geometry"/>
+        </mxCell>
+        <mxCell id="B2" value="B" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#0033A0;strokeWidth=2;fontSize=13;fontFamily=Arial;fontStyle=1;fontColor=#0033A0;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="440" y="460" width="36" height="36" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_ADR2_A2" style="endArrow=classic;strokeColor=#005DAA;strokeWidth=2;endSize=4;" edge="1" source="ADR2" target="A2" parent="1"/>
+        <mxCell id="e_B2_ADR2" style="endArrow=classic;strokeColor=#005DAA;strokeWidth=2;endSize=4;" edge="1" source="B2" target="ADR2" parent="1"/>
+        <mxCell id="lab2" value="B caused ADR · switch predates" style="text;html=1;align=center;verticalAlign=middle;strokeColor=none;fillColor=none;fontColor=#3F4444;fontSize=11;fontFamily=Arial;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="260" y="510" width="260" height="18" as="geometry"/>
+        </mxCell>
+
+        <!-- DAG 3 A → ADR ← B (additive) -->
+        <mxCell id="A3" value="A" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#0033A0;strokeWidth=2;fontSize=13;fontFamily=Arial;fontStyle=1;fontColor=#0033A0;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="500" y="460" width="36" height="36" as="geometry"/>
+        </mxCell>
+        <mxCell id="ADR3" value="ADR" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#0033A0;strokeWidth=2;fontSize=11;fontFamily=Arial;fontStyle=1;fontColor=#0033A0;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="570" y="460" width="36" height="36" as="geometry"/>
+        </mxCell>
+        <mxCell id="B3" value="B" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#0033A0;strokeWidth=2;fontSize=13;fontFamily=Arial;fontStyle=1;fontColor=#0033A0;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="640" y="460" width="36" height="36" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_A3_ADR3" style="endArrow=classic;strokeColor=#005DAA;strokeWidth=2;endSize=4;" edge="1" source="A3" target="ADR3" parent="1"/>
+        <mxCell id="e_B3_ADR3" style="endArrow=classic;strokeColor=#005DAA;strokeWidth=2;endSize=4;" edge="1" source="B3" target="ADR3" parent="1"/>
+        <mxCell id="lab3" value="both drugs additive" style="text;html=1;align=center;verticalAlign=middle;strokeColor=none;fillColor=none;fontColor=#3F4444;fontSize=11;fontFamily=Arial;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="480" y="510" width="220" height="18" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="cpdagCaption" value="Three clinically distinct stories. The same columns cannot tell them apart." style="text;html=1;align=center;verticalAlign=middle;strokeColor=none;fillColor=none;fontColor=#8a94a6;fontSize=13;fontFamily=Arial;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="40" y="560" width="620" height="24" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="whyBox" value="&lt;b&gt;Why it matters:&lt;/b&gt;&lt;br/&gt;Regulators need to know which drug caused the adverse event. Cross-sectional data attributes blame to whichever drug happened to be in the patient&#39;s chart." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F6F8FC;fontColor=#3F4444;strokeColor=#CDCDCD;strokeWidth=2;fontSize=13;fontFamily=Arial;arcSize=8;align=left;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="40" y="620" width="620" height="90" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="reshape" value="therapy&#xa;journey object" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;fontColor=#0033A0;strokeColor=#005DAA;strokeWidth=3;fontSize=14;fontFamily=Arial;fontStyle=1;arcSize=50;" vertex="1" parent="1">
+          <mxGeometry x="760" y="380" width="160" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="resArrow" style="endArrow=classic;strokeColor=#005DAA;strokeWidth=5;endSize=5;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="920" y="425" as="sourcePoint"/>
+            <mxPoint x="960" y="425" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="longHead" value="LONGITUDINAL · OBJECT-CENTRIC" style="text;html=1;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;fontColor=#0033A0;fontSize=16;fontFamily=Arial;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="960" y="95" width="600" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="longSub" value="Patient object · dispense and ADR sub-objects with dates" style="text;html=1;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;fontColor=#3F4444;fontSize=14;fontFamily=Arial;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="960" y="125" width="600" height="20" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="tlBox" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#CDCDCD;strokeWidth=2;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="960" y="160" width="680" height="210" as="geometry"/>
+        </mxCell>
+        <mxCell id="tlTitle" value="PATIENT P-2041 · PRESCRIPTION &amp; ADR TIMELINE" style="text;html=1;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;fontColor=#3F4444;fontSize=13;fontFamily=Arial;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="980" y="170" width="620" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="drugA_bar" value="drug A · days 0–120" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0033A0;fontColor=#ffffff;strokeColor=#0033A0;fontSize=11;fontFamily=Arial;fontStyle=2;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="1030" y="264" width="260" height="32" as="geometry"/>
+        </mxCell>
+        <mxCell id="ADR_tl" value="ADR&#xa;day 120" style="rhombus;whiteSpace=wrap;html=1;fillColor=#D64309;strokeColor=#D64309;fontColor=#ffffff;fontSize=11;fontFamily=Arial;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1290" y="260" width="80" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="drugB_bar" value="drug B · day 140+" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#005DAA;fontColor=#ffffff;strokeColor=#005DAA;fontSize=11;fontFamily=Arial;fontStyle=2;arcSize=8;opacity=80;" vertex="1" parent="1">
+          <mxGeometry x="1400" y="264" width="220" height="32" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="dagBox" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#005DAA;strokeWidth=2;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="960" y="400" width="680" height="180" as="geometry"/>
+        </mxCell>
+        <mxCell id="dagTitle" value="SINGLE ORIENTED DAG" style="text;html=1;align=center;verticalAlign=middle;strokeColor=none;fillColor=none;fontColor=#0033A0;fontSize=14;fontFamily=Arial;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="960" y="415" width="680" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="A_o" value="A" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#0033A0;strokeWidth=3;fontSize=15;fontFamily=Arial;fontStyle=1;fontColor=#0033A0;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="1070" y="510" width="56" height="56" as="geometry"/>
+        </mxCell>
+        <mxCell id="ADR_o" value="ADR" style="ellipse;whiteSpace=wrap;html=1;fillColor=#D64309;strokeColor=#D64309;strokeWidth=3;fontSize=13;fontFamily=Arial;fontStyle=1;fontColor=#ffffff;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="1310" y="510" width="56" height="56" as="geometry"/>
+        </mxCell>
+        <mxCell id="B_o" value="B" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#0033A0;strokeWidth=3;fontSize=15;fontFamily=Arial;fontStyle=1;fontColor=#0033A0;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="1550" y="510" width="56" height="56" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_Ao_ADRo" style="endArrow=classic;strokeColor=#D64309;strokeWidth=4;endSize=5;" edge="1" source="A_o" target="ADR_o" parent="1"/>
+        <mxCell id="e_ADRo_Bo" style="endArrow=classic;strokeColor=#005DAA;strokeWidth=3;endSize=5;" edge="1" source="ADR_o" target="B_o" parent="1"/>
+
+        <mxCell id="resolvesBox" value="&lt;b style=&quot;color:#D64309&quot;&gt;What temporal precedence resolves:&lt;/b&gt;&lt;br/&gt;Drug B dispense is &lt;b&gt;after&lt;/b&gt; the ADR. The collider/additive stories are ruled out; the ADR-on-A hypothesis becomes the only CPDAG-compatible orientation." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF4E6;fontColor=#3F4444;strokeColor=#D64309;strokeWidth=2;fontSize=13;fontFamily=Arial;arcSize=8;align=left;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="960" y="620" width="680" height="90" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="legendBox" value="&lt;b&gt;WHAT THE OBJECT MODEL CARRIES THAT THE FLAT TABLE DOES NOT&lt;/b&gt;&lt;br/&gt;&lt;br/&gt;• &lt;b&gt;Dispense runs&lt;/b&gt; — start/stop dates of drug A and drug B, not a single &#39;ever-exposed&#39; flag.&lt;br/&gt;• &lt;b&gt;ADR onset date&lt;/b&gt; — the timestamp rules out drug B (not yet started) and pins blame on A.&lt;br/&gt;• &lt;b&gt;Switch event&lt;/b&gt; — transition from A to B as a distinct relational sub-object on the patient." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F6F8FC;fontColor=#3F4444;strokeColor=#CDCDCD;strokeWidth=1;fontSize=12;fontFamily=Arial;arcSize=8;align=left;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="40" y="770" width="1600" height="150" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

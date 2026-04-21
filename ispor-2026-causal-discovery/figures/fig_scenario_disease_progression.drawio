@@ -1,0 +1,126 @@
+<mxfile host="app.diagrams.net" modified="2026-04-20" type="device">
+  <diagram name="Scenario 3 — Disease progression" id="scn-progression">
+    <mxGraphModel dx="1680" dy="960" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1680" pageHeight="960">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <mxCell id="titleBg" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F6F8FC;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="0" y="0" width="1680" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="titleKicker" value="SCENARIO 3" style="text;html=1;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;fontColor=#0033A0;fontSize=20;fontFamily=Arial;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="20" width="180" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="titleMain" value="Chronic disease progression" style="text;html=1;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;fontColor=#3F4444;fontSize=22;fontFamily=Arial;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="220" y="20" width="700" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="titleNote" value="comorbidities on the problem list" style="text;html=1;align=right;verticalAlign=middle;strokeColor=none;fillColor=none;fontColor=#8a94a6;fontSize=14;fontFamily=Arial;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="1180" y="20" width="460" height="30" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="flatHead" value="FLAT · CROSS-SECTIONAL" style="text;html=1;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;fontColor=#8a94a6;fontSize=16;fontFamily=Arial;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="95" width="620" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="flatSub" value="problem-list flags collapsed into static columns" style="text;html=1;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;fontColor=#3F4444;fontSize=14;fontFamily=Arial;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="40" y="125" width="620" height="20" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="tblHead" value="patient_id &amp;nbsp; | &amp;nbsp; T2D &amp;nbsp; | &amp;nbsp; HTN &amp;nbsp; | &amp;nbsp; CKD" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#0033A0;fontColor=#ffffff;strokeColor=#0033A0;fontSize=13;fontFamily=Arial;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="40" y="160" width="620" height="32" as="geometry"/>
+        </mxCell>
+        <mxCell id="tblRows" value="P-0412 &amp;nbsp;&amp;nbsp; 1 &amp;nbsp;&amp;nbsp; 1 &amp;nbsp;&amp;nbsp; 1 &lt;br/&gt;P-0528 &amp;nbsp;&amp;nbsp; 0 &amp;nbsp;&amp;nbsp; 1 &amp;nbsp;&amp;nbsp; 0 &lt;br/&gt;P-0671 &amp;nbsp;&amp;nbsp; 1 &amp;nbsp;&amp;nbsp; 1 &amp;nbsp;&amp;nbsp; 0 &lt;br/&gt;P-0744 &amp;nbsp;&amp;nbsp; 1 &amp;nbsp;&amp;nbsp; 0 &amp;nbsp;&amp;nbsp; 0 &lt;br/&gt;P-0859 &amp;nbsp;&amp;nbsp; 1 &amp;nbsp;&amp;nbsp; 1 &amp;nbsp;&amp;nbsp; 1 &lt;br/&gt;· · ·" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;fontColor=#3F4444;strokeColor=#CDCDCD;fontSize=13;fontFamily=Arial;align=center;" vertex="1" parent="1">
+          <mxGeometry x="40" y="192" width="620" height="160" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="cpdagBox" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#CDCDCD;strokeWidth=2;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="40" y="380" width="620" height="220" as="geometry"/>
+        </mxCell>
+        <mxCell id="cpdagTitle" value="CPDAG · UNDIRECTED TRIANGLE" style="text;html=1;align=center;verticalAlign=middle;strokeColor=none;fillColor=none;fontColor=#3F4444;fontSize=14;fontFamily=Arial;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="395" width="620" height="30" as="geometry"/>
+        </mxCell>
+
+        <!-- Triangle nodes -->
+        <mxCell id="T2D_f" value="T2D" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#0033A0;strokeWidth=2.5;fontSize=12;fontFamily=Arial;fontStyle=1;fontColor=#0033A0;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="320" y="440" width="60" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="HTN_f" value="HTN" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#0033A0;strokeWidth=2.5;fontSize=12;fontFamily=Arial;fontStyle=1;fontColor=#0033A0;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="240" y="540" width="60" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="CKD_f" value="CKD" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#0033A0;strokeWidth=2.5;fontSize=12;fontFamily=Arial;fontStyle=1;fontColor=#0033A0;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="400" y="540" width="60" height="60" as="geometry"/>
+        </mxCell>
+        <!-- undirected edges (no arrow) -->
+        <mxCell id="e_T2D_HTN_f" style="endArrow=none;strokeColor=#8a94a6;strokeWidth=2.5;" edge="1" source="T2D_f" target="HTN_f" parent="1"/>
+        <mxCell id="e_T2D_CKD_f" style="endArrow=none;strokeColor=#8a94a6;strokeWidth=2.5;" edge="1" source="T2D_f" target="CKD_f" parent="1"/>
+        <mxCell id="e_HTN_CKD_f" style="endArrow=none;strokeColor=#8a94a6;strokeWidth=2.5;" edge="1" source="HTN_f" target="CKD_f" parent="1"/>
+
+        <mxCell id="cpdagCaption" value="Six orderings of T2D, HTN, CKD fit the same CPDAG." style="text;html=1;align=center;verticalAlign=middle;strokeColor=none;fillColor=none;fontColor=#8a94a6;fontSize=13;fontFamily=Arial;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="40" y="565" width="620" height="24" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="whyBox" value="&lt;b&gt;Why it matters:&lt;/b&gt;&lt;br/&gt;Payers and care teams need to know where to intervene in the progression. A static comorbidity list cannot tell prevention from sequela." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F6F8FC;fontColor=#3F4444;strokeColor=#CDCDCD;strokeWidth=2;fontSize=13;fontFamily=Arial;arcSize=8;align=left;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="40" y="620" width="620" height="90" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="reshape" value="diagnosis&#xa;dates" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;fontColor=#0033A0;strokeColor=#005DAA;strokeWidth=3;fontSize=16;fontFamily=Arial;fontStyle=1;arcSize=50;" vertex="1" parent="1">
+          <mxGeometry x="760" y="380" width="160" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="resArrow" style="endArrow=classic;strokeColor=#005DAA;strokeWidth=5;endSize=5;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="920" y="425" as="sourcePoint"/>
+            <mxPoint x="960" y="425" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="longHead" value="LONGITUDINAL · OBJECT-CENTRIC" style="text;html=1;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;fontColor=#0033A0;fontSize=16;fontFamily=Arial;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="960" y="95" width="600" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="longSub" value="Patient object · dated diagnosis sub-objects" style="text;html=1;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;fontColor=#3F4444;fontSize=14;fontFamily=Arial;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="960" y="125" width="600" height="20" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="tlBox" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#CDCDCD;strokeWidth=2;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="960" y="160" width="680" height="210" as="geometry"/>
+        </mxCell>
+        <mxCell id="tlTitle" value="PATIENT P-0412 · DIAGNOSIS TIMELINE (AGE)" style="text;html=1;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;fontColor=#3F4444;fontSize=13;fontFamily=Arial;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="980" y="170" width="620" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="T2D_tl" value="T2D&#xa;age 54" style="ellipse;whiteSpace=wrap;html=1;fillColor=#0033A0;strokeColor=#0033A0;fontColor=#ffffff;fontSize=11;fontFamily=Arial;fontStyle=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="1160" y="255" width="44" height="44" as="geometry"/>
+        </mxCell>
+        <mxCell id="HTN_tl" value="HTN&#xa;age 58" style="ellipse;whiteSpace=wrap;html=1;fillColor=#0033A0;strokeColor=#0033A0;fontColor=#ffffff;fontSize=11;fontFamily=Arial;fontStyle=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="1280" y="255" width="44" height="44" as="geometry"/>
+        </mxCell>
+        <mxCell id="CKD_tl" value="CKD&#xa;age 63" style="ellipse;whiteSpace=wrap;html=1;fillColor=#D64309;strokeColor=#D64309;fontColor=#ffffff;fontSize=11;fontFamily=Arial;fontStyle=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="1430" y="255" width="44" height="44" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="dagBox" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#005DAA;strokeWidth=2;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="960" y="400" width="680" height="180" as="geometry"/>
+        </mxCell>
+        <mxCell id="dagTitle" value="ORIENTED PROGRESSION" style="text;html=1;align=center;verticalAlign=middle;strokeColor=none;fillColor=none;fontColor=#0033A0;fontSize=14;fontFamily=Arial;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="960" y="415" width="680" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="T2D_o" value="T2D" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#0033A0;strokeWidth=3;fontSize=14;fontFamily=Arial;fontStyle=1;fontColor=#0033A0;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="1070" y="500" width="60" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="HTN_o" value="HTN" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#0033A0;strokeWidth=3;fontSize=14;fontFamily=Arial;fontStyle=1;fontColor=#0033A0;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="1310" y="500" width="60" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="CKD_o" value="CKD" style="ellipse;whiteSpace=wrap;html=1;fillColor=#D64309;strokeColor=#D64309;strokeWidth=3;fontSize=14;fontFamily=Arial;fontStyle=1;fontColor=#ffffff;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="1550" y="500" width="60" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_T2D_HTN" style="endArrow=classic;strokeColor=#005DAA;strokeWidth=3;endSize=5;" edge="1" source="T2D_o" target="HTN_o" parent="1"/>
+        <mxCell id="e_HTN_CKD" style="endArrow=classic;strokeColor=#D64309;strokeWidth=4;endSize=5;" edge="1" source="HTN_o" target="CKD_o" parent="1"/>
+
+        <mxCell id="resolvesBox" value="&lt;b style=&quot;color:#D64309&quot;&gt;What temporal precedence resolves:&lt;/b&gt;&lt;br/&gt;Across millions of patients, the distribution of diagnosis order pins down a single progression graph. Payers can locate the intervention window — here, glycemic control." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF4E6;fontColor=#3F4444;strokeColor=#D64309;strokeWidth=2;fontSize=13;fontFamily=Arial;arcSize=8;align=left;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="960" y="620" width="680" height="90" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="legendBox" value="&lt;b&gt;WHAT THE OBJECT MODEL CARRIES THAT THE FLAT TABLE DOES NOT&lt;/b&gt;&lt;br/&gt;&lt;br/&gt;• &lt;b&gt;First-diagnosis dates&lt;/b&gt; — when each condition was &lt;i&gt;first&lt;/i&gt; recorded, not merely whether it is ever present.&lt;br/&gt;• &lt;b&gt;Terminal/progression node&lt;/b&gt; — CKD anchored as sequela, not as a co-occurring flag.&lt;br/&gt;• &lt;b&gt;Cross-patient aggregation&lt;/b&gt; — progression graph averaged over dated trajectories." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F6F8FC;fontColor=#3F4444;strokeColor=#CDCDCD;strokeWidth=1;fontSize=12;fontFamily=Arial;arcSize=8;align=left;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="40" y="770" width="1600" height="150" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

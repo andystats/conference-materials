@@ -23,13 +23,16 @@
         <mxCell id="moist" value="Moisture exposure&#xa;&lt;i&gt;rediscovered&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;fontColor=#0033A0;strokeColor=#0033A0;strokeWidth=3;fontSize=13;fontFamily=Arial;fontStyle=1;arcSize=20;" vertex="1" parent="1">
           <mxGeometry x="300" y="500" width="200" height="70" as="geometry"/>
         </mxCell>
+        <mxCell id="yeast" value="Yeast colonization&#xa;&lt;i&gt;rediscovered&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;fontColor=#0033A0;strokeColor=#0033A0;strokeWidth=3;fontSize=13;fontFamily=Arial;fontStyle=1;arcSize=20;" vertex="1" parent="1">
+          <mxGeometry x="300" y="590" width="200" height="60" as="geometry"/>
+        </mxCell>
 
         <!-- Albumin pathway nodes (orange stroke) -->
         <mxCell id="albadm" value="Albumin administration&#xa;&lt;i&gt;timing flagged&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF1EA;fontColor=#D64309;strokeColor=#D64309;strokeWidth=3;fontSize=13;fontFamily=Arial;fontStyle=1;arcSize=20;" vertex="1" parent="1">
-          <mxGeometry x="300" y="660" width="220" height="70" as="geometry"/>
+          <mxGeometry x="300" y="680" width="220" height="60" as="geometry"/>
         </mxCell>
         <mxCell id="fluid" value="Fluid management&#xa;&lt;i&gt;patterns flagged&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF1EA;fontColor=#D64309;strokeColor=#D64309;strokeWidth=3;fontSize=13;fontFamily=Arial;fontStyle=1;arcSize=20;" vertex="1" parent="1">
-          <mxGeometry x="300" y="800" width="220" height="70" as="geometry"/>
+          <mxGeometry x="300" y="770" width="220" height="60" as="geometry"/>
         </mxCell>
 
         <!-- Hypoalbuminemia (orange hero node) -->
@@ -47,6 +50,7 @@
         <mxCell id="e2" style="endArrow=classic;strokeColor=#005DAA;strokeWidth=2;endSize=4;" edge="1" source="icu" target="hemo" parent="1"/>
         <mxCell id="e3" style="endArrow=classic;strokeColor=#005DAA;strokeWidth=2;endSize=4;" edge="1" source="icu" target="imm" parent="1"/>
         <mxCell id="e4" style="endArrow=classic;strokeColor=#005DAA;strokeWidth=2;endSize=4;" edge="1" source="icu" target="moist" parent="1"/>
+        <mxCell id="e4b" style="endArrow=classic;strokeColor=#005DAA;strokeWidth=2;endSize=4;" edge="1" source="icu" target="yeast" parent="1"/>
         <mxCell id="e5" style="endArrow=classic;strokeColor=#005DAA;strokeWidth=2;endSize=4;" edge="1" source="icu" target="albadm" parent="1"/>
         <mxCell id="e6" style="endArrow=classic;strokeColor=#005DAA;strokeWidth=2;endSize=4;" edge="1" source="icu" target="fluid" parent="1"/>
 
@@ -62,6 +66,7 @@
         <mxCell id="e11" style="endArrow=classic;strokeColor=#005DAA;strokeWidth=2;endSize=4;curved=1;" edge="1" source="hemo" target="hapri" parent="1"/>
         <mxCell id="e12" style="endArrow=classic;strokeColor=#005DAA;strokeWidth=2;endSize=4;curved=1;" edge="1" source="imm" target="hapri" parent="1"/>
         <mxCell id="e13" style="endArrow=classic;strokeColor=#005DAA;strokeWidth=2;endSize=4;curved=1;" edge="1" source="moist" target="hapri" parent="1"/>
+        <mxCell id="e13b" style="endArrow=classic;strokeColor=#005DAA;strokeWidth=2;endSize=4;curved=1;" edge="1" source="yeast" target="hapri" parent="1"/>
 
         <!-- Edge: hypoalbuminemia → HAPrI (ORANGE candidate edge) -->
         <mxCell id="e14" value="candidate&#xa;upstream edge" style="endArrow=classic;strokeColor=#D64309;strokeWidth=3;endSize=6;fontColor=#D64309;fontSize=11;fontFamily=Arial;fontStyle=1;labelPosition=center;verticalLabelPosition=bottom;align=center;" edge="1" source="hypo" target="hapri" parent="1"/>

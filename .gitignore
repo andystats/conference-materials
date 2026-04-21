@@ -2,3 +2,15 @@
 .DS_Store
 .turbo/
 __pycache__/
+
+# Source material kept out of the public repo (large PPTs, uncleared media)
+ispor-2026-causal-discovery/materials/
+ispor-2026-causal-discovery/figures/objectanalytics-mimic-key-images/
+acic-2026-causal-shap/poster/
+
+# Local-only guide describing the gitignored materials/ folder
+ispor-2026-causal-discovery/new-files-guide.md
+
+# Generated poster outputs (build_poster.py produces these; keep the script tracked)
+ispor-2026-causal-discovery/poster/*.pptx
+ispor-2026-causal-discovery/poster/png_cache/

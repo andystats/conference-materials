@@ -46,21 +46,26 @@
     <text x="410" y="468" text-anchor="middle" font-size="13" fill="#3F4444" font-style="italic">rediscovered</text>
   </g>
   <g id="moistNode">
-    <rect x="310" y="555" width="200" height="70" rx="14" fill="#ffffff" stroke="#0033A0" stroke-width="3"/>
-    <text x="410" y="590" text-anchor="middle" font-size="18" font-weight="700" fill="#0033A0">Moisture exposure</text>
-    <text x="410" y="613" text-anchor="middle" font-size="13" fill="#3F4444" font-style="italic">rediscovered</text>
+    <rect x="310" y="540" width="200" height="60" rx="14" fill="#ffffff" stroke="#0033A0" stroke-width="3"/>
+    <text x="410" y="568" text-anchor="middle" font-size="18" font-weight="700" fill="#0033A0">Moisture exposure</text>
+    <text x="410" y="589" text-anchor="middle" font-size="13" fill="#3F4444" font-style="italic">rediscovered</text>
+  </g>
+  <g id="yeastNode">
+    <rect x="310" y="620" width="200" height="60" rx="14" fill="#ffffff" stroke="#0033A0" stroke-width="3"/>
+    <text x="410" y="648" text-anchor="middle" font-size="18" font-weight="700" fill="#0033A0">Yeast colonization</text>
+    <text x="410" y="669" text-anchor="middle" font-size="13" fill="#3F4444" font-style="italic">rediscovered</text>
   </g>
 
   <!-- Level 1 albumin-pathway nodes -->
   <g id="albAdmNode">
-    <rect x="310" y="720" width="220" height="70" rx="14" fill="#FFF1EA" stroke="#D64309" stroke-width="3"/>
-    <text x="420" y="750" text-anchor="middle" font-size="17" font-weight="700" fill="#D64309">Albumin administration</text>
-    <text x="420" y="773" text-anchor="middle" font-size="13" fill="#D64309" font-style="italic">timing flagged</text>
+    <rect x="310" y="710" width="220" height="60" rx="14" fill="#FFF1EA" stroke="#D64309" stroke-width="3"/>
+    <text x="420" y="738" text-anchor="middle" font-size="17" font-weight="700" fill="#D64309">Albumin administration</text>
+    <text x="420" y="759" text-anchor="middle" font-size="13" fill="#D64309" font-style="italic">timing flagged</text>
   </g>
   <g id="fluidNode">
-    <rect x="310" y="820" width="220" height="70" rx="14" fill="#FFF1EA" stroke="#D64309" stroke-width="3"/>
-    <text x="420" y="850" text-anchor="middle" font-size="17" font-weight="700" fill="#D64309">Fluid management</text>
-    <text x="420" y="873" text-anchor="middle" font-size="13" fill="#D64309" font-style="italic">patterns flagged</text>
+    <rect x="310" y="800" width="220" height="60" rx="14" fill="#FFF1EA" stroke="#D64309" stroke-width="3"/>
+    <text x="420" y="828" text-anchor="middle" font-size="17" font-weight="700" fill="#D64309">Fluid management</text>
+    <text x="420" y="849" text-anchor="middle" font-size="13" fill="#D64309" font-style="italic">patterns flagged</text>
   </g>
 
   <!-- ==== Level 2: hypoalbuminemia (orange hero) ==== -->
@@ -85,18 +90,19 @@
   <!-- ==== Edges ==== -->
   <!-- ICU -> all risk factors (thin, navy) -->
   <g stroke="#005DAA" stroke-width="2.5" fill="none" opacity="0.75">
-    <line x1="230" y1="450" x2="310" y2="165" marker-end="url(#arrNavy)"/>
-    <line x1="230" y1="460" x2="310" y2="295" marker-end="url(#arrNavy)"/>
-    <line x1="230" y1="470" x2="310" y2="445" marker-end="url(#arrNavy)"/>
-    <line x1="230" y1="480" x2="310" y2="590" marker-end="url(#arrNavy)"/>
-    <line x1="230" y1="490" x2="310" y2="745" marker-end="url(#arrNavy)"/>
-    <line x1="230" y1="500" x2="310" y2="855" marker-end="url(#arrNavy)"/>
+    <line x1="230" y1="448" x2="310" y2="165" marker-end="url(#arrNavy)"/>
+    <line x1="230" y1="455" x2="310" y2="295" marker-end="url(#arrNavy)"/>
+    <line x1="230" y1="465" x2="310" y2="445" marker-end="url(#arrNavy)"/>
+    <line x1="230" y1="472" x2="310" y2="570" marker-end="url(#arrNavy)"/>
+    <line x1="230" y1="480" x2="310" y2="650" marker-end="url(#arrNavy)"/>
+    <line x1="230" y1="488" x2="310" y2="735" marker-end="url(#arrNavy)"/>
+    <line x1="230" y1="498" x2="310" y2="825" marker-end="url(#arrNavy)"/>
   </g>
 
   <!-- Albumin / fluid -> hypoalbuminemia (orange) -->
   <g stroke="#D64309" stroke-width="3.2" fill="none">
-    <path d="M 530 755 C 560 700, 575 620, 568 560" marker-end="url(#arrOrange)"/>
-    <path d="M 530 855 C 575 780, 575 650, 568 570" marker-end="url(#arrOrange)"/>
+    <path d="M 530 735 C 560 680, 575 620, 568 560" marker-end="url(#arrOrange)"/>
+    <path d="M 530 830 C 575 770, 575 650, 568 570" marker-end="url(#arrOrange)"/>
   </g>
 
   <!-- Hemodynamic instability -> hypoalbuminemia (confounder-like, navy dashed) -->
@@ -109,7 +115,8 @@
     <path d="M 510 155 C 720 170, 840 320, 870 485" marker-end="url(#arrNavy)"/>
     <path d="M 510 300 C 600 340, 820 390, 855 482" marker-end="url(#arrNavy)"/>
     <path d="M 510 445 C 600 620, 780 680, 855 598" marker-end="url(#arrNavy)"/>
-    <path d="M 510 590 C 620 640, 780 670, 855 600" marker-end="url(#arrNavy)"/>
+    <path d="M 510 570 C 620 630, 780 660, 855 598" marker-end="url(#arrNavy)"/>
+    <path d="M 510 650 C 650 680, 780 680, 855 602" marker-end="url(#arrNavy)"/>
   </g>
 
   <!-- Hypoalbuminemia -> HAPrI (THICK ORANGE headline edge) -->

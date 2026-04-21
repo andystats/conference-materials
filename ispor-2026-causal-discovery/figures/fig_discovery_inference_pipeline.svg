@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="10.5in" height="6.6in" viewBox="0 0 1050 660" font-family="Arial, sans-serif">
+  <defs>
+    <marker id="arrBlue" markerWidth="6" markerHeight="6" refX="5.5" refY="3" orient="auto">
+      <polygon points="0 0, 6 3, 0 6" fill="#005DAA"/>
+    </marker>
+    <marker id="arrPurple" markerWidth="6" markerHeight="6" refX="5.5" refY="3" orient="auto">
+      <polygon points="0 0, 6 3, 0 6" fill="#783C96"/>
+    </marker>
+    <marker id="arrOrange" markerWidth="6" markerHeight="6" refX="5.5" refY="3" orient="auto">
+      <polygon points="0 0, 6 3, 0 6" fill="#D64309"/>
+    </marker>
+  </defs>
+
+  <!-- Title + subtitle -->
+  <text x="525" y="36" text-anchor="middle" font-size="22" font-weight="700" fill="#0033A0">From discovery to inference</text>
+  <text x="525" y="64" text-anchor="middle" font-size="16" font-style="italic" fill="#3F4444">Discovery prioritizes; clinicians arbitrate; confirmatory estimation settles the effect.</text>
+
+  <!-- Four blocks: width=235, gap=20; starts at x=20 -->
+  <!-- Block 1: 20-255, Arrow: 255-275, Block 2: 275-510, Arrow: 510-530, Block 3: 530-765, Arrow: 765-785, Block 4: 785-1020 -->
+
+  <!-- ==== BLOCK 1 — Object representation ==== -->
+  <rect x="20" y="100" width="235" height="490" rx="8" fill="#E6EEF9" stroke="#0033A0" stroke-width="2.5"/>
+  <circle cx="56" cy="132" r="20" fill="#0033A0"/>
+  <text x="56" y="139" text-anchor="middle" font-size="20" font-weight="700" fill="#ffffff">1</text>
+  <text x="86" y="139" font-size="16" font-weight="700" fill="#0033A0">Object rep.</text>
+
+  <text x="36" y="178" font-size="16" fill="#3F4444">
+    <tspan x="36" dy="0">Encode every patient as</tspan>
+    <tspan x="36" dy="18">a temporally ordered</tspan>
+    <tspan x="36" dy="18">object with dated labs,</tspan>
+    <tspan x="36" dy="18">meds, procedures, and</tspan>
+    <tspan x="36" dy="18">transfers.</tspan>
+  </text>
+
+  <!-- Tree inset -->
+  <rect x="36" y="296" width="203" height="276" rx="6" fill="#ffffff" stroke="#005DAA" stroke-width="1.5"/>
+  <text x="48" y="322" font-family="Courier New, monospace" font-size="16" font-weight="700" fill="#0033A0">Patient</text>
+  <text x="48" y="348" font-family="Courier New, monospace" font-size="16" fill="#0033A0">├ Admission (t=0)</text>
+  <text x="48" y="372" font-family="Courier New, monospace" font-size="16" fill="#0033A0">├ Labs (albumin)</text>
+  <text x="48" y="396" font-family="Courier New, monospace" font-size="16" fill="#0033A0">├ Meds (pressors)</text>
+  <text x="48" y="420" font-family="Courier New, monospace" font-size="16" fill="#0033A0">├ Procedures</text>
+  <text x="48" y="444" font-family="Courier New, monospace" font-size="16" fill="#0033A0">├ Microbiology</text>
+  <text x="48" y="468" font-family="Courier New, monospace" font-size="16" fill="#0033A0">└ Transfers</text>
+
+  <!-- Arrow 1→2 -->
+  <text x="265" y="340" text-anchor="middle" font-size="16" font-style="italic" fill="#005DAA">relational</text>
+  <text x="265" y="356" text-anchor="middle" font-size="16" font-style="italic" fill="#005DAA">graph</text>
+  <line x1="257" y1="378" x2="273" y2="378" stroke="#005DAA" stroke-width="3" marker-end="url(#arrBlue)"/>
+
+  <!-- ==== BLOCK 2 — Constrained discovery ==== -->
+  <rect x="275" y="100" width="235" height="490" rx="8" fill="#E6EEF9" stroke="#0033A0" stroke-width="2.5"/>
+  <circle cx="311" cy="132" r="20" fill="#0033A0"/>
+  <text x="311" y="139" text-anchor="middle" font-size="20" font-weight="700" fill="#ffffff">2</text>
+  <text x="341" y="139" font-size="16" font-weight="700" fill="#0033A0">Constrained discovery</text>
+
+  <text x="291" y="178" font-size="16" fill="#3F4444">
+    <tspan x="291" dy="0">Search millions of object-</tspan>
+    <tspan x="291" dy="18">tree projections. Temporal</tspan>
+    <tspan x="291" dy="18">precedence (τ &lt; 0) and</tspan>
+    <tspan x="291" dy="18">relational structure orient</tspan>
+    <tspan x="291" dy="18">edges a flat CPDAG leaves</tspan>
+    <tspan x="291" dy="18">ambiguous.</tspan>
+  </text>
+
+  <!-- Mini DAG -->
+  <rect x="291" y="316" width="203" height="256" rx="6" fill="#ffffff" stroke="#005DAA" stroke-width="1.5"/>
+  <circle cx="339" cy="378" r="20" fill="#ffffff" stroke="#005DAA" stroke-width="2"/>
+  <text x="339" y="385" text-anchor="middle" font-size="16" font-weight="700" fill="#0033A0">X</text>
+  <circle cx="392" cy="450" r="20" fill="#ffffff" stroke="#005DAA" stroke-width="2"/>
+  <text x="392" y="457" text-anchor="middle" font-size="16" font-weight="700" fill="#0033A0">Y</text>
+  <circle cx="445" cy="378" r="20" fill="#ffffff" stroke="#005DAA" stroke-width="2"/>
+  <text x="445" y="385" text-anchor="middle" font-size="16" font-weight="700" fill="#0033A0">Z</text>
+  <line x1="354" y1="393" x2="380" y2="432" stroke="#005DAA" stroke-width="2.5" marker-end="url(#arrBlue)"/>
+  <line x1="430" y1="393" x2="404" y2="432" stroke="#005DAA" stroke-width="2.5" marker-end="url(#arrBlue)"/>
+  <text x="392" y="508" text-anchor="middle" font-size="16" font-style="italic" fill="#005DAA">
+    <tspan x="392" dy="0">sparse, oriented</tspan>
+    <tspan x="392" dy="16">candidate graph</tspan>
+  </text>
+
+  <!-- Arrow 2→3 -->
+  <text x="520" y="340" text-anchor="middle" font-size="16" font-style="italic" fill="#783C96">candidate</text>
+  <text x="520" y="356" text-anchor="middle" font-size="16" font-style="italic" fill="#783C96">DAG</text>
+  <line x1="512" y1="378" x2="528" y2="378" stroke="#783C96" stroke-width="3" marker-end="url(#arrPurple)"/>
+
+  <!-- ==== BLOCK 3 — Clinician review ==== -->
+  <rect x="530" y="100" width="235" height="490" rx="8" fill="#F0E8F5" stroke="#783C96" stroke-width="2.5"/>
+  <circle cx="566" cy="132" r="20" fill="#783C96"/>
+  <text x="566" y="139" text-anchor="middle" font-size="20" font-weight="700" fill="#ffffff">3</text>
+  <text x="596" y="139" font-size="16" font-weight="700" fill="#783C96">Clinician review</text>
+
+  <text x="546" y="178" font-size="16" fill="#3F4444">
+    <tspan x="546" dy="0">Domain experts prune</tspan>
+    <tspan x="546" dy="18">implausible edges and</tspan>
+    <tspan x="546" dy="18">endorse the subset worth</tspan>
+    <tspan x="546" dy="18">confirmatory work; those</tspan>
+    <tspan x="546" dy="18">become pre-specified</tspan>
+    <tspan x="546" dy="18">estimands.</tspan>
+  </text>
+
+  <!-- Checklist -->
+  <rect x="546" y="316" width="203" height="256" rx="6" fill="#ffffff" stroke="#783C96" stroke-width="1.5"/>
+  <text x="558" y="340" font-family="Courier New, monospace" font-size="16" font-weight="700" fill="#5B8A5E">✓ Hypoalbuminemia</text>
+  <text x="558" y="364" font-family="Courier New, monospace" font-size="16" font-weight="700" fill="#5B8A5E">✓ Immobility</text>
+  <text x="558" y="388" font-family="Courier New, monospace" font-size="16" font-weight="700" fill="#5B8A5E">✓ Mech. ventilation</text>
+  <text x="558" y="412" font-family="Courier New, monospace" font-size="16" font-weight="700" fill="#5B8A5E">✓ Yeast colonization</text>
+  <text x="558" y="448" font-family="Courier New, monospace" font-size="16" font-weight="700" fill="#D64309">✗ Spurious lab edge</text>
+  <text x="558" y="484" font-family="Courier New, monospace" font-size="16" font-weight="700" fill="#783C96">? Fluid timing</text>
+  <text x="558" y="508" font-family="Courier New, monospace" font-size="16" font-weight="700" fill="#783C96">? Albumin dosing</text>
+  <text x="558" y="548" font-family="Courier New, monospace" font-size="16" font-style="italic" fill="#8A94A6">kept · pruned · flagged</text>
+
+  <!-- Arrow 3→4 -->
+  <text x="775" y="340" text-anchor="middle" font-size="16" font-style="italic" fill="#D64309">prioritized</text>
+  <text x="775" y="356" text-anchor="middle" font-size="16" font-style="italic" fill="#D64309">estimand</text>
+  <line x1="767" y1="378" x2="783" y2="378" stroke="#D64309" stroke-width="3" marker-end="url(#arrOrange)"/>
+
+  <!-- ==== BLOCK 4 — Target trial / TMLE ==== -->
+  <rect x="785" y="100" width="235" height="490" rx="8" fill="#FBE5D8" stroke="#D64309" stroke-width="2.5"/>
+  <circle cx="821" cy="132" r="20" fill="#D64309"/>
+  <text x="821" y="139" text-anchor="middle" font-size="20" font-weight="700" fill="#ffffff">4</text>
+  <text x="851" y="139" font-size="16" font-weight="700" fill="#D64309">Target trial / TMLE</text>
+
+  <text x="801" y="178" font-size="16" fill="#3F4444">
+    <tspan x="801" dy="0">Emulate the would-be RCT,</tspan>
+    <tspan x="801" dy="18">then estimate the candidate</tspan>
+    <tspan x="801" dy="18">effect with TMLE or longi-</tspan>
+    <tspan x="801" dy="18">tudinal g-methods. Doubly</tspan>
+    <tspan x="801" dy="18">robust: consistent if either</tspan>
+    <tspan x="801" dy="18">model is correct.</tspan>
+  </text>
+
+  <!-- Equation box -->
+  <rect x="801" y="316" width="203" height="80" rx="6" fill="#ffffff" stroke="#D64309" stroke-width="2"/>
+  <text x="902" y="346" text-anchor="middle" font-family="Courier New, monospace" font-size="16" font-weight="700" fill="#D64309">ψ =</text>
+  <text x="902" y="374" text-anchor="middle" font-family="Courier New, monospace" font-size="16" font-weight="700" fill="#D64309">E[Y^(a=1) − Y^(a=0)]</text>
+
+  <text x="902" y="440" text-anchor="middle" font-size="16" font-style="italic" fill="#8A94A6">
+    <tspan x="902" dy="0">Target-trial emulation:</tspan>
+    <tspan x="902" dy="18">Hernán &amp; Robins (2016)</tspan>
+    <tspan x="902" dy="18">TMLE: vdL &amp; Rubin (2006)</tspan>
+  </text>
+
+  <!-- Bottom legend -->
+  <text x="525" y="634" text-anchor="middle" font-size="16" font-style="italic" fill="#3F4444">
+    discovery ────→  human judgement ────→  confirmatory inference
+  </text>
+</svg>

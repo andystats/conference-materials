@@ -1,0 +1,80 @@
+<mxfile host="app.diagrams.net" modified="2026-04-21" type="device">
+  <diagram name="Correlation vs Causal Contribution" id="corr-vs-contrib">
+    <mxGraphModel dx="1050" dy="620" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1050" pageHeight="620">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <!-- Title -->
+        <mxCell id="title" value="Correlation is not the contribution the algorithm ranks on" style="text;html=1;align=center;verticalAlign=middle;strokeColor=none;fillColor=none;fontColor=#0033A0;fontSize=22;fontFamily=Arial;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="75" y="16" width="900" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="subtitle" value="The engine promotes an edge only after pre-index time constraints and competing explanations." style="text;html=1;align=center;verticalAlign=middle;strokeColor=none;fillColor=none;fontColor=#3F4444;fontSize=16;fontFamily=Arial;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="75" y="52" width="900" height="28" as="geometry"/>
+        </mxCell>
+
+        <!-- LEFT CARD: ASSOCIATION -->
+        <mxCell id="leftCard" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ECEEF1;strokeColor=#8A94A6;strokeWidth=2.5;arcSize=4;" vertex="1" parent="1">
+          <mxGeometry x="25" y="100" width="440" height="480" as="geometry"/>
+        </mxCell>
+        <mxCell id="leftKicker" value="ASSOCIATION" style="text;html=1;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;fontColor=#8A94A6;fontSize=16;fontFamily=Arial;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="50" y="118" width="300" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="leftTitle" value="Raw correlation with outcome" style="text;html=1;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;fontColor=#3F4444;fontSize=20;fontFamily=Arial;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="50" y="150" width="390" height="28" as="geometry"/>
+        </mxCell>
+        <mxCell id="leftFormula" value="P(Y=1|X=1) &#8722; P(Y=1|X=0)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;fontColor=#8A94A6;strokeColor=#8A94A6;strokeWidth=1.5;fontSize=17;fontFamily=Courier New;fontStyle=1;arcSize=8;align=center;" vertex="1" parent="1">
+          <mxGeometry x="50" y="184" width="390" height="44" as="geometry"/>
+        </mxCell>
+        <mxCell id="leftDesc" value="Marginal difference in outcome rates between&#xa;factor-positive and factor-negative patients." style="text;html=1;align=left;verticalAlign=top;strokeColor=none;fillColor=none;fontColor=#3F4444;fontSize=16;fontFamily=Arial;" vertex="1" parent="1">
+          <mxGeometry x="50" y="240" width="390" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="leftList" value="&lt;b&gt;Picks up any signal moving with Y:&lt;/b&gt;&#xa;&#8226; genuine upstream cause&#xa;&#8226; downstream effect (reverse)&#xa;&#8226; severity marker (confounded)&#xa;&#8226; shared-cause proxy&#xa;&#8226; bystander (unrelated)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;fontColor=#3F4444;strokeColor=#CDCDCD;strokeWidth=1.5;fontSize=16;fontFamily=Arial;align=left;verticalAlign=top;spacingLeft=14;spacingTop=10;arcSize=6;" vertex="1" parent="1">
+          <mxGeometry x="50" y="320" width="390" height="170" as="geometry"/>
+        </mxCell>
+        <mxCell id="leftEx" value="&quot;Hypoalbuminemia 5&#215; more common&#xa;in patients who develop HAPrI.&quot;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F6F8FC;fontColor=#8A94A6;strokeColor=#8A94A6;strokeWidth=1;fontSize=16;fontFamily=Arial;fontStyle=2;arcSize=6;align=center;" vertex="1" parent="1">
+          <mxGeometry x="50" y="510" width="390" height="54" as="geometry"/>
+        </mxCell>
+
+        <!-- Arrow between panels -->
+        <mxCell id="arrowLabel" value="prune by&#xa;time +&#xa;competing&#xa;explanations" style="text;html=1;align=center;verticalAlign=middle;strokeColor=none;fillColor=none;fontColor=#D64309;fontSize=16;fontFamily=Arial;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="475" y="290" width="100" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="arrow" style="endArrow=classic;strokeColor=#D64309;strokeWidth=4;endSize=5;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="495" y="380" as="sourcePoint"/>
+            <mxPoint x="555" y="380" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- RIGHT CARD: CAUSAL CONTRIBUTION -->
+        <mxCell id="rightCard" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FBE5D8;strokeColor=#D64309;strokeWidth=2.5;arcSize=4;" vertex="1" parent="1">
+          <mxGeometry x="585" y="100" width="440" height="480" as="geometry"/>
+        </mxCell>
+        <mxCell id="rightKicker" value="CAUSAL CONTRIBUTION" style="text;html=1;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;fontColor=#D64309;fontSize=16;fontFamily=Arial;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="610" y="118" width="300" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="rightTitle" value="Pruned pre-index contribution" style="text;html=1;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;fontColor=#3F4444;fontSize=20;fontFamily=Arial;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="610" y="150" width="390" height="28" as="geometry"/>
+        </mxCell>
+        <mxCell id="rightFormula" value="c&#7522;   within the Noisy-OR model" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;fontColor=#D64309;strokeColor=#D64309;strokeWidth=1.5;fontSize=17;fontFamily=Courier New;fontStyle=1;arcSize=8;align=center;" vertex="1" parent="1">
+          <mxGeometry x="610" y="184" width="390" height="44" as="geometry"/>
+        </mxCell>
+        <mxCell id="rightDesc" value="Per-factor activation probability fitted after&#xa;temporal precedence and competing factors." style="text;html=1;align=left;verticalAlign=top;strokeColor=none;fillColor=none;fontColor=#3F4444;fontSize=16;fontFamily=Arial;" vertex="1" parent="1">
+          <mxGeometry x="610" y="240" width="390" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="rightList" value="&lt;b&gt;Only survives if it meets:&lt;/b&gt;&#xa;&#8226; &#964; &lt; 0 (pre-index only)&#xa;&#8226; still contributes when competing&#xa;   factors are fit&#xa;&#8226; robust to leave-one-out pruning&#xa;&#8226; clinically reviewable" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;fontColor=#3F4444;strokeColor=#D64309;strokeWidth=1.5;fontSize=16;fontFamily=Arial;align=left;verticalAlign=top;spacingLeft=14;spacingTop=10;arcSize=6;" vertex="1" parent="1">
+          <mxGeometry x="610" y="320" width="390" height="170" as="geometry"/>
+        </mxCell>
+        <mxCell id="rightEx" value="&quot;After pruning, hypoalbuminemia&#xa;retains a non-trivial c&#7522; &#8212; prioritized.&quot;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;fontColor=#D64309;strokeColor=#D64309;strokeWidth=1;fontSize=16;fontFamily=Arial;fontStyle=2;arcSize=6;align=center;" vertex="1" parent="1">
+          <mxGeometry x="610" y="510" width="390" height="54" as="geometry"/>
+        </mxCell>
+
+        <!-- Footer -->
+        <mxCell id="footer" value="Both are pre-inferential. A confirmed causal effect requires TMLE via target-trial emulation (Stage 4)." style="text;html=1;align=center;strokeColor=none;fillColor=none;fontColor=#8A94A6;fontSize=16;fontFamily=Arial;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="75" y="590" width="900" height="24" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

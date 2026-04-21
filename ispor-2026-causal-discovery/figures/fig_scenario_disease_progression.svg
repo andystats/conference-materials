@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="14in" height="8in" viewBox="0 0 1680 960" font-family="Arial, sans-serif">
+  <defs>
+    <marker id="arrNavyP" markerWidth="6" markerHeight="6" refX="5.5" refY="3" orient="auto">
+      <polygon points="0 0, 6 3, 0 6" fill="#005DAA"/>
+    </marker>
+    <marker id="arrOrangeP" markerWidth="7" markerHeight="7" refX="6.5" refY="3.5" orient="auto">
+      <polygon points="0 0, 7 3.5, 0 7" fill="#D64309"/>
+    </marker>
+    <marker id="arrGrayP" markerWidth="6" markerHeight="6" refX="5.5" refY="3" orient="auto">
+      <polygon points="0 0, 6 3, 0 6" fill="#8a94a6"/>
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <rect x="0" y="0" width="1680" height="70" fill="#F6F8FC"/>
+  <text x="40"   y="42" font-size="22" font-weight="700" fill="#0033A0" letter-spacing="0.08em">SCENARIO 3</text>
+  <text x="210"  y="42" font-size="24" font-weight="700" fill="#3F4444">Chronic disease progression</text>
+  <text x="1640" y="42" text-anchor="end" font-size="14" font-style="italic" fill="#8a94a6">comorbidities on the problem list</text>
+
+  <!-- ====== LEFT PANEL: flat ====== -->
+  <g id="flatPanel">
+    <text x="40" y="110" font-size="18" font-weight="700" fill="#8a94a6" letter-spacing="0.1em">FLAT · CROSS-SECTIONAL</text>
+    <text x="40" y="138" font-size="15" fill="#3F4444" font-style="italic">problem-list flags collapsed into static columns</text>
+
+    <!-- Table -->
+    <g font-size="13" fill="#3F4444">
+      <rect x="40" y="160" width="620" height="32" fill="#0033A0"/>
+      <text x="60"  y="180" font-weight="700" fill="#fff">patient_id</text>
+      <text x="220" y="180" font-weight="700" fill="#fff">T2D</text>
+      <text x="340" y="180" font-weight="700" fill="#fff">HTN</text>
+      <text x="470" y="180" font-weight="700" fill="#fff">CKD</text>
+
+      <rect x="40" y="192" width="620" height="26" fill="#ffffff" stroke="#CDCDCD" stroke-width="1"/>
+      <text x="60"  y="210">P-0412</text><text x="220" y="210">1</text><text x="340" y="210">1</text><text x="470" y="210">1</text>
+
+      <rect x="40" y="218" width="620" height="26" fill="#F6F8FC" stroke="#CDCDCD" stroke-width="1"/>
+      <text x="60"  y="236">P-0528</text><text x="220" y="236">0</text><text x="340" y="236">1</text><text x="470" y="236">0</text>
+
+      <rect x="40" y="244" width="620" height="26" fill="#ffffff" stroke="#CDCDCD" stroke-width="1"/>
+      <text x="60"  y="262">P-0671</text><text x="220" y="262">1</text><text x="340" y="262">1</text><text x="470" y="262">0</text>
+
+      <rect x="40" y="270" width="620" height="26" fill="#F6F8FC" stroke="#CDCDCD" stroke-width="1"/>
+      <text x="60"  y="288">P-0744</text><text x="220" y="288">1</text><text x="340" y="288">0</text><text x="470" y="288">0</text>
+
+      <rect x="40" y="296" width="620" height="26" fill="#ffffff" stroke="#CDCDCD" stroke-width="1"/>
+      <text x="60"  y="314">P-0859</text><text x="220" y="314">1</text><text x="340" y="314">1</text><text x="470" y="314">1</text>
+
+      <text x="350" y="346" text-anchor="middle" font-size="22" fill="#CDCDCD">· · ·</text>
+    </g>
+
+    <!-- Undirected triangle (CPDAG) -->
+    <rect x="40" y="380" width="620" height="220" rx="10" fill="#ffffff" stroke="#CDCDCD" stroke-width="2"/>
+    <text x="350" y="410" text-anchor="middle" font-size="15" font-weight="700" fill="#3F4444" letter-spacing="0.08em">CPDAG · UNDIRECTED TRIANGLE</text>
+
+    <g transform="translate(220, 440)">
+      <!-- T2D -->
+      <circle cx="100" cy="30" r="28" fill="#ffffff" stroke="#0033A0" stroke-width="2.5"/>
+      <text x="100" y="26" text-anchor="middle" font-size="13" font-weight="700" fill="#0033A0">T2D</text>
+      <text x="100" y="42" text-anchor="middle" font-size="9" fill="#3F4444">diabetes</text>
+      <!-- HTN -->
+      <circle cx="30" cy="140" r="28" fill="#ffffff" stroke="#0033A0" stroke-width="2.5"/>
+      <text x="30" y="136" text-anchor="middle" font-size="13" font-weight="700" fill="#0033A0">HTN</text>
+      <text x="30" y="152" text-anchor="middle" font-size="9" fill="#3F4444">hypertension</text>
+      <!-- CKD -->
+      <circle cx="170" cy="140" r="28" fill="#ffffff" stroke="#0033A0" stroke-width="2.5"/>
+      <text x="170" y="136" text-anchor="middle" font-size="13" font-weight="700" fill="#0033A0">CKD</text>
+      <text x="170" y="152" text-anchor="middle" font-size="9" fill="#3F4444">kidney disease</text>
+      <!-- Undirected edges -->
+      <line x1="82"  y1="52"  x2="42"  y2="118" stroke="#8a94a6" stroke-width="2.5"/>
+      <line x1="118" y1="52"  x2="158" y2="118" stroke="#8a94a6" stroke-width="2.5"/>
+      <line x1="58"  y1="140" x2="142" y2="140" stroke="#8a94a6" stroke-width="2.5"/>
+      <!-- Question marks on edges -->
+      <text x="50"  y="94" font-size="18" font-weight="700" fill="#8a94a6">?</text>
+      <text x="140" y="94" font-size="18" font-weight="700" fill="#8a94a6">?</text>
+      <text x="95"  y="156" font-size="18" font-weight="700" fill="#8a94a6">?</text>
+    </g>
+
+    <text x="350" y="586" text-anchor="middle" font-size="13" fill="#8a94a6" font-style="italic">Six orderings of T2D, HTN, CKD fit the same CPDAG.</text>
+
+    <!-- Why it matters -->
+    <rect x="40" y="620" width="620" height="90" rx="8" fill="#F6F8FC" stroke="#CDCDCD" stroke-width="2"/>
+    <text x="60" y="650" font-size="13" font-weight="700" fill="#3F4444">Why it matters:</text>
+    <text x="60" y="674" font-size="13" fill="#3F4444">Payers and care teams need to know where to intervene in the progression.</text>
+    <text x="60" y="694" font-size="13" fill="#3F4444">A static comorbidity list cannot tell prevention from sequela.</text>
+  </g>
+
+  <!-- Middle reshape -->
+  <g transform="translate(760, 380)">
+    <rect x="0" y="0" width="160" height="90" rx="45" fill="#ffffff" stroke="#005DAA" stroke-width="3"/>
+    <text x="80" y="42" text-anchor="middle" font-size="15" font-weight="700" fill="#0033A0">diagnosis</text>
+    <text x="80" y="64" text-anchor="middle" font-size="15" font-weight="700" fill="#0033A0">dates</text>
+    <line x1="-20" y1="45" x2="0"   y2="45" stroke="#005DAA" stroke-width="5"/>
+    <line x1="160" y1="45" x2="186" y2="45" stroke="#005DAA" stroke-width="5" marker-end="url(#arrNavyP)"/>
+  </g>
+
+  <!-- ====== RIGHT PANEL: longitudinal ====== -->
+  <g id="longPanel">
+    <text x="960" y="110" font-size="18" font-weight="700" fill="#0033A0" letter-spacing="0.1em">LONGITUDINAL · OBJECT-CENTRIC</text>
+    <text x="960" y="138" font-size="15" fill="#3F4444" font-style="italic">Patient object · dated diagnosis sub-objects</text>
+
+    <!-- Lifetime timeline -->
+    <rect x="960" y="160" width="680" height="210" rx="10" fill="#ffffff" stroke="#CDCDCD" stroke-width="2"/>
+    <text x="980" y="188" font-size="13" font-weight="700" fill="#3F4444" letter-spacing="0.06em">PATIENT P-0412 · DIAGNOSIS TIMELINE (AGE)</text>
+
+    <line x1="1000" y1="280" x2="1620" y2="280" stroke="#CDCDCD" stroke-width="2"/>
+    <!-- tick marks -->
+    <line x1="1060" y1="276" x2="1060" y2="284" stroke="#8a94a6" stroke-width="2"/>
+    <text x="1060" y="306" text-anchor="middle" font-size="11" fill="#8a94a6">age 50</text>
+    <line x1="1210" y1="276" x2="1210" y2="284" stroke="#8a94a6" stroke-width="2"/>
+    <text x="1210" y="306" text-anchor="middle" font-size="11" fill="#8a94a6">age 55</text>
+    <line x1="1360" y1="276" x2="1360" y2="284" stroke="#8a94a6" stroke-width="2"/>
+    <text x="1360" y="306" text-anchor="middle" font-size="11" fill="#8a94a6">age 60</text>
+    <line x1="1510" y1="276" x2="1510" y2="284" stroke="#8a94a6" stroke-width="2"/>
+    <text x="1510" y="306" text-anchor="middle" font-size="11" fill="#8a94a6">age 65</text>
+
+    <!-- T2D marker -->
+    <circle cx="1180" cy="280" r="15" fill="#0033A0"/>
+    <text x="1180" y="247" text-anchor="middle" font-size="13" font-weight="700" fill="#0033A0">T2D</text>
+    <text x="1180" y="232" text-anchor="middle" font-size="11" fill="#3F4444">age 54</text>
+
+    <!-- HTN marker -->
+    <circle cx="1300" cy="280" r="15" fill="#0033A0"/>
+    <text x="1300" y="247" text-anchor="middle" font-size="13" font-weight="700" fill="#0033A0">HTN</text>
+    <text x="1300" y="232" text-anchor="middle" font-size="11" fill="#3F4444">age 58</text>
+
+    <!-- CKD marker -->
+    <circle cx="1450" cy="280" r="15" fill="#D64309"/>
+    <text x="1450" y="247" text-anchor="middle" font-size="13" font-weight="700" fill="#D64309">CKD</text>
+    <text x="1450" y="232" text-anchor="middle" font-size="11" fill="#D64309">age 63</text>
+
+    <text x="1300" y="346" text-anchor="middle" font-size="12" fill="#8a94a6" font-style="italic">onset dates fix the progression: T2D → HTN → CKD</text>
+
+    <!-- Oriented DAG -->
+    <rect x="960" y="400" width="680" height="180" rx="10" fill="#ffffff" stroke="#005DAA" stroke-width="2"/>
+    <text x="1300" y="430" text-anchor="middle" font-size="15" font-weight="700" fill="#0033A0" letter-spacing="0.08em">ORIENTED PROGRESSION</text>
+
+    <g transform="translate(1050, 470)">
+      <circle cx="30"  cy="55" r="30" fill="#ffffff" stroke="#0033A0" stroke-width="3"/>
+      <text x="30"  y="52" text-anchor="middle" font-size="14" font-weight="700" fill="#0033A0">T2D</text>
+      <text x="30"  y="68" text-anchor="middle" font-size="9" fill="#3F4444">age 54</text>
+      <circle cx="270" cy="55" r="30" fill="#ffffff" stroke="#0033A0" stroke-width="3"/>
+      <text x="270" y="52" text-anchor="middle" font-size="14" font-weight="700" fill="#0033A0">HTN</text>
+      <text x="270" y="68" text-anchor="middle" font-size="9" fill="#3F4444">age 58</text>
+      <circle cx="510" cy="55" r="32" fill="#D64309" stroke="#D64309" stroke-width="3"/>
+      <text x="510" y="52" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff">CKD</text>
+      <text x="510" y="68" text-anchor="middle" font-size="9" fill="#ffffff">age 63</text>
+      <line x1="60"  y1="55" x2="240" y2="55" stroke="#005DAA" stroke-width="3" marker-end="url(#arrNavyP)"/>
+      <line x1="300" y1="55" x2="478" y2="55" stroke="#D64309" stroke-width="4" marker-end="url(#arrOrangeP)"/>
+      <text x="150" y="105" text-anchor="middle" font-size="11" fill="#8a94a6" font-style="italic">diabetic nephro-vascular path</text>
+      <text x="389" y="105" text-anchor="middle" font-size="11" fill="#D64309" font-style="italic">candidate intervention window</text>
+    </g>
+
+    <!-- Resolves -->
+    <rect x="960" y="620" width="680" height="90" rx="8" fill="#FFF4E6" stroke="#D64309" stroke-width="2"/>
+    <text x="980"  y="650" font-size="13" font-weight="700" fill="#D64309">What temporal precedence resolves:</text>
+    <text x="980"  y="674" font-size="13" fill="#3F4444">Across millions of patients, the distribution of diagnosis order pins down a single</text>
+    <text x="980"  y="694" font-size="13" fill="#3F4444">progression graph. Payers can locate the intervention window — here, glycemic control.</text>
+  </g>
+
+  <!-- Legend -->
+  <g transform="translate(40, 770)">
+    <rect x="0" y="0" width="1600" height="150" rx="10" fill="#F6F8FC" stroke="#CDCDCD" stroke-width="1"/>
+    <text x="20" y="32" font-size="14" font-weight="700" fill="#0033A0" letter-spacing="0.08em">WHAT THE OBJECT MODEL CARRIES THAT THE FLAT TABLE DOES NOT</text>
+
+    <g transform="translate(20, 54)">
+      <rect x="0" y="0" width="24" height="14" fill="#0033A0"/>
+      <text x="36" y="12" font-size="12" fill="#3F4444"><tspan font-weight="700">First-diagnosis dates</tspan> — when each condition was <tspan font-style="italic">first</tspan> recorded, not merely whether it is ever present.</text>
+    </g>
+    <g transform="translate(20, 78)">
+      <rect x="0" y="0" width="24" height="14" fill="#D64309"/>
+      <text x="36" y="12" font-size="12" fill="#3F4444"><tspan font-weight="700">Terminal/progression node</tspan> — CKD anchored as sequela, not as a co-occurring flag.</text>
+    </g>
+    <g transform="translate(20, 102)">
+      <rect x="0" y="0" width="24" height="14" fill="#ffffff" stroke="#0033A0" stroke-width="2"/>
+      <text x="36" y="12" font-size="12" fill="#3F4444"><tspan font-weight="700">Cross-patient aggregation</tspan> — progression graph averaged over dated trajectories, not static diagnoses.</text>
+    </g>
+    <text x="1580" y="128" text-anchor="end" font-size="11" font-style="italic" fill="#8a94a6">pattern analogous to AOK Nordost disease-journey study · schematic</text>
+  </g>
+</svg>

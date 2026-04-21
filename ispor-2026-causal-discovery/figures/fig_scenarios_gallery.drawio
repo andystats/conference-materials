@@ -1,0 +1,43 @@
+<mxfile host="app.diagrams.net" modified="2026-04-20" type="device">
+  <diagram name="Scenarios Gallery" id="scenarios-gallery">
+    <mxGraphModel dx="1800" dy="1400" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="1400">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <!-- Title -->
+        <mxCell id="kicker" value="HOW OBJECT ANALYTICS + TIME DISAMBIGUATE THE CPDAG" style="text;html=1;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;fontColor=#0033A0;fontSize=18;fontFamily=Arial;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="40" width="900" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="titleMain" value="Four scenarios where flat tables stall and longitudinal objects settle the orientation." style="text;html=1;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;fontColor=#3F4444;fontSize=26;fontFamily=Arial;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="80" width="1680" height="36" as="geometry"/>
+        </mxCell>
+        <mxCell id="divRule" style="endArrow=none;strokeColor=#0033A0;strokeWidth=3;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="0" y="130" as="sourcePoint"/>
+            <mxPoint x="1800" y="130" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Four panel placeholders -->
+        <mxCell id="p1" value="&lt;b style=&quot;color:#0033A0&quot;&gt;SCENARIO 1 · Sepsis → antibiotic → mortality&lt;/b&gt;&lt;br/&gt;&lt;br/&gt;Flat table: S—A—M (CPDAG, 3 candidate DAGs)&lt;br/&gt;↓ add admission object + timestamps&lt;br/&gt;Oriented DAG: S → A → M&lt;br/&gt;&lt;br/&gt;&lt;i style=&quot;color:#D64309&quot;&gt;Takeaway: time-to-abx becomes the identifiable estimand.&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;fontColor=#3F4444;strokeColor=#CDCDCD;strokeWidth=2;fontSize=13;fontFamily=Arial;arcSize=8;align=left;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="50" y="170" width="820" height="530" as="geometry"/>
+        </mxCell>
+        <mxCell id="p2" value="&lt;b style=&quot;color:#0033A0&quot;&gt;SCENARIO 2 · Drug switch &amp; adverse event&lt;/b&gt;&lt;br/&gt;&lt;br/&gt;Flat table: A ~ ADR ~ B (CPDAG, 3 candidate DAGs)&lt;br/&gt;↓ add patient journey + dispense dates&lt;br/&gt;Oriented DAG: A → ADR → switch-to-B&lt;br/&gt;&lt;br/&gt;&lt;i style=&quot;color:#D64309&quot;&gt;Takeaway: drug B wasn&#39;t started when the ADR appeared.&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;fontColor=#3F4444;strokeColor=#CDCDCD;strokeWidth=2;fontSize=13;fontFamily=Arial;arcSize=8;align=left;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="930" y="170" width="820" height="530" as="geometry"/>
+        </mxCell>
+        <mxCell id="p3" value="&lt;b style=&quot;color:#0033A0&quot;&gt;SCENARIO 3 · Chronic disease progression&lt;/b&gt;&lt;br/&gt;&lt;br/&gt;Flat table: undirected triangle T2D — HTN — CKD&lt;br/&gt;↓ add patient object + first-dx dates&lt;br/&gt;Oriented progression: T2D → HTN → CKD&lt;br/&gt;&lt;br/&gt;&lt;i style=&quot;color:#D64309&quot;&gt;Takeaway: payer-relevant intervention window becomes visible.&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;fontColor=#3F4444;strokeColor=#CDCDCD;strokeWidth=2;fontSize=13;fontFamily=Arial;arcSize=8;align=left;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="50" y="730" width="820" height="530" as="geometry"/>
+        </mxCell>
+        <mxCell id="p4" value="&lt;b style=&quot;color:#0033A0&quot;&gt;SCENARIO 4 · Breast-cancer risk: life-course ordering&lt;/b&gt;&lt;br/&gt;&lt;br/&gt;Flat table: dense undirected web of risk factors + BC&lt;br/&gt;↓ add life-course object + dated milestones&lt;br/&gt;Oriented DAG: fam hx → menar. → parity → HRT → BC&lt;br/&gt;&lt;br/&gt;&lt;i style=&quot;color:#D64309&quot;&gt;Takeaway: immutable-at-birth + timestamps separate policy levers from fixed risk.&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;fontColor=#3F4444;strokeColor=#CDCDCD;strokeWidth=2;fontSize=13;fontFamily=Arial;arcSize=8;align=left;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="930" y="730" width="820" height="530" as="geometry"/>
+        </mxCell>
+
+        <!-- Footer -->
+        <mxCell id="footer" value="&lt;b style=&quot;color:#0033A0&quot;&gt;COMMON THREAD&lt;/b&gt;&lt;br/&gt;An object-analytics engine keeps the things a flat table throws away: &lt;b&gt;event timestamps&lt;/b&gt;, &lt;b&gt;start/stop runs&lt;/b&gt;, &lt;b&gt;diagnosis dates&lt;/b&gt;, and &lt;b&gt;immutability-at-birth&lt;/b&gt;. These constraints collapse the Markov equivalence class to a single oriented DAG — turning flagged edges into identifiable estimands for TMLE and longitudinal g-methods downstream." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F6F8FC;fontColor=#3F4444;strokeColor=#0033A0;strokeWidth=2;fontSize=14;fontFamily=Arial;arcSize=8;align=left;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="50" y="1290" width="1700" height="90" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

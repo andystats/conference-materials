@@ -1,0 +1,120 @@
+<mxfile host="app.diagrams.net" modified="2026-04-21" type="device">
+  <diagram name="Relative-Time Guardrail" id="relative-time-guardrail">
+    <mxGraphModel dx="1050" dy="540" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1050" pageHeight="540">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <!-- Title -->
+        <mxCell id="title" value="Relative-time guardrail" style="text;html=1;align=center;verticalAlign=middle;strokeColor=none;fillColor=none;fontColor=#0033A0;fontSize=24;fontFamily=Arial;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="225" y="18" width="600" height="36" as="geometry"/>
+        </mxCell>
+        <mxCell id="subtitle" value="Features are built from &#964; &lt; 0. The outcome lives at &#964; = 0.&#xa;Post-index information is excluded from discovery." style="text;html=1;align=center;verticalAlign=middle;strokeColor=none;fillColor=none;fontColor=#3F4444;fontSize=16;fontFamily=Arial;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="225" y="58" width="600" height="40" as="geometry"/>
+        </mxCell>
+
+        <!-- Pre-zero feature window -->
+        <mxCell id="preWin" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E6EEF9;strokeColor=#005DAA;strokeWidth=2;arcSize=3;" vertex="1" parent="1">
+          <mxGeometry x="90" y="130" width="430" height="130" as="geometry"/>
+        </mxCell>
+        <mxCell id="preLabel" value="Feature window" style="text;html=1;align=center;verticalAlign=middle;strokeColor=none;fillColor=none;fontColor=#0033A0;fontSize=18;fontFamily=Arial;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="90" y="150" width="430" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="preBody" value="&#964; &lt; 0 &#183; candidate features,&#xa;confounders, treatments&#xa;&lt;i&gt;&#8212; all pre-index&lt;/i&gt;" style="text;html=1;align=center;verticalAlign=middle;strokeColor=none;fillColor=none;fontColor=#3F4444;fontSize=16;fontFamily=Arial;" vertex="1" parent="1">
+          <mxGeometry x="90" y="180" width="430" height="70" as="geometry"/>
+        </mxCell>
+
+        <!-- Post-zero leakage window -->
+        <mxCell id="postWin" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ECEEF1;strokeColor=#8A94A6;strokeWidth=2;dashed=1;dashPattern=6 4;arcSize=3;" vertex="1" parent="1">
+          <mxGeometry x="575" y="130" width="360" height="130" as="geometry"/>
+        </mxCell>
+        <mxCell id="postLabel" value="Leakage zone &#8212; excluded" style="text;html=1;align=center;verticalAlign=middle;strokeColor=none;fillColor=none;fontColor=#8A94A6;fontSize=18;fontFamily=Arial;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="575" y="150" width="360" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="postBody" value="&#964; &gt; 0 &#183; follow-up care,&#xa;downstream effects,&#xa;post-index labs" style="text;html=1;align=center;verticalAlign=middle;strokeColor=none;fillColor=none;fontColor=#3F4444;fontSize=16;fontFamily=Arial;" vertex="1" parent="1">
+          <mxGeometry x="575" y="180" width="360" height="70" as="geometry"/>
+        </mxCell>
+
+        <!-- Chips -->
+        <mxCell id="chipVent" value="Mech. vent start&#xa;&#964; = &#8722;48 h" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;fontColor=#0033A0;strokeColor=#005DAA;strokeWidth=2;fontSize=16;fontFamily=Arial;fontStyle=1;arcSize=25;" vertex="1" parent="1">
+          <mxGeometry x="160" y="290" width="160" height="46" as="geometry"/>
+        </mxCell>
+        <mxCell id="chipVentLine" style="endArrow=none;strokeColor=#005DAA;strokeWidth=2;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="240" y="338" as="sourcePoint"/>
+            <mxPoint x="240" y="360" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="chipAlb" value="Albumin 2.4 g/dL&#xa;&#964; = &#8722;18 h" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D64309;fontColor=#ffffff;strokeColor=#D64309;strokeWidth=2;fontSize=16;fontFamily=Arial;fontStyle=1;arcSize=25;" vertex="1" parent="1">
+          <mxGeometry x="320" y="290" width="160" height="46" as="geometry"/>
+        </mxCell>
+        <mxCell id="chipAlbLine" style="endArrow=none;strokeColor=#D64309;strokeWidth=2;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="400" y="338" as="sourcePoint"/>
+            <mxPoint x="400" y="360" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="chipWound" value="Wound care order&#xa;&#964; = +6 h &#183; excluded" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;fontColor=#8A94A6;strokeColor=#8A94A6;strokeWidth=2;dashed=1;dashPattern=4 3;fontSize=16;fontFamily=Arial;fontStyle=2;arcSize=25;" vertex="1" parent="1">
+          <mxGeometry x="600" y="290" width="170" height="46" as="geometry"/>
+        </mxCell>
+        <mxCell id="chipWoundLine" style="endArrow=none;strokeColor=#8A94A6;strokeWidth=2;dashed=1;dashPattern=4 3;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="685" y="338" as="sourcePoint"/>
+            <mxPoint x="685" y="360" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Horizontal time axis -->
+        <mxCell id="axis" style="endArrow=classic;startArrow=classic;strokeColor=#3F4444;strokeWidth=3;endSize=4;startSize=4;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="80" y="370" as="sourcePoint"/>
+            <mxPoint x="970" y="370" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Zero vertical guide line -->
+        <mxCell id="zeroLine" style="endArrow=none;strokeColor=#0033A0;strokeWidth=4;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="525" y="110" as="sourcePoint"/>
+            <mxPoint x="525" y="360" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="zeroBox" value="&#964; = 0&#xa;HAPrI diagnosis" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0033A0;fontColor=#ffffff;strokeColor=#0033A0;fontSize=14;fontFamily=Arial;fontStyle=1;arcSize=30;" vertex="1" parent="1">
+          <mxGeometry x="465" y="88" width="120" height="38" as="geometry"/>
+        </mxCell>
+
+        <!-- Tick labels -->
+        <mxCell id="tick72" value="&#8722;72 h" style="text;html=1;align=center;strokeColor=none;fillColor=none;fontColor=#3F4444;fontSize=16;fontFamily=Arial;" vertex="1" parent="1">
+          <mxGeometry x="90" y="388" width="60" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="tick48" value="&#8722;48 h" style="text;html=1;align=center;strokeColor=none;fillColor=none;fontColor=#3F4444;fontSize=16;fontFamily=Arial;" vertex="1" parent="1">
+          <mxGeometry x="210" y="388" width="60" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="tick24" value="&#8722;24 h" style="text;html=1;align=center;strokeColor=none;fillColor=none;fontColor=#3F4444;fontSize=16;fontFamily=Arial;" vertex="1" parent="1">
+          <mxGeometry x="330" y="388" width="60" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="tick0" value="0" style="text;html=1;align=center;strokeColor=none;fillColor=none;fontColor=#0033A0;fontSize=17;fontFamily=Arial;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="505" y="388" width="40" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="tickP24" value="+24 h" style="text;html=1;align=center;strokeColor=none;fillColor=none;fontColor=#8A94A6;fontSize=16;fontFamily=Arial;" vertex="1" parent="1">
+          <mxGeometry x="625" y="388" width="60" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="tickP48" value="+48 h" style="text;html=1;align=center;strokeColor=none;fillColor=none;fontColor=#8A94A6;fontSize=16;fontFamily=Arial;" vertex="1" parent="1">
+          <mxGeometry x="755" y="388" width="60" height="24" as="geometry"/>
+        </mxCell>
+
+        <!-- Axis label -->
+        <mxCell id="axisLabel" value="&#964;  (time relative to HAPrI diagnosis)" style="text;html=1;align=center;strokeColor=none;fillColor=none;fontColor=#3F4444;fontSize=16;fontFamily=Arial;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="225" y="480" width="600" height="24" as="geometry"/>
+        </mxCell>
+
+        <!-- Math hint -->
+        <mxCell id="mathHint" value="X = f({events at &#964; &lt; 0}),   Y = 1(HAPrI at &#964; = 0)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F6F8FC;fontColor=#0033A0;strokeColor=#005DAA;strokeWidth=2;fontSize=16;fontFamily=Courier New;fontStyle=1;arcSize=10;align=center;" vertex="1" parent="1">
+          <mxGeometry x="260" y="430" width="530" height="44" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

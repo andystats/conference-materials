@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="18in" height="9in" viewBox="0 0 1800 900" font-family="Arial, sans-serif">
+  <defs>
+    <linearGradient id="bandGrad" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%" stop-color="#005DAA" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#005DAA" stop-opacity="0.08"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Title + subtitle -->
+  <text x="900" y="90" text-anchor="middle" font-size="38" font-weight="700" fill="#0033A0">Albumin aligned to HAPrI diagnosis</text>
+  <text x="900" y="128" text-anchor="middle" font-size="22" font-style="italic" fill="#3F4444">Serum albumin drops below normal days before index and remains depressed afterwards. Illustrative trajectory.</text>
+
+  <!-- Plot area -->
+  <rect x="200" y="200" width="1400" height="500" fill="#FFFFFF" stroke="#CDCDCD" stroke-width="2"/>
+
+  <!-- Post-zero leakage shading -->
+  <rect x="900" y="200" width="700" height="500" fill="#ECEEF1" opacity="0.6"/>
+
+  <!-- Pre-zero callout -->
+  <rect x="320" y="220" width="340" height="40" rx="16" fill="#E6EEF9" stroke="#005DAA" stroke-width="2"/>
+  <text x="490" y="246" text-anchor="middle" font-size="16" font-weight="700" fill="#0033A0">τ &lt; 0 · candidate feature window</text>
+
+  <!-- Post-zero callout -->
+  <rect x="1090" y="220" width="440" height="40" rx="16" fill="#ECEEF1" stroke="#8A94A6" stroke-width="2" stroke-dasharray="6 4"/>
+  <text x="1310" y="246" text-anchor="middle" font-size="16" font-weight="700" fill="#8A94A6">τ &gt; 0 · leakage zone, excluded from discovery</text>
+
+  <!-- Y-axis gridlines + labels (albumin 2.0–4.5 g/dL) -->
+  <!-- y=200 corresponds to 4.5 g/dL; y=700 corresponds to 2.0 g/dL; scale 200 px = 1 g/dL -->
+  <line x1="200" y1="300" x2="1600" y2="300" stroke="#EFEFEF" stroke-width="1"/>
+  <line x1="200" y1="400" x2="1600" y2="400" stroke="#EFEFEF" stroke-width="1"/>
+  <line x1="200" y1="500" x2="1600" y2="500" stroke="#EFEFEF" stroke-width="1"/>
+  <line x1="200" y1="600" x2="1600" y2="600" stroke="#EFEFEF" stroke-width="1"/>
+  <text x="185" y="205" text-anchor="end" font-size="15" fill="#3F4444">4.5</text>
+  <text x="185" y="305" text-anchor="end" font-size="15" fill="#3F4444">4.0</text>
+  <text x="185" y="405" text-anchor="end" font-size="15" fill="#3F4444">3.5</text>
+  <text x="185" y="505" text-anchor="end" font-size="15" fill="#3F4444">3.0</text>
+  <text x="185" y="605" text-anchor="end" font-size="15" fill="#3F4444">2.5</text>
+  <text x="185" y="705" text-anchor="end" font-size="15" fill="#3F4444">2.0</text>
+
+  <!-- X-axis ticks -->
+  <!-- x=200..1600; τ = −14d..+14d; 1400/28 = 50 px per day; τ=0 at x=900 -->
+  <line x1="200" y1="700" x2="1600" y2="700" stroke="#3F4444" stroke-width="3"/>
+
+  <line x1="200" y1="700" x2="200" y2="715" stroke="#3F4444" stroke-width="2"/>
+  <text x="200" y="735" text-anchor="middle" font-size="15" fill="#3F4444">−14</text>
+
+  <line x1="450" y1="700" x2="450" y2="715" stroke="#3F4444" stroke-width="2"/>
+  <text x="450" y="735" text-anchor="middle" font-size="15" fill="#3F4444">−9</text>
+
+  <line x1="700" y1="700" x2="700" y2="715" stroke="#3F4444" stroke-width="2"/>
+  <text x="700" y="735" text-anchor="middle" font-size="15" fill="#3F4444">−4</text>
+
+  <line x1="900" y1="700" x2="900" y2="720" stroke="#0033A0" stroke-width="4"/>
+  <text x="900" y="740" text-anchor="middle" font-size="18" font-weight="700" fill="#0033A0">0</text>
+
+  <line x1="1100" y1="700" x2="1100" y2="715" stroke="#8A94A6" stroke-width="2"/>
+  <text x="1100" y="735" text-anchor="middle" font-size="15" fill="#8A94A6">+4</text>
+
+  <line x1="1350" y1="700" x2="1350" y2="715" stroke="#8A94A6" stroke-width="2"/>
+  <text x="1350" y="735" text-anchor="middle" font-size="15" fill="#8A94A6">+9</text>
+
+  <line x1="1600" y1="700" x2="1600" y2="715" stroke="#8A94A6" stroke-width="2"/>
+  <text x="1600" y="735" text-anchor="middle" font-size="15" fill="#8A94A6">+14</text>
+
+  <!-- IQR band (polygon around mean) -->
+  <!-- Upper band: mean + 0.4 g/dL; Lower band: mean − 0.4 g/dL. 200px = 1 g/dL so offset is 80px -->
+  <path d="M 250 220 L 450 280 L 650 370 L 780 460 L 880 500 L 920 505 L 1060 495 L 1250 460 L 1400 435 L 1550 420 L 1550 580 L 1400 595 L 1250 620 L 1060 655 L 920 665 L 880 660 L 780 620 L 650 530 L 450 440 L 250 380 Z"
+        fill="url(#bandGrad)" stroke="none"/>
+
+  <!-- Mean trajectory (smooth-ish polyline) -->
+  <polyline points="250,300 450,360 650,450 780,540 880,580 920,585 1060,575 1250,540 1400,515 1550,500"
+            fill="none" stroke="#0033A0" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Data point markers -->
+  <circle cx="250" cy="300" r="7" fill="#0033A0"/>
+  <circle cx="450" cy="360" r="7" fill="#0033A0"/>
+  <circle cx="650" cy="450" r="7" fill="#0033A0"/>
+  <circle cx="780" cy="540" r="7" fill="#D64309"/>
+  <circle cx="880" cy="580" r="7" fill="#D64309"/>
+  <circle cx="920" cy="585" r="8" fill="#D64309" stroke="#ffffff" stroke-width="2"/>
+  <circle cx="1060" cy="575" r="7" fill="#D64309"/>
+  <circle cx="1250" cy="540" r="7" fill="#0033A0"/>
+  <circle cx="1400" cy="515" r="7" fill="#0033A0"/>
+  <circle cx="1550" cy="500" r="7" fill="#0033A0"/>
+
+  <!-- Normal threshold line (3.5 g/dL → y=400) -->
+  <line x1="200" y1="400" x2="1600" y2="400" stroke="#5B8A5E" stroke-width="2" stroke-dasharray="8 4"/>
+  <text x="1590" y="392" text-anchor="end" font-size="15" font-weight="700" fill="#5B8A5E">Normal ≥ 3.5 g/dL</text>
+
+  <!-- Severe threshold line (2.5 g/dL → y=600) -->
+  <line x1="200" y1="600" x2="1600" y2="600" stroke="#D64309" stroke-width="2" stroke-dasharray="8 4"/>
+  <text x="1590" y="622" text-anchor="end" font-size="15" font-weight="700" fill="#D64309">Severe &lt; 2.5 g/dL</text>
+
+  <!-- Zero vertical line (HAPrI dx) -->
+  <line x1="900" y1="160" x2="900" y2="700" stroke="#0033A0" stroke-width="5"/>
+  <rect x="846" y="158" width="108" height="34" rx="14" fill="#0033A0"/>
+  <text x="900" y="180" text-anchor="middle" font-size="16" font-weight="700" fill="#ffffff">HAPrI dx</text>
+
+  <!-- Drop callout arrow -->
+  <path d="M 700 310 Q 790 380 820 470" fill="none" stroke="#D64309" stroke-width="2" marker-end="url(#arrDropOrange)"/>
+  <defs>
+    <marker id="arrDropOrange" markerWidth="6" markerHeight="6" refX="5.5" refY="3" orient="auto">
+      <polygon points="0 0, 6 3, 0 6" fill="#D64309"/>
+    </marker>
+  </defs>
+  <rect x="500" y="270" width="220" height="50" rx="10" fill="#FBE5D8" stroke="#D64309" stroke-width="1.5"/>
+  <text x="610" y="290" text-anchor="middle" font-size="15" font-weight="700" fill="#D64309">Pre-index drop</text>
+  <text x="610" y="308" text-anchor="middle" font-size="13" fill="#3F4444">τ ≈ −7 to −1 d</text>
+
+  <!-- X-axis label -->
+  <text x="900" y="775" text-anchor="middle" font-size="20" font-weight="700" fill="#3F4444">τ  (days relative to HAPrI diagnosis)</text>
+
+  <!-- Y-axis label (rotated) -->
+  <g transform="translate(100,450) rotate(-90)">
+    <text text-anchor="middle" font-size="20" font-weight="700" fill="#3F4444">Serum albumin (g/dL)</text>
+  </g>
+
+  <!-- Illustrative badge -->
+  <rect x="1480" y="150" width="120" height="28" rx="12" fill="#FBE5D8" stroke="#D64309" stroke-width="1"/>
+  <text x="1540" y="169" text-anchor="middle" font-size="13" font-weight="700" fill="#D64309" letter-spacing="1">ILLUSTRATIVE</text>
+
+  <!-- Footnote -->
+  <text x="900" y="855" text-anchor="middle" font-size="15" font-style="italic" fill="#8A94A6">
+    Trajectory schematic based on the shape reported in the source deck. Absolute values are placeholders pending cohort-level analysis.
+  </text>
+</svg>

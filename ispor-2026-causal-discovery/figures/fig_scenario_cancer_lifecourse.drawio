@@ -1,0 +1,151 @@
+<mxfile host="app.diagrams.net" modified="2026-04-20" type="device">
+  <diagram name="Scenario 4 — Cancer life course" id="scn-cancer">
+    <mxGraphModel dx="1680" dy="960" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1680" pageHeight="960">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <mxCell id="titleBg" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F6F8FC;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="0" y="0" width="1680" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="titleKicker" value="SCENARIO 4" style="text;html=1;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;fontColor=#0033A0;fontSize=20;fontFamily=Arial;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="20" width="180" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="titleMain" value="Breast-cancer risk: life-course ordering" style="text;html=1;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;fontColor=#3F4444;fontSize=22;fontFamily=Arial;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="220" y="20" width="780" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="titleNote" value="modifiable vs. immutable factors" style="text;html=1;align=right;verticalAlign=middle;strokeColor=none;fillColor=none;fontColor=#8a94a6;fontSize=14;fontFamily=Arial;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="1180" y="20" width="460" height="30" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="flatHead" value="FLAT · CROSS-SECTIONAL" style="text;html=1;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;fontColor=#8a94a6;fontSize=16;fontFamily=Arial;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="95" width="620" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="flatSub" value="a row of risk factors &amp; outcome, no history" style="text;html=1;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;fontColor=#3F4444;fontSize=14;fontFamily=Arial;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="40" y="125" width="620" height="20" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="tblHead" value="id &amp;nbsp; fam_hx &amp;nbsp; menarche &amp;nbsp; parity &amp;nbsp; HRT &amp;nbsp; BC" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#0033A0;fontColor=#ffffff;strokeColor=#0033A0;fontSize=12;fontFamily=Arial;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="40" y="160" width="620" height="32" as="geometry"/>
+        </mxCell>
+        <mxCell id="tblRows" value="4012 &amp;nbsp;&amp;nbsp; 1 &amp;nbsp;&amp;nbsp; 11 &amp;nbsp;&amp;nbsp; 0 &amp;nbsp;&amp;nbsp; 1 &amp;nbsp;&amp;nbsp; 1 &lt;br/&gt;4108 &amp;nbsp;&amp;nbsp; 0 &amp;nbsp;&amp;nbsp; 13 &amp;nbsp;&amp;nbsp; 2 &amp;nbsp;&amp;nbsp; 0 &amp;nbsp;&amp;nbsp; 0 &lt;br/&gt;4193 &amp;nbsp;&amp;nbsp; 0 &amp;nbsp;&amp;nbsp; 14 &amp;nbsp;&amp;nbsp; 1 &amp;nbsp;&amp;nbsp; 1 &amp;nbsp;&amp;nbsp; 1 &lt;br/&gt;4284 &amp;nbsp;&amp;nbsp; 1 &amp;nbsp;&amp;nbsp; 12 &amp;nbsp;&amp;nbsp; 0 &amp;nbsp;&amp;nbsp; 1 &amp;nbsp;&amp;nbsp; 1 &lt;br/&gt;4377 &amp;nbsp;&amp;nbsp; 0 &amp;nbsp;&amp;nbsp; 12 &amp;nbsp;&amp;nbsp; 3 &amp;nbsp;&amp;nbsp; 0 &amp;nbsp;&amp;nbsp; 0 &lt;br/&gt;· · ·" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;fontColor=#3F4444;strokeColor=#CDCDCD;fontSize=12;fontFamily=Arial;align=center;" vertex="1" parent="1">
+          <mxGeometry x="40" y="192" width="620" height="160" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="cpdagBox" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#CDCDCD;strokeWidth=2;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="40" y="380" width="620" height="220" as="geometry"/>
+        </mxCell>
+        <mxCell id="cpdagTitle" value="DENSE UNDIRECTED CPDAG" style="text;html=1;align=center;verticalAlign=middle;strokeColor=none;fillColor=none;fontColor=#3F4444;fontSize=14;fontFamily=Arial;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="395" width="620" height="30" as="geometry"/>
+        </mxCell>
+
+        <!-- center BC node + peripheral factors -->
+        <mxCell id="BC_f" value="BC" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#0033A0;strokeWidth=3;fontSize=13;fontFamily=Arial;fontStyle=1;fontColor=#0033A0;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="330" y="530" width="60" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="fam_f" value="fam hx" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#0033A0;strokeWidth=2;fontSize=11;fontFamily=Arial;fontStyle=1;fontColor=#0033A0;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="80" y="440" width="54" height="54" as="geometry"/>
+        </mxCell>
+        <mxCell id="men_f" value="menar." style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#0033A0;strokeWidth=2;fontSize=11;fontFamily=Arial;fontStyle=1;fontColor=#0033A0;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="220" y="430" width="54" height="54" as="geometry"/>
+        </mxCell>
+        <mxCell id="par_f" value="parity" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#0033A0;strokeWidth=2;fontSize=11;fontFamily=Arial;fontStyle=1;fontColor=#0033A0;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="440" y="430" width="54" height="54" as="geometry"/>
+        </mxCell>
+        <mxCell id="hrt_f" value="HRT" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#0033A0;strokeWidth=2;fontSize=11;fontFamily=Arial;fontStyle=1;fontColor=#0033A0;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="570" y="440" width="54" height="54" as="geometry"/>
+        </mxCell>
+        <!-- undirected edges -->
+        <mxCell id="e_famBC" style="endArrow=none;strokeColor=#8a94a6;strokeWidth=2;" edge="1" source="fam_f" target="BC_f" parent="1"/>
+        <mxCell id="e_menBC" style="endArrow=none;strokeColor=#8a94a6;strokeWidth=2;" edge="1" source="men_f" target="BC_f" parent="1"/>
+        <mxCell id="e_parBC" style="endArrow=none;strokeColor=#8a94a6;strokeWidth=2;" edge="1" source="par_f" target="BC_f" parent="1"/>
+        <mxCell id="e_hrtBC" style="endArrow=none;strokeColor=#8a94a6;strokeWidth=2;" edge="1" source="hrt_f" target="BC_f" parent="1"/>
+        <mxCell id="e_famMen" style="endArrow=none;strokeColor=#CDCDCD;strokeWidth=1.5;" edge="1" source="fam_f" target="men_f" parent="1"/>
+        <mxCell id="e_menPar" style="endArrow=none;strokeColor=#CDCDCD;strokeWidth=1.5;" edge="1" source="men_f" target="par_f" parent="1"/>
+        <mxCell id="e_parHrt" style="endArrow=none;strokeColor=#CDCDCD;strokeWidth=1.5;" edge="1" source="par_f" target="hrt_f" parent="1"/>
+
+        <mxCell id="whyBox" value="&lt;b&gt;Why it matters:&lt;/b&gt;&lt;br/&gt;Family history is fixed at birth. HRT is a policy lever. Collapsing them into one row conflates effect sizes that carry totally different clinical implications." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F6F8FC;fontColor=#3F4444;strokeColor=#CDCDCD;strokeWidth=2;fontSize=13;fontFamily=Arial;arcSize=8;align=left;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="40" y="620" width="620" height="90" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="reshape" value="life-course&#xa;object" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;fontColor=#0033A0;strokeColor=#005DAA;strokeWidth=3;fontSize=16;fontFamily=Arial;fontStyle=1;arcSize=50;" vertex="1" parent="1">
+          <mxGeometry x="760" y="380" width="160" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="resArrow" style="endArrow=classic;strokeColor=#005DAA;strokeWidth=5;endSize=5;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="920" y="425" as="sourcePoint"/>
+            <mxPoint x="960" y="425" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="longHead" value="LONGITUDINAL · OBJECT-CENTRIC" style="text;html=1;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;fontColor=#0033A0;fontSize=16;fontFamily=Arial;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="960" y="95" width="600" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="longSub" value="Patient object · dated life-course events" style="text;html=1;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;fontColor=#3F4444;fontSize=14;fontFamily=Arial;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="960" y="125" width="600" height="20" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="tlBox" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#CDCDCD;strokeWidth=2;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="960" y="160" width="680" height="210" as="geometry"/>
+        </mxCell>
+        <mxCell id="tlTitle" value="PATIENT 4012 · LIFE-COURSE EVENTS" style="text;html=1;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;fontColor=#3F4444;fontSize=13;fontFamily=Arial;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="980" y="170" width="620" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="fam_tl" value="fam hx&#xa;birth" style="rectangle;whiteSpace=wrap;html=1;fillColor=#8a94a6;strokeColor=#8a94a6;fontColor=#ffffff;fontSize=11;fontFamily=Arial;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="990" y="260" width="64" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="men_tl" value="menar.&#xa;age 12" style="ellipse;whiteSpace=wrap;html=1;fillColor=#0033A0;strokeColor=#0033A0;fontColor=#ffffff;fontSize=11;fontFamily=Arial;fontStyle=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="260" width="44" height="44" as="geometry"/>
+        </mxCell>
+        <mxCell id="par_tl" value="parity&#xa;age 28" style="ellipse;whiteSpace=wrap;html=1;fillColor=#0033A0;strokeColor=#0033A0;fontColor=#ffffff;fontSize=11;fontFamily=Arial;fontStyle=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="1250" y="260" width="44" height="44" as="geometry"/>
+        </mxCell>
+        <mxCell id="hrt_tl" value="HRT&#xa;age 48" style="ellipse;whiteSpace=wrap;html=1;fillColor=#0033A0;strokeColor=#0033A0;fontColor=#ffffff;fontSize=11;fontFamily=Arial;fontStyle=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="1400" y="260" width="44" height="44" as="geometry"/>
+        </mxCell>
+        <mxCell id="bc_tl" value="BC dx&#xa;age 52" style="ellipse;whiteSpace=wrap;html=1;fillColor=#D64309;strokeColor=#D64309;fontColor=#ffffff;fontSize=11;fontFamily=Arial;fontStyle=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="1550" y="258" width="48" height="48" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="dagBox" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#005DAA;strokeWidth=2;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="960" y="400" width="680" height="180" as="geometry"/>
+        </mxCell>
+        <mxCell id="dagTitle" value="ORIENTED LIFE-COURSE DAG" style="text;html=1;align=center;verticalAlign=middle;strokeColor=none;fillColor=none;fontColor=#0033A0;fontSize=14;fontFamily=Arial;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="960" y="415" width="680" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="fam_o" value="fam hx" style="rectangle;whiteSpace=wrap;html=1;fillColor=#F6F8FC;strokeColor=#8a94a6;strokeWidth=2;fontColor=#3F4444;fontSize=11;fontFamily=Arial;fontStyle=1;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="980" y="500" width="80" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="men_o" value="menar." style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#0033A0;strokeWidth=2.5;fontSize=11;fontFamily=Arial;fontStyle=1;fontColor=#0033A0;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="1110" y="496" width="48" height="48" as="geometry"/>
+        </mxCell>
+        <mxCell id="par_o" value="parity" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#0033A0;strokeWidth=2.5;fontSize=11;fontFamily=Arial;fontStyle=1;fontColor=#0033A0;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="1220" y="496" width="48" height="48" as="geometry"/>
+        </mxCell>
+        <mxCell id="hrt_o" value="HRT" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#D64309;strokeWidth=3;fontSize=11;fontFamily=Arial;fontStyle=1;fontColor=#D64309;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="1340" y="494" width="52" height="52" as="geometry"/>
+        </mxCell>
+        <mxCell id="bc_o" value="BC dx" style="ellipse;whiteSpace=wrap;html=1;fillColor=#D64309;strokeColor=#D64309;strokeWidth=3;fontSize=11;fontFamily=Arial;fontStyle=1;fontColor=#ffffff;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="1480" y="492" width="56" height="56" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_fam_men" style="endArrow=classic;strokeColor=#005DAA;strokeWidth=2.5;endSize=5;" edge="1" source="fam_o" target="men_o" parent="1"/>
+        <mxCell id="e_men_par" style="endArrow=classic;strokeColor=#005DAA;strokeWidth=2;endSize=5;" edge="1" source="men_o" target="par_o" parent="1"/>
+        <mxCell id="e_par_hrt" style="endArrow=classic;strokeColor=#005DAA;strokeWidth=2;endSize=5;" edge="1" source="par_o" target="hrt_o" parent="1"/>
+        <mxCell id="e_hrt_bc" style="endArrow=classic;strokeColor=#D64309;strokeWidth=3.5;endSize=5;" edge="1" source="hrt_o" target="bc_o" parent="1"/>
+        <mxCell id="e_fam_bc" style="endArrow=classic;strokeColor=#005DAA;strokeWidth=2;endSize=5;dashed=1;dashPattern=5 4;curved=1;" edge="1" source="fam_o" target="bc_o" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points"><mxPoint x="1260" y="450"/></Array>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="resolvesBox" value="&lt;b style=&quot;color:#D64309&quot;&gt;What temporal precedence + immutability resolves:&lt;/b&gt;&lt;br/&gt;Only HRT is a modifiable &lt;b&gt;late&lt;/b&gt; event. The other edges point outward from genetic/developmental nodes — they can&#39;t absorb credit that belongs to HRT." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF4E6;fontColor=#3F4444;strokeColor=#D64309;strokeWidth=2;fontSize=13;fontFamily=Arial;arcSize=8;align=left;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="960" y="620" width="680" height="90" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="legendBox" value="&lt;b&gt;WHAT THE OBJECT MODEL CARRIES THAT THE FLAT TABLE DOES NOT&lt;/b&gt;&lt;br/&gt;&lt;br/&gt;• &lt;b&gt;Immutability at birth&lt;/b&gt; — family history can only be a &lt;i&gt;source&lt;/i&gt;, never a sink.&lt;br/&gt;• &lt;b&gt;Developmental timestamps&lt;/b&gt; — menarche &amp; first birth anchor to specific ages, not flags.&lt;br/&gt;• &lt;b&gt;Policy-lever events&lt;/b&gt; — HRT start dates separable from diagnosis, so the modifiable edge is identifiable." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F6F8FC;fontColor=#3F4444;strokeColor=#CDCDCD;strokeWidth=1;fontSize=12;fontFamily=Arial;arcSize=8;align=left;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="40" y="770" width="1600" height="150" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

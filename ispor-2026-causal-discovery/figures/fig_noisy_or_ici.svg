@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="18in" height="7.2in" viewBox="0 0 1800 720" font-family="Arial, sans-serif">
+  <defs>
+    <marker id="arrBlue2" markerWidth="6" markerHeight="6" refX="5.5" refY="3" orient="auto">
+      <polygon points="0 0, 6 3, 0 6" fill="#005DAA"/>
+    </marker>
+    <marker id="arrOrange2" markerWidth="6" markerHeight="6" refX="5.5" refY="3" orient="auto">
+      <polygon points="0 0, 6 3, 0 6" fill="#D64309"/>
+    </marker>
+    <marker id="arrGray2" markerWidth="6" markerHeight="6" refX="5.5" refY="3" orient="auto">
+      <polygon points="0 0, 6 3, 0 6" fill="#8A94A6"/>
+    </marker>
+    <marker id="arrNavy2" markerWidth="6" markerHeight="6" refX="5.5" refY="3" orient="auto">
+      <polygon points="0 0, 6 3, 0 6" fill="#0033A0"/>
+    </marker>
+  </defs>
+
+  <!-- Title + subtitle -->
+  <text x="900" y="65" text-anchor="middle" font-size="34" font-weight="700" fill="#0033A0">Independent causal influence (Noisy-OR)</text>
+  <text x="900" y="102" text-anchor="middle" font-size="18" font-style="italic" fill="#3F4444">Each candidate factor xᵢ triggers the outcome independently with probability cᵢ. The observed outcome is the OR of the hidden triggers.</text>
+
+  <!-- Factor 1 -->
+  <rect x="120" y="180" width="180" height="70" rx="14" fill="#ffffff" stroke="#005DAA" stroke-width="3"/>
+  <text x="210" y="210" text-anchor="middle" font-size="18" font-weight="700" fill="#0033A0">x₁</text>
+  <text x="210" y="232" text-anchor="middle" font-size="15" fill="#0033A0">mech. vent</text>
+  <line x1="300" y1="215" x2="380" y2="215" stroke="#005DAA" stroke-width="3"/>
+  <ellipse cx="410" cy="215" rx="30" ry="20" fill="#E6EEF9" stroke="#005DAA" stroke-width="2"/>
+  <text x="410" y="221" text-anchor="middle" font-size="18" font-weight="700" fill="#0033A0">c₁</text>
+  <line x1="440" y1="215" x2="500" y2="215" stroke="#005DAA" stroke-width="3" marker-end="url(#arrBlue2)"/>
+  <ellipse cx="530" cy="215" rx="30" ry="20" fill="#ffffff" stroke="#8A94A6" stroke-width="2" stroke-dasharray="4 3"/>
+  <text x="530" y="221" text-anchor="middle" font-size="18" font-weight="700" fill="#8A94A6">H₁</text>
+
+  <!-- Factor 2 (orange — featured) -->
+  <rect x="120" y="300" width="180" height="70" rx="14" fill="#D64309" stroke="#D64309" stroke-width="3"/>
+  <text x="210" y="330" text-anchor="middle" font-size="18" font-weight="700" fill="#ffffff">x₂</text>
+  <text x="210" y="352" text-anchor="middle" font-size="15" fill="#ffffff">hypoalbuminemia</text>
+  <line x1="300" y1="335" x2="380" y2="335" stroke="#D64309" stroke-width="3"/>
+  <ellipse cx="410" cy="335" rx="30" ry="20" fill="#FBE5D8" stroke="#D64309" stroke-width="2"/>
+  <text x="410" y="341" text-anchor="middle" font-size="18" font-weight="700" fill="#D64309">c₂</text>
+  <line x1="440" y1="335" x2="500" y2="335" stroke="#D64309" stroke-width="3" marker-end="url(#arrOrange2)"/>
+  <ellipse cx="530" cy="335" rx="30" ry="20" fill="#ffffff" stroke="#8A94A6" stroke-width="2" stroke-dasharray="4 3"/>
+  <text x="530" y="341" text-anchor="middle" font-size="18" font-weight="700" fill="#8A94A6">H₂</text>
+
+  <!-- Factor 3 -->
+  <rect x="120" y="420" width="180" height="70" rx="14" fill="#ffffff" stroke="#005DAA" stroke-width="3"/>
+  <text x="210" y="450" text-anchor="middle" font-size="18" font-weight="700" fill="#0033A0">x₃</text>
+  <text x="210" y="472" text-anchor="middle" font-size="15" fill="#0033A0">immobility</text>
+  <line x1="300" y1="455" x2="380" y2="455" stroke="#005DAA" stroke-width="3"/>
+  <ellipse cx="410" cy="455" rx="30" ry="20" fill="#E6EEF9" stroke="#005DAA" stroke-width="2"/>
+  <text x="410" y="461" text-anchor="middle" font-size="18" font-weight="700" fill="#0033A0">c₃</text>
+  <line x1="440" y1="455" x2="500" y2="455" stroke="#005DAA" stroke-width="3" marker-end="url(#arrBlue2)"/>
+  <ellipse cx="530" cy="455" rx="30" ry="20" fill="#ffffff" stroke="#8A94A6" stroke-width="2" stroke-dasharray="4 3"/>
+  <text x="530" y="461" text-anchor="middle" font-size="18" font-weight="700" fill="#8A94A6">H₃</text>
+
+  <!-- OR gate -->
+  <rect x="680" y="280" width="100" height="120" rx="40" fill="#0033A0" stroke="#0033A0" stroke-width="3"/>
+  <text x="730" y="350" text-anchor="middle" font-size="26" font-weight="700" fill="#ffffff">OR</text>
+
+  <!-- Lines from H to OR -->
+  <line x1="560" y1="215" x2="680" y2="310" stroke="#8A94A6" stroke-width="3" marker-end="url(#arrGray2)"/>
+  <line x1="560" y1="335" x2="680" y2="340" stroke="#8A94A6" stroke-width="3" marker-end="url(#arrGray2)"/>
+  <line x1="560" y1="455" x2="680" y2="370" stroke="#8A94A6" stroke-width="3" marker-end="url(#arrGray2)"/>
+
+  <!-- Outcome Y -->
+  <ellipse cx="930" cy="340" rx="70" ry="50" fill="#ffffff" stroke="#0033A0" stroke-width="5"/>
+  <text x="930" y="338" text-anchor="middle" font-size="22" font-weight="700" fill="#0033A0">Y</text>
+  <text x="930" y="362" text-anchor="middle" font-size="16" fill="#0033A0">HAPrI</text>
+  <line x1="780" y1="340" x2="860" y2="340" stroke="#0033A0" stroke-width="5" marker-end="url(#arrNavy2)"/>
+
+  <!-- Equation 1 (exact) -->
+  <text x="1090" y="195" font-size="13" font-weight="700" letter-spacing="1" fill="#8A94A6">PROBABILITY OF Y</text>
+  <rect x="1090" y="205" width="560" height="70" rx="8" fill="#F6F8FC" stroke="#005DAA" stroke-width="3"/>
+  <text x="1370" y="250" text-anchor="middle" font-family="Courier New, monospace" font-size="26" font-weight="700" fill="#0033A0">P(Y = 1 | x) = 1 − ∏ᵢ (1 − cᵢ xᵢ)</text>
+
+  <!-- Equation 2 (approximation) -->
+  <text x="1090" y="315" font-size="13" font-weight="700" letter-spacing="1" fill="#8A94A6">SMALL-cᵢ APPROXIMATION</text>
+  <rect x="1090" y="325" width="560" height="70" rx="8" fill="#FBE5D8" stroke="#D64309" stroke-width="3"/>
+  <text x="1370" y="370" text-anchor="middle" font-family="Courier New, monospace" font-size="26" font-weight="700" fill="#D64309">P(Y = 1 | x)  ≈  Σᵢ cᵢ xᵢ</text>
+
+  <!-- Interpretation -->
+  <rect x="1090" y="420" width="560" height="70" rx="6" fill="#ffffff" stroke="#CDCDCD" stroke-width="2"/>
+  <text x="1370" y="446" text-anchor="middle" font-size="17" fill="#3F4444">When every cᵢ is small, contributions add.</text>
+  <text x="1370" y="470" text-anchor="middle" font-size="17" fill="#3F4444">Each cᵢ reads as an interpretable per-factor causal contribution.</text>
+
+  <!-- Legend -->
+  <text x="900" y="600" text-anchor="middle" font-size="15" font-style="italic" fill="#3F4444">
+    xᵢ  observed factor        cᵢ  per-factor activation probability        Hᵢ  hidden trigger (latent)
+  </text>
+
+  <!-- Caveat -->
+  <rect x="400" y="625" width="1000" height="36" rx="8" fill="#F6F8FC" stroke="#CDCDCD" stroke-width="1"/>
+  <text x="900" y="649" text-anchor="middle" font-size="14" font-style="italic" fill="#8A94A6">Assumption: the hidden triggers Hᵢ are conditionally independent given xᵢ.</text>
+</svg>

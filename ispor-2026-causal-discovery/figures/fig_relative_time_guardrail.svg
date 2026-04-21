@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="10.5in" height="5.4in" viewBox="0 0 1050 540" font-family="Arial, sans-serif">
+  <defs>
+    <marker id="arrInk" markerWidth="6" markerHeight="6" refX="5.5" refY="3" orient="auto">
+      <polygon points="0 0, 6 3, 0 6" fill="#3F4444"/>
+    </marker>
+    <marker id="arrInkStart" markerWidth="6" markerHeight="6" refX="0.5" refY="3" orient="auto">
+      <polygon points="6 0, 0 3, 6 6" fill="#3F4444"/>
+    </marker>
+  </defs>
+
+  <!-- Title + subtitle -->
+  <text x="525" y="36" text-anchor="middle" font-size="24" font-weight="700" fill="#0033A0">Relative-time guardrail</text>
+  <text x="525" y="68" text-anchor="middle" font-size="16" font-style="italic" fill="#3F4444">
+    <tspan x="525" dy="0">Features are built from τ &lt; 0. The outcome lives at τ = 0.</tspan>
+    <tspan x="525" dy="20">Post-index information is excluded from discovery.</tspan>
+  </text>
+
+  <!-- Pre-zero feature window -->
+  <rect x="90" y="130" width="430" height="130" rx="8" fill="#E6EEF9" stroke="#005DAA" stroke-width="2"/>
+  <text x="305" y="168" text-anchor="middle" font-size="18" font-weight="700" fill="#0033A0">Feature window</text>
+  <text x="305" y="194" text-anchor="middle" font-size="16" fill="#3F4444">τ &lt; 0 · candidate features,</text>
+  <text x="305" y="214" text-anchor="middle" font-size="16" fill="#3F4444">confounders, treatments</text>
+  <text x="305" y="234" text-anchor="middle" font-size="16" font-style="italic" fill="#0033A0">— all pre-index</text>
+
+  <!-- Post-zero leakage window -->
+  <rect x="575" y="130" width="360" height="130" rx="8" fill="#ECEEF1" stroke="#8A94A6" stroke-width="2" stroke-dasharray="6 4"/>
+  <text x="755" y="168" text-anchor="middle" font-size="18" font-weight="700" fill="#8A94A6">Leakage zone — excluded</text>
+  <text x="755" y="194" text-anchor="middle" font-size="16" fill="#3F4444">τ &gt; 0 · follow-up care,</text>
+  <text x="755" y="214" text-anchor="middle" font-size="16" fill="#3F4444">downstream effects,</text>
+  <text x="755" y="234" text-anchor="middle" font-size="16" fill="#3F4444">post-index labs</text>
+
+  <!-- Sample pre-index events (chips) -->
+  <rect x="160" y="290" width="160" height="46" rx="10" fill="#ffffff" stroke="#005DAA" stroke-width="2"/>
+  <text x="240" y="311" text-anchor="middle" font-size="16" font-weight="700" fill="#0033A0">Mech. vent start</text>
+  <text x="240" y="328" text-anchor="middle" font-size="16" fill="#0033A0">τ = −48 h</text>
+  <line x1="240" y1="338" x2="240" y2="360" stroke="#005DAA" stroke-width="2"/>
+
+  <rect x="320" y="290" width="160" height="46" rx="10" fill="#D64309" stroke="#D64309" stroke-width="2"/>
+  <text x="400" y="311" text-anchor="middle" font-size="16" font-weight="700" fill="#ffffff">Albumin 2.4 g/dL</text>
+  <text x="400" y="328" text-anchor="middle" font-size="16" fill="#ffffff">τ = −18 h</text>
+  <line x1="400" y1="338" x2="400" y2="360" stroke="#D64309" stroke-width="2"/>
+
+  <!-- Post-index excluded event -->
+  <rect x="600" y="290" width="170" height="46" rx="10" fill="#ffffff" stroke="#8A94A6" stroke-width="2" stroke-dasharray="4 3"/>
+  <text x="685" y="311" text-anchor="middle" font-size="16" font-weight="700" font-style="italic" fill="#8A94A6">Wound care order</text>
+  <text x="685" y="328" text-anchor="middle" font-size="16" font-style="italic" fill="#8A94A6">τ = +6 h · excluded</text>
+  <line x1="685" y1="338" x2="685" y2="360" stroke="#8A94A6" stroke-width="2" stroke-dasharray="4 3"/>
+
+  <!-- Horizontal time axis -->
+  <line x1="80" y1="370" x2="970" y2="370" stroke="#3F4444" stroke-width="3" marker-start="url(#arrInkStart)" marker-end="url(#arrInk)"/>
+
+  <!-- Axis tick labels -->
+  <line x1="120" y1="363" x2="120" y2="382" stroke="#3F4444" stroke-width="2"/>
+  <text x="120" y="402" text-anchor="middle" font-size="16" fill="#3F4444">−72 h</text>
+
+  <line x1="240" y1="363" x2="240" y2="382" stroke="#3F4444" stroke-width="2"/>
+  <text x="240" y="402" text-anchor="middle" font-size="16" fill="#3F4444">−48 h</text>
+
+  <line x1="360" y1="363" x2="360" y2="382" stroke="#3F4444" stroke-width="2"/>
+  <text x="360" y="402" text-anchor="middle" font-size="16" fill="#3F4444">−24 h</text>
+
+  <!-- Zero tick (navy, thicker) -->
+  <line x1="525" y1="358" x2="525" y2="388" stroke="#0033A0" stroke-width="3"/>
+  <text x="525" y="406" text-anchor="middle" font-size="17" font-weight="700" fill="#0033A0">0</text>
+
+  <line x1="655" y1="363" x2="655" y2="382" stroke="#8A94A6" stroke-width="2"/>
+  <text x="655" y="402" text-anchor="middle" font-size="16" fill="#8A94A6">+24 h</text>
+
+  <line x1="785" y1="363" x2="785" y2="382" stroke="#8A94A6" stroke-width="2"/>
+  <text x="785" y="402" text-anchor="middle" font-size="16" fill="#8A94A6">+48 h</text>
+
+  <!-- Zero vertical guide line -->
+  <line x1="525" y1="110" x2="525" y2="360" stroke="#0033A0" stroke-width="4"/>
+
+  <!-- Zero node (above panels) -->
+  <rect x="465" y="88" width="120" height="38" rx="12" fill="#0033A0" stroke="#0033A0"/>
+  <text x="525" y="104" text-anchor="middle" font-size="16" font-weight="700" fill="#ffffff">τ = 0</text>
+  <text x="525" y="120" text-anchor="middle" font-size="16" fill="#ffffff">HAPrI diagnosis</text>
+
+  <!-- Axis label -->
+  <text x="525" y="494" text-anchor="middle" font-size="16" font-weight="700" fill="#3F4444">τ  (time relative to HAPrI diagnosis)</text>
+
+  <!-- Math hint -->
+  <rect x="260" y="430" width="530" height="44" rx="8" fill="#F6F8FC" stroke="#005DAA" stroke-width="1.5"/>
+  <text x="525" y="458" text-anchor="middle" font-size="16" font-weight="700" font-family="Courier New, monospace" fill="#0033A0">
+    X = f({events at τ &lt; 0}),   Y = 1(HAPrI at τ = 0)
+  </text>
+</svg>
