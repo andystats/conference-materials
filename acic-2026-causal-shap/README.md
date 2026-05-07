@@ -29,7 +29,7 @@ acic-2026-causal-shap/
 │   ├── logistics.txt             # Conference logistics
 │   └── notes.txt                 # Working notes on causalShap
 ├── app/                          # Causal SHAP interactive Python app
-│   ├── app.py                    # Streamlit/Shiny app entry point
+│   ├── app.py                    # Python Shiny app entry point
 │   ├── causal_shap.py            # Core causal SHAP implementation
 │   ├── requirements.txt          # Python dependencies
 │   ├── run_app.bat               # Windows launch script
@@ -45,10 +45,9 @@ acic-2026-causal-shap/
 │   ├── simcausal_many_mediators.R
 │   ├── run_causal_shap_demo.py
 │   └── output/                   # Generated demo data, plots, and summaries
-└── poster/                       # Printable poster (42" × 40" landscape)
+└── poster/                       # Printable poster (48" × 36" landscape)
     ├── ACIC2026_CausalSHAP_Poster.pptx
     ├── ACIC2026_CausalSHAP_Poster.pdf
-    ├── build_poster.py           # Regenerates figures + PPTX
     └── export_pdf.py             # PPTX → PDF via PowerPoint COM
 ```
 
@@ -71,10 +70,12 @@ Live at: `https://andystats.github.io/conference-materials/acic-2026-causal-shap
 ```bash
 cd app
 pip install -r requirements.txt
-python app.py
+shiny run --port 8000 app.py
 ```
 
-Requires Python 3.13+ with `streamlit`, `shap`, `causal-learn`, and dependencies in `requirements.txt`.
+Requires Python 3.13+ with `shiny`, `shap`, `causal-learn`, and dependencies in `requirements.txt`.
+
+For custom data, use the `Data` tab's CSV uploader, run discovery, add expert required/forbidden edges, then compare standard SHAP, causal SHAP, and adjustment-set SHAP in the `Causal SHAP` tab.
 
 ## Running the simcausal demo
 
@@ -89,8 +90,7 @@ The demo lives at `demo/index.html` and the teaching notebook is `demo/causal_sh
 
 ```bash
 cd poster
-python build_poster.py          # regenerate figures + QR + .pptx
 python export_pdf.py            # render .pptx to .pdf (requires PowerPoint)
 ```
 
-Requires `python-pptx`, `qrcode[pil]`, `matplotlib`, and `pywin32`.
+Requires `pywin32` and PowerPoint.

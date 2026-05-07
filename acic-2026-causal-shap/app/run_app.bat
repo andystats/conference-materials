@@ -1,3 +1,4 @@
 @echo off
-cd /d "C:\Users\wilso\Box\Active\Tao of RWD\3 (Mar) 2026\ACIC latebreaker abstracts\Causal Shap\materials\causal_discovery_app"
-"C:\Users\wilso\AppData\Local\Programs\Python\Python313\python.exe" -m shiny run --port 8000 app.py
+cd /d "%~dp0"
+py -3.13 -m shiny run --port 8000 app.py
+if errorlevel 1 python -m shiny run --port 8000 app.py

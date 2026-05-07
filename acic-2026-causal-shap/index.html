@@ -293,7 +293,7 @@ const Tab_Artifact = () => {
       </SectionTitle>
       <Para>
         SHAP attributes a model&rsquo;s prediction by averaging each feature&rsquo;s marginal contribution across <em>every</em>
-        possible ordering of the features. It treats them as exchangeable. In a causal system they are not:
+        possible ordering of the features. It treats them as exchangeable. In a causal system, they are not:
         causes come before effects, and shuffling that order is how credit gets stolen.
       </Para>
       <Para>
@@ -1457,10 +1457,12 @@ const App = () => {
   const [tab, setTab] = useState(0);
 
   const mainRef = useRef(null);
+  const hasMountedRef = useRef(false);
   useEffect(() => {
-    if (mainRef.current) {
+    if (hasMountedRef.current && mainRef.current) {
       mainRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
     }
+    hasMountedRef.current = true;
   }, [tab]);
 
   const renderTab = () => {
@@ -1540,6 +1542,30 @@ const App = () => {
           <p style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "1rem", lineHeight: 1.75, color: COLORS.subtle, margin: 0 }}>
             We evaluated the approach in synthetic data generated under known DAGs using the R package <em>simcausal</em> and in real-world MIMIC-IV data. In simulations, standard SHAP over-attributed importance to mediators, whereas causal SHAP re-ranked features (Kendall&rsquo;s &tau;=0.42 between methods) and reduced mediator inflation. In MIMIC-IV, the expert-informed DAG helped distinguish upstream severity drivers from downstream interventions. These results support expert-guided DAG refinement as a practical route to more causally coherent explanations in structured clinical machine learning.
           </p>
+        </GlassCard>
+
+        <GlassCard style={{ marginBottom: 28, borderTop: `4px solid ${COLORS.teal}` }}>
+          <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "1.35rem", fontWeight: 700, color: COLORS.text, marginBottom: 10 }}>Start here</h2>
+          <p style={{ fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.98rem", lineHeight: 1.65, color: COLORS.subtle, marginBottom: 18 }}>
+            New to the project? Read the poster, walk through the reproducible simcausal demo, then run the local app with your own CSV when you are ready to test a DAG-informed attribution workflow.
+          </p>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))", gap: 12 }}>
+            {[
+              ["Read the poster", "./poster/ACIC2026_CausalSHAP_Poster.pdf", "The printable ACIC poster as a PDF."],
+              ["Open the slide deck", "./poster/ACIC2026_CausalSHAP_Poster.pptx", "Editable PowerPoint source."],
+              ["Run the demo", "./demo/", "Known-DAG simcausal validation with plots and notebook."],
+              ["Try your CSV", "./app/", "Local app setup for upload, discovery, and causal SHAP."]
+            ].map(([label, href, desc]) => (
+              <a key={label} href={href} style={{
+                display: "block", textDecoration: "none", color: COLORS.text,
+                background: "white", border: `1px solid ${COLORS.border}`, borderRadius: 10,
+                padding: "14px 16px", minHeight: 118
+              }}>
+                <span style={{ display: "block", fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.95rem", fontWeight: 800, color: COLORS.teal, marginBottom: 6 }}>{label}</span>
+                <span style={{ display: "block", fontFamily: "'Source Sans 3', sans-serif", fontSize: "0.84rem", lineHeight: 1.45, color: COLORS.subtle }}>{desc}</span>
+              </a>
+            ))}
+          </div>
         </GlassCard>
       </section>
 

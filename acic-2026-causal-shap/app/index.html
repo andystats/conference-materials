@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Try Causal SHAP Locally</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: #111827;
+      background: #fffdf9;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.55;
+    }
+    header {
+      padding: 48px 24px 28px;
+      border-bottom: 1px solid #d1d5db;
+      background: #ffffff;
+    }
+    main {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 32px 24px 56px;
+    }
+    h1 {
+      max-width: 880px;
+      margin: 0;
+      font-size: clamp(2rem, 5vw, 3.4rem);
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+    h2 {
+      margin: 0 0 12px;
+      font-size: 1.35rem;
+      letter-spacing: 0;
+    }
+    p {
+      max-width: 820px;
+      color: #4b5563;
+    }
+    section {
+      margin-top: 34px;
+      padding-top: 26px;
+      border-top: 1px solid #d1d5db;
+    }
+    .eyebrow {
+      margin: 0 0 8px;
+      color: #008080;
+      font-size: 0.8rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    .lede {
+      margin-top: 16px;
+      font-size: 1.08rem;
+    }
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 18px;
+    }
+    .step {
+      min-height: 150px;
+      padding: 18px;
+      background: #ffffff;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+    }
+    .step strong {
+      display: block;
+      margin-bottom: 8px;
+      color: #111827;
+    }
+    .command {
+      overflow-x: auto;
+      margin-top: 14px;
+      padding: 16px;
+      border-radius: 8px;
+      background: #0f172a;
+      color: #e5e7eb;
+      font-family: "Cascadia Mono", Consolas, monospace;
+      font-size: 0.92rem;
+      white-space: pre;
+    }
+    a { color: #008080; font-weight: 700; }
+    ul { color: #4b5563; }
+    @media (max-width: 760px) {
+      .steps { grid-template-columns: 1fr; }
+      header { padding: 36px 18px 24px; }
+      main { padding: 24px 18px 42px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <p class="eyebrow">Run the full workflow</p>
+    <h1>Try causal SHAP on your own CSV.</h1>
+    <p class="lede">
+      The hosted conference page is static. The full causal discovery and causal SHAP workflow runs as a local Python Shiny app.
+    </p>
+  </header>
+
+  <main>
+    <section>
+      <h2>Quick Start</h2>
+      <p>From the <code>acic-2026-causal-shap/app/</code> folder:</p>
+      <div class="command">py -3.13 -m pip install -r requirements.txt
+py -3.13 -m shiny run --port 8000 app.py</div>
+      <p>Then open <code>http://127.0.0.1:8000</code>. On Windows, <code>run_app.bat</code> does the same thing.</p>
+    </section>
+
+    <section>
+      <h2>Workflow</h2>
+      <div class="steps">
+        <div class="step">
+          <strong>1. Upload Data</strong>
+          Use a CSV with one row per observation and numeric columns for candidate features and outcome.
+        </div>
+        <div class="step">
+          <strong>2. Resolve the DAG</strong>
+          Run discovery, then add required and forbidden edges from temporal and domain knowledge.
+        </div>
+        <div class="step">
+          <strong>3. Compare Attribution</strong>
+          Run standard SHAP, DAG-constrained causal SHAP, and adjustment-set SHAP.
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>What To Bring</h2>
+      <ul>
+        <li>A prediction outcome column.</li>
+        <li>Candidate feature columns.</li>
+        <li>Enough subject-matter knowledge to rule out impossible arrows.</li>
+        <li>A willingness to treat the output as attribution under assumptions, not proof of causality.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>More Materials</h2>
+      <p>
+        Start with the <a href="../demo/">reproducible simcausal demo</a>, then return here for your own CSV.
+        The source files are in <a href="https://github.com/andystats/conference-materials/tree/main/acic-2026-causal-shap/app">GitHub</a>.
+      </p>
+    </section>
+  </main>
+</body>
+</html>
