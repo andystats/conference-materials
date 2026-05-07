@@ -4,4 +4,4 @@ Plain Markdown fragments for poster sections. Each file is one section — headl
 
 **Filename convention:** `<section>.md` — e.g. `headline.md`, `abstract.md`, `column-left.md`, `fig-hero-caption.md`.
 
-Empty until the first real section is lifted out of the poster draft.
+Current supporting files include the accepted abstract, the causal SHAP guide, and presentation notes for the simcausal demo.

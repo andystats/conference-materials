@@ -39,6 +39,12 @@ acic-2026-causal-shap/
 │       ├── sample_train.csv
 │       ├── simcausal_train.csv
 │       └── true_total_effects.json
+├── demo/                         # Reproducible simcausal many-mediators demo
+│   ├── index.html                # Static teaching page for GitHub Pages
+│   ├── causal_shap_simcausal_demo.ipynb
+│   ├── simcausal_many_mediators.R
+│   ├── run_causal_shap_demo.py
+│   └── output/                   # Generated demo data, plots, and summaries
 └── poster/                       # Printable poster (42" × 40" landscape)
     ├── ACIC2026_CausalSHAP_Poster.pptx
     ├── ACIC2026_CausalSHAP_Poster.pdf
@@ -69,6 +75,15 @@ python app.py
 ```
 
 Requires Python 3.13+ with `streamlit`, `shap`, `causal-learn`, and dependencies in `requirements.txt`.
+
+## Running the simcausal demo
+
+```bash
+Rscript demo/simcausal_many_mediators.R 2500 20260506 demo/output
+py -3.13 demo/run_causal_shap_demo.py --output-dir demo/output --n-perms 16 --n-background 8 --n-instances 12
+```
+
+The demo lives at `demo/index.html` and the teaching notebook is `demo/causal_shap_simcausal_demo.ipynb`. It generates a DAG with many mediators plus downstream proxy variables that foil standard SHAP, then reruns attribution with the expert DAG using `app/causal_shap.py`.
 
 ## Regenerating the poster
 

@@ -255,11 +255,11 @@ def compute_causal_shap(model, data, dag, feature_names, outcome_var,
 
 
 def compute_causal_shap_fast(model, data, dag, feature_names, outcome_var,
-                              n_perms=50, n_background=10):
+                              n_perms=50, n_background=10, n_instances=30):
     """
     Faster version of causal SHAP for interactive use.
 
-    Uses fewer permutations and background samples.
+    Uses fewer permutations, background samples, and evaluation instances.
     Computes mean absolute SHAP per feature (summary level, not instance level).
     """
     feature_set = set(feature_names)
@@ -268,11 +268,11 @@ def compute_causal_shap_fast(model, data, dag, feature_names, outcome_var,
     bg_data = data[feature_names].copy()
 
     # Sample a small number of instances
-    n_instances = min(len(data), 30)
-    sample_indices = np.random.choice(len(data), n_instances, replace=False)
+    n_sample_instances = min(len(data), n_instances)
+    sample_indices = np.random.choice(len(data), n_sample_instances, replace=False)
     sample_data = data.iloc[sample_indices]
 
-    all_shap = np.zeros((n_instances, len(feature_names)))
+    all_shap = np.zeros((n_sample_instances, len(feature_names)))
 
     for inst_idx, (_, instance) in enumerate(sample_data.iterrows()):
         shap_vals = np.zeros(len(feature_names))

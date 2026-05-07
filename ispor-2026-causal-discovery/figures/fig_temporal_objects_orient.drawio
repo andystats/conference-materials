@@ -1,0 +1,123 @@
+<mxfile host="app.diagrams.net" modified="2026-04-22" type="device">
+  <diagram name="Temporal objects orient" id="temporal-objects-orient">
+    <mxGraphModel dx="1050" dy="500" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1050" pageHeight="500">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <!-- Title -->
+        <mxCell id="title" value="Keep the clocks attached &#8212; time orients the arrows" style="text;html=1;align=center;verticalAlign=middle;strokeColor=none;fillColor=none;fontColor=#333333;fontSize=24;fontFamily=Helvetica;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="225" y="18" width="600" height="36" as="geometry"/>
+        </mxCell>
+        <mxCell id="subtitle" value="A patient object stamps every event with its clock, so the algorithm cannot orient edges backwards in time." style="text;html=1;align=center;verticalAlign=middle;strokeColor=none;fillColor=none;fontColor=#999999;fontSize=16;fontFamily=Helvetica;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="125" y="50" width="800" height="28" as="geometry"/>
+        </mxCell>
+
+        <!-- LEFT: patient object -->
+        <mxCell id="lKicker" value="PATIENT OBJECT" style="text;html=1;align=center;strokeColor=none;fillColor=none;fontColor=#4682B4;fontSize=16;fontFamily=Helvetica;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="96" width="280" height="22" as="geometry"/>
+        </mxCell>
+        <mxCell id="pRoot" value="Patient" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#0033A0;strokeColor=#00267A;fontColor=#FFFFFF;fontSize=16;fontStyle=1;shadow=1;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="42" y="212" width="76" height="76" as="geometry"/>
+        </mxCell>
+        <mxCell id="cLabs" value="Labs" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#4A90D9;strokeColor=#3A7BC8;fontColor=#FFFFFF;fontSize=16;fontStyle=1;shadow=1;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="210" y="130" width="60" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="cLabsDate" value="albumin &#183; day &#8722;3" style="text;html=1;align=left;strokeColor=none;fillColor=none;fontColor=#666666;fontSize=16;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="290" y="150" width="130" height="18" as="geometry"/>
+        </mxCell>
+        <mxCell id="cMeds" value="Meds" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#4A90D9;strokeColor=#3A7BC8;fontColor=#FFFFFF;fontSize=16;fontStyle=1;shadow=1;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="210" y="220" width="60" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="cMedsDate" value="pressors &#183; day &#8722;2" style="text;html=1;align=left;strokeColor=none;fillColor=none;fontColor=#666666;fontSize=16;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="290" y="240" width="130" height="18" as="geometry"/>
+        </mxCell>
+        <mxCell id="cProc" value="Proc." style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#4A90D9;strokeColor=#3A7BC8;fontColor=#FFFFFF;fontSize=16;fontStyle=1;shadow=1;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="210" y="310" width="60" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="cProcDate" value="intubation &#183; day &#8722;1" style="text;html=1;align=left;strokeColor=none;fillColor=none;fontColor=#666666;fontSize=16;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="290" y="330" width="140" height="18" as="geometry"/>
+        </mxCell>
+        <mxCell id="cHAPrI" value="HAPrI" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#D64309;strokeColor=#A83207;fontColor=#FFFFFF;fontSize=16;fontStyle=1;shadow=1;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="210" y="390" width="60" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="cHAPrIDate" value="day 0 (index)" style="text;html=1;align=left;strokeColor=none;fillColor=none;fontColor=#D64309;fontSize=16;fontFamily=Helvetica;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="290" y="415" width="110" height="18" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="eLabs"  style="endArrow=classic;strokeColor=#0033A0;strokeWidth=2.5;endSize=6;" edge="1" source="pRoot" target="cLabs" parent="1"/>
+        <mxCell id="eMeds"  style="endArrow=classic;strokeColor=#0033A0;strokeWidth=2.5;endSize=6;" edge="1" source="pRoot" target="cMeds" parent="1"/>
+        <mxCell id="eProc"  style="endArrow=classic;strokeColor=#0033A0;strokeWidth=2.5;endSize=6;" edge="1" source="pRoot" target="cProc" parent="1"/>
+        <mxCell id="eHAPrI" style="endArrow=classic;strokeColor=#0033A0;strokeWidth=2.5;endSize=6;" edge="1" source="pRoot" target="cHAPrI" parent="1"/>
+
+        <!-- MIDDLE: add the clock -->
+        <mxCell id="mKicker" value="ADD THE CLOCK" style="text;html=1;align=center;strokeColor=none;fillColor=none;fontColor=#5B8A5E;fontSize=16;fontFamily=Helvetica;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="425" y="96" width="200" height="22" as="geometry"/>
+        </mxCell>
+        <mxCell id="clock" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#FFFFFF;strokeColor=#5B8A5E;strokeWidth=3;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="480" y="155" width="90" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="clockHand1" style="endArrow=none;strokeColor=#5B8A5E;strokeWidth=3;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="525" y="200" as="sourcePoint"/>
+            <mxPoint x="525" y="168" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="clockHand2" style="endArrow=none;strokeColor=#5B8A5E;strokeWidth=3;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="525" y="200" as="sourcePoint"/>
+            <mxPoint x="548" y="210" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="clockCaption" value="event timestamps" style="text;html=1;align=center;strokeColor=none;fillColor=none;fontColor=#333333;fontSize=16;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="425" y="260" width="200" height="22" as="geometry"/>
+        </mxCell>
+        <mxCell id="plusSign" value="&#8853;" style="text;html=1;align=center;strokeColor=none;fillColor=none;fontColor=#5B8A5E;fontSize=22;fontFamily=Helvetica;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="510" y="300" width="30" height="24" as="geometry"/>
+        </mxCell>
+        <mxCell id="relationalStructure" value="relational structure" style="text;html=1;align=center;strokeColor=none;fillColor=none;fontColor=#5B8A5E;fontSize=16;fontFamily=Helvetica;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="425" y="328" width="200" height="22" as="geometry"/>
+        </mxCell>
+        <mxCell id="bigArrow" style="endArrow=classic;strokeColor=#5B8A5E;strokeWidth=6;endSize=4;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="680" y="250" as="sourcePoint"/>
+            <mxPoint x="740" y="250" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- RIGHT: oriented DAG -->
+        <mxCell id="rKicker" value="ORIENTED DAG" style="text;html=1;align=center;strokeColor=none;fillColor=none;fontColor=#D64309;fontSize=16;fontFamily=Helvetica;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="740" y="96" width="280" height="22" as="geometry"/>
+        </mxCell>
+        <mxCell id="rx" value="X" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#4A90D9;strokeColor=#3A7BC8;fontColor=#FFFFFF;fontSize=18;fontStyle=1;shadow=1;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="770" y="170" width="60" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="ry" value="Y" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#D4645C;strokeColor=#B84E47;fontColor=#FFFFFF;fontSize=18;fontStyle=1;shadow=1;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="850" y="250" width="60" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="rz" value="Z" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#E8A838;strokeColor=#CC8F2E;fontColor=#FFFFFF;fontSize=18;fontStyle=1;shadow=1;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="930" y="170" width="60" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="rxDate" value="day &#8722;3" style="text;html=1;align=center;strokeColor=none;fillColor=none;fontColor=#666666;fontSize=16;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="770" y="140" width="60" height="18" as="geometry"/>
+        </mxCell>
+        <mxCell id="ryDate" value="day &#8722;1" style="text;html=1;align=center;strokeColor=none;fillColor=none;fontColor=#666666;fontSize=16;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="850" y="318" width="60" height="18" as="geometry"/>
+        </mxCell>
+        <mxCell id="rzDate" value="day 0" style="text;html=1;align=center;strokeColor=none;fillColor=none;fontColor=#666666;fontSize=16;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="930" y="140" width="60" height="18" as="geometry"/>
+        </mxCell>
+        <mxCell id="rExy" style="endArrow=classic;strokeColor=#333333;strokeWidth=3;endSize=6;" edge="1" source="rx" target="ry" parent="1"/>
+        <mxCell id="rEyz" style="endArrow=classic;strokeColor=#333333;strokeWidth=3;endSize=6;" edge="1" source="ry" target="rz" parent="1"/>
+        <mxCell id="rCaption" value="time picks the story" style="text;html=1;align=center;strokeColor=none;fillColor=none;fontColor=#5B8A5E;fontSize=16;fontFamily=Helvetica;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="740" y="370" width="280" height="22" as="geometry"/>
+        </mxCell>
+
+        <!-- Footer -->
+        <mxCell id="footer" value="Timestamps are not features &#8212; they are hard orientation constraints." style="text;html=1;align=center;strokeColor=none;fillColor=none;fontColor=#333333;fontSize=16;fontFamily=Helvetica;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="125" y="460" width="800" height="22" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

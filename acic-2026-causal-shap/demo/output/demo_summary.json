@@ -1,0 +1,40 @@
+{
+  "seed": 20260506,
+  "n_rows": 2500,
+  "n_features": 18,
+  "model": "GradientBoostingRegressor",
+  "test_r2": 0.9408009453009982,
+  "test_mae": 0.9674035169051417,
+  "n_perms": 16,
+  "n_background": 8,
+  "n_instances": 12,
+  "kendall_tau_standard_vs_truth": 0.22310032643658012,
+  "kendall_tau_causal_vs_truth": 0.4394400369205365,
+  "spearman_r_standard_vs_truth": 0.27008767686943375,
+  "spearman_r_causal_vs_truth": 0.5495606398076895,
+  "mean_rank_error_standard": 4.333333333333333,
+  "mean_rank_error_causal": 3.3333333333333335,
+  "downstream_proxy_share_standard": 0.5074066178231716,
+  "downstream_proxy_share_causal": 0.11971073251958766,
+  "top_standard": [
+    "CompositeScoreProxy",
+    "MonitoringProxy",
+    "Inflammation",
+    "BaselineSeverity",
+    "TreatmentIntensity"
+  ],
+  "top_causal": [
+    "BaselineSeverity",
+    "ChronicBurden",
+    "Inflammation",
+    "PerfusionDeficit",
+    "Lactate"
+  ],
+  "top_truth": [
+    "BaselineSeverity",
+    "Inflammation",
+    "ChronicBurden",
+    "TreatmentIntensity",
+    "PerfusionDeficit"
+  ]
+}

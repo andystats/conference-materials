@@ -1,0 +1,7 @@
+{
+  "generator": "simcausal_many_mediators.R",
+  "n": 2500,
+  "seed": 20260506,
+  "outcome": "AcuteRisk",
+  "note": "Downstream proxy variables are predictive descendants but have no directed path into AcuteRisk."
+}
