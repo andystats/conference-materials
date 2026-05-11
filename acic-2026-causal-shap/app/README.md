@@ -1,8 +1,8 @@
-# Causal SHAP Interactive App
+# Causal SHAP Demo App
 
-This folder contains the Python Shiny app used for the ACIC 2026 causal SHAP workflow.
+This folder contains the Python Shiny companion app for the ACIC 2026 causal SHAP demo.
 
-The public GitHub Pages site is static, so it cannot run this app in the browser. To try causal SHAP on your own data, run the app locally and upload a CSV.
+The public GitHub Pages site is static, so it cannot run this app in the browser. The app is intentionally scoped to the checked-in simcausal demo: run vanilla SHAP first, then supply the known true DAG and compare against causal SHAP.
 
 ## Quick Start
 
@@ -21,24 +21,23 @@ http://127.0.0.1:8000
 
 On Windows you can also double-click `run_app.bat`.
 
-## Using Your Own CSV
+## Demo Sequence
 
-1. Open the `Data` tab.
-2. Select `Upload custom CSV`.
-3. Upload a CSV with one row per observation and numeric columns for candidate features and outcome.
-4. Select variables to include.
-5. Use `Discover` to estimate candidate graph structure.
-6. Add required and forbidden edges from domain knowledge.
-7. Use `Causal SHAP` to compare standard SHAP, DAG-constrained causal SHAP, and adjustment-set SHAP.
+1. Open the `Data` tab and keep the default simcausal teaching data.
+2. Go to `Causal SHAP`.
+3. Run `Standard SHAP only`.
+4. Switch to `Compare standard vs causal SHAP`.
+5. Keep `Known true DAG` selected and compute again.
+6. Use the comparison plot and rank table to show downstream proxies moving down.
 
-## What You Need To Provide
+## Data Source
 
-For a meaningful causal SHAP run, the app needs:
+The app reads `../demo/output/simcausal_many_mediators.csv` and `../demo/output/ground_truth_edges.csv`. Regenerate those files from the repository root with:
 
-- A prediction outcome column.
-- Candidate feature columns.
-- A DAG source: discovered graph, expert edge list, or ground-truth/simulation graph.
-- Enough domain knowledge to rule out impossible directions, especially time-reversed arrows and descendants of the outcome.
+```powershell
+Rscript demo\simcausal_many_mediators.R 2500 20260506 demo\output
+py -3.13 demo\run_causal_shap_demo.py --output-dir demo\output --n-perms 16 --n-background 8 --n-instances 12
+```
 
 ## Important Caveat
 

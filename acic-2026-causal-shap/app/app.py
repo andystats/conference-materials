@@ -1,7 +1,8 @@
 """
-Causal Discovery Playground
-An interactive tool for learning causal structure from data
-Based on Chapter 13 of Molak's "Causal Inference and Discovery in Python"
+Causal SHAP demo app for the ACIC 2026 teaching example.
+
+The app is scoped to the simcausal demo: run vanilla SHAP, then provide the
+known true DAG and compare the attribution shift.
 """
 
 from shiny import App, render, ui, reactive
@@ -55,18 +56,13 @@ try:
 except ImportError as e:
     print(f"[INIT] causal-learn not available: {e}")
 
-SAMPLE_FILE = os.path.join(APP_DIR, "data", "simcausal_train.csv")
-GROUND_TRUTH_FILE = os.path.join(APP_DIR, "data", "ground_truth_edges.csv")
-LEGACY_SAMPLE_FILE = os.path.join(APP_DIR, "data", "sample_train.csv")
-MIMIC_TRAIN_FILE = os.path.join(APP_DIR, "..", "..", "train.impute.csv")
-MIMIC_TEST_FILE = os.path.join(APP_DIR, "..", "..", "test.impute.csv")
-MIMIC_EXPERT_DAG_FILE = os.path.join(APP_DIR, "data", "mimic_expert_dag.csv")
-TRUE_EFFECTS_FILE = os.path.join(APP_DIR, "data", "true_total_effects.json")
+DEMO_OUTPUT_DIR = os.path.abspath(os.path.join(APP_DIR, "..", "demo", "output"))
+SAMPLE_FILE = os.path.join(DEMO_OUTPUT_DIR, "simcausal_many_mediators.csv")
+GROUND_TRUTH_FILE = os.path.join(DEMO_OUTPUT_DIR, "ground_truth_edges.csv")
 
 print(f"[INIT] App directory: {APP_DIR}")
 print(f"[INIT] Sample file exists: {os.path.exists(SAMPLE_FILE)}")
 print(f"[INIT] Ground truth file exists: {os.path.exists(GROUND_TRUTH_FILE)}")
-print(f"[INIT] MIMIC train exists: {os.path.exists(MIMIC_TRAIN_FILE)}")
 print(f"[INIT] causal-learn available: {CASTLE_AVAILABLE}")
 print(f"[INIT] SHAP available: {SHAP_AVAILABLE}")
 
@@ -817,6 +813,13 @@ def load_ground_truth_edges(filepath):
         return None
 
 
+def load_demo_data():
+    """Load the checked-in many-mediator simcausal output."""
+    if os.path.exists(SAMPLE_FILE):
+        return pd.read_csv(SAMPLE_FILE)
+    return pd.DataFrame()
+
+
 # ============================================================================
 # UI DEFINITION
 # ============================================================================
@@ -827,8 +830,8 @@ app_ui = ui.page_fluid(
     ui.HTML('''
         <div class="app-header">
             <div style="max-width: 1200px; margin: 0 auto; padding: 0 24px;">
-                <h1 class="app-title">Causal Discovery</h1>
-                <p class="app-subtitle">Learn causal structure from observational data</p>
+                <h1 class="app-title">Causal SHAP Demo</h1>
+                <p class="app-subtitle">Run vanilla SHAP, then supply the known DAG and watch attribution move upstream</p>
             </div>
         </div>
     '''),
@@ -844,19 +847,13 @@ app_ui = ui.page_fluid(
                 ui.row(
                     ui.column(5,
                         ui.HTML('<div class="card">'),
-                        ui.HTML('<div class="card-title">Import Data</div>'),
+                        ui.HTML('<div class="card-title">Demo Data</div>'),
                         ui.input_radio_buttons(
                             "dataset_choice", "Dataset",
                             choices={
-                                "simcausal": "Simcausal (12 vars, known ground truth)",
-                                "mimic": "MIMIC-IV PRI (33 vars, clinical data)",
-                                "upload": "Upload custom CSV"
+                                "simcausal": "Simcausal teaching data (18 predictors, known true DAG)"
                             },
                             selected="simcausal"
-                        ),
-                        ui.panel_conditional(
-                            "input.dataset_choice === 'upload'",
-                            ui.input_file("file_upload", "Upload CSV", accept=[".csv"], multiple=False),
                         ),
                         ui.output_ui("dataset_description"),
                         ui.HTML('</div>'),
@@ -916,8 +913,8 @@ app_ui = ui.page_fluid(
                         ui.HTML('<div class="card">'),
                         ui.HTML('<div class="card-title">Constraints</div>'),
                         ui.HTML('<p style="font-size: 0.85rem; color: var(--gray-500); margin-bottom: 12px;">Incorporate domain knowledge. Format: <code>Source,Target</code> (one per line)</p>'),
-                        ui.input_text_area("forbidden", "Forbidden edges", placeholder="pri,age\nBMI,age", rows=3),
-                        ui.input_text_area("required", "Required edges", placeholder="age,min_Alb", rows=3),
+                        ui.input_text_area("forbidden", "Forbidden edges", placeholder="CompositeScoreProxy,AcuteRisk\nMonitoringProxy,AcuteRisk", rows=3),
+                        ui.input_text_area("required", "Required edges", placeholder="BaselineSeverity,AcuteRisk\nInflammation,AcuteRisk", rows=3),
                         ui.HTML('</div>'),
 
                         ui.HTML('<div class="card">'),
@@ -929,9 +926,8 @@ app_ui = ui.page_fluid(
                     )
                 ),
                 ui.HTML('''<div class="warning-box" style="margin-top: 16px;">
-                    <strong>Note:</strong> Different algorithms can produce very different graphs from the same data.
-                    Our experiments showed only 19.6% consistency between PC and GES algorithms.
-                    Always validate results with domain expertise.
+                    <strong>Optional exercise:</strong> Discovery is here to show why the DAG matters, not to replace
+                    the known simcausal graph. Use the true DAG in the Causal SHAP tab for the main demo.
                 </div>'''),
             ),
 
@@ -1006,9 +1002,8 @@ app_ui = ui.page_fluid(
                     )
                 ),
                 ui.HTML('''<div class="info-box" style="margin-top: 16px;">
-                    <strong>Next steps:</strong> Use the discovered graph to inform your causal DAG,
-                    then proceed to identification and estimation (e.g., TMLE, IPW) in Module 4.
-                    Remember: <em>"The causes are not in the data"</em> — Judea Pearl
+                    <strong>Next step:</strong> Use this tab only if you want to inspect a discovered graph.
+                    For the main demo, go to Causal SHAP and select the known true DAG.
                 </div>'''),
             ),
 
@@ -1020,9 +1015,9 @@ app_ui = ui.page_fluid(
                 ui.row(
                     ui.column(6,
                         ui.HTML('<div class="card">'),
-                        ui.HTML('<div class="card-title">Ground Truth</div>'),
+                        ui.HTML('<div class="card-title">Known True DAG</div>'),
                         ui.input_file("gt_upload", "Upload ground truth CSV (from, to columns)", accept=[".csv"], multiple=False),
-                        ui.input_checkbox("use_sample_gt", "Use sample ground truth (simcausal)", value=True),
+                        ui.input_checkbox("use_sample_gt", "Use simcausal true DAG", value=True),
                         ui.output_ui("gt_status"),
                         ui.HTML('</div>'),
 
@@ -1032,9 +1027,9 @@ app_ui = ui.page_fluid(
                         ui.HTML('</div>'),
 
                         ui.HTML('<div class="card">'),
-                        ui.HTML('<div class="card-title">Treatment Pathway Analysis</div>'),
+                        ui.HTML('<div class="card-title">Demo Anchor Edges</div>'),
                         ui.HTML('''<p style="font-size: 0.85rem; color: var(--gray-500); margin-bottom: 12px;">
-                            For TMLE, the Treatment → Outcome pathway is critical. How did the algorithm perform?
+                            Key edges that explain why proxies are predictive descendants rather than outcome causes.
                         </p>'''),
                         ui.output_ui("treatment_pathway_eval"),
                         ui.HTML('</div>'),
@@ -1052,10 +1047,8 @@ app_ui = ui.page_fluid(
                     )
                 ),
                 ui.HTML('''<div class="warning-box" style="margin-top: 16px;">
-                    <strong>Interpretation:</strong> High skeleton F1 with low directed F1 indicates the algorithm
-                    found the right associations but struggled with edge orientation. This is common for
-                    constraint-based methods like PC. Score-based methods (GES) may find different
-                    equivalence classes but often have better orientation on causal pathways.
+                    <strong>Interpretation:</strong> This tab compares an estimated graph to the true simcausal DAG.
+                    High skeleton F1 with low directed F1 means the algorithm found associations but missed orientation.
                 </div>'''),
             ),
 
@@ -1082,14 +1075,14 @@ app_ui = ui.page_fluid(
                         ui.input_radio_buttons(
                             "shap_method", "SHAP method",
                             choices={
-                                "compare": "Compare All (recommended)",
                                 "standard": "Standard SHAP only",
-                                "causal": "DAG-Constrained (Causal Shapley)",
+                                "compare": "Compare standard vs causal SHAP",
+                                "causal": "Causal SHAP only",
                                 "adjustment": "Adjustment-Set SHAP",
                             },
-                            selected="compare"
+                            selected="standard"
                         ),
-                        ui.input_slider("shap_n_perms", "Permutations (causal)", min=20, max=200, value=50, step=10),
+                        ui.input_slider("shap_n_perms", "Permutations (causal)", min=8, max=80, value=16, step=8),
                         ui.input_action_button("shap_compute_btn", "Compute SHAP", class_="btn-primary", width="100%"),
                         ui.output_ui("shap_status"),
                         ui.HTML('</div>'),
@@ -1099,17 +1092,16 @@ app_ui = ui.page_fluid(
                         ui.input_radio_buttons(
                             "shap_dag_source", "",
                             choices={
-                                "discovered": "Use discovered DAG (from Discover tab)",
-                                "expert": "Use expert DAG (for MIMIC-IV PRI)",
-                                "ground_truth": "Use ground truth DAG (simcausal only)",
+                                "ground_truth": "Known true DAG",
+                                "discovered": "Discovered DAG (optional exercise)",
                             },
-                            selected="discovered"
+                            selected="ground_truth"
                         ),
                         ui.HTML('''<div class="info-box">
                             <strong>Standard SHAP</strong> ignores causal structure — permutes all features independently.<br><br>
-                            <strong>Causal SHAP</strong> restricts permutations to valid topological orderings of the DAG
+                            <strong>Causal SHAP</strong> uses the known DAG to restrict permutations to valid topological orderings
                             (Heskes et al. 2020).<br><br>
-                            <strong>Adjustment-Set SHAP</strong> uses only the DAG-identified confounders as features.
+                            Run Standard SHAP first, then compare with the known true DAG selected.
                         </div>'''),
                         ui.HTML('</div>'),
                     ),
@@ -1131,12 +1123,13 @@ app_ui = ui.page_fluid(
                     )
                 ),
                 ui.HTML('''<div class="info-box" style="margin-top: 16px;">
-                    <strong>Why Causal SHAP?</strong> Standard SHAP can inflate mediator importance and
-                    miss true causal drivers. By constraining permutations to respect the DAG, Causal SHAP
-                    produces feature attributions aligned with the data generating process.
+                    <strong>Why Causal SHAP?</strong> Standard SHAP can inflate downstream proxy importance and
+                    miss upstream drivers. By constraining permutations to respect the DAG, Causal SHAP
+                    produces feature attributions that are more aligned with the data-generating process.
                     <em>The causes are not in the data — but a DAG tells SHAP where to look.</em>
                 </div>'''),
             ),
+            selected="Causal SHAP",
         ),
         style="max-width: 1200px; margin: 0 auto; padding: 0 24px;"
     ),
@@ -1144,8 +1137,7 @@ app_ui = ui.page_fluid(
     # Footer
     ui.HTML('''
         <div class="footer">
-            Based on Chapter 13 of Molak's "Causal Inference and Discovery in Python" ·
-            instats SSC 2026 Workshop · Module 3
+            ACIC 2026 causal SHAP teaching demo · static entry page lives in ../index.html
         </div>
     '''),
 )
@@ -1192,7 +1184,7 @@ def _make_lingam_prior_knowledge(n, forbidden, required):
 # ============================================================================
 def server(input, output, session):
 
-    data_store = reactive.Value(pd.DataFrame())
+    data_store = reactive.Value(load_demo_data())
     adj_matrix_store = reactive.Value(None)
     col_names_store = reactive.Value([])
     discovery_complete = reactive.Value(False)
@@ -1206,7 +1198,7 @@ def server(input, output, session):
     # DATA TAB
     # -------------------------------------------------------------------------
     @reactive.Effect
-    @reactive.event(input.dataset_choice, input.file_upload)
+    @reactive.event(input.dataset_choice)
     def _load_data():
         df = pd.DataFrame()
         choice = input.dataset_choice()
@@ -1214,20 +1206,6 @@ def server(input, output, session):
         if choice == "simcausal":
             if os.path.exists(SAMPLE_FILE):
                 df = pd.read_csv(SAMPLE_FILE)
-            elif os.path.exists(LEGACY_SAMPLE_FILE):
-                df = pd.read_csv(LEGACY_SAMPLE_FILE)
-        elif choice == "mimic":
-            if os.path.exists(MIMIC_TRAIN_FILE):
-                df = pd.read_csv(MIMIC_TRAIN_FILE)
-            else:
-                print(f"[ERROR] MIMIC train file not found: {MIMIC_TRAIN_FILE}")
-        elif choice == "upload":
-            if input.file_upload() is not None:
-                file_info = input.file_upload()[0]
-                try:
-                    df = pd.read_csv(file_info["datapath"])
-                except Exception as e:
-                    print(f"[ERROR] {e}")
 
         data_store.set(df)
         adj_matrix_store.set(None)
@@ -1240,19 +1218,10 @@ def server(input, output, session):
         choice = input.dataset_choice()
         if choice == "simcausal":
             return ui.HTML('''<div class="info-box">
-                <strong>Simcausal data:</strong> 500 obs, 12 variables with known causal structure.
-                Treatment → Outcome direct effect = +5. Ground truth DAG available.
-                Ideal for validating causal SHAP against known effects.
+                <strong>Simcausal data:</strong> 2,500 rows, 18 predictors, and known true DAG.
+                Downstream proxy variables are predictive descendants with zero total effect on AcuteRisk.
+                This is the main ACIC demo dataset.
             </div>''')
-        elif choice == "mimic":
-            exists = os.path.exists(MIMIC_TRAIN_FILE)
-            if exists:
-                return ui.HTML('''<div class="info-box">
-                    <strong>MIMIC-IV PRI:</strong> 22,717 ICU patients, 33 clinical variables.
-                    Outcome: hospital-acquired pressure injury (pri). Key treatment variable: Vasopressors.
-                    Expert DAG available for causal SHAP analysis.
-                </div>''')
-            return ui.HTML('<div class="warning-box">MIMIC-IV train.impute.csv not found in project root.</div>')
         return ui.HTML('')
 
     @output
@@ -1287,7 +1256,7 @@ def server(input, output, session):
             return ui.HTML('<p style="color: var(--gray-400);">Load data first</p>')
 
         numeric_cols = df.select_dtypes(include=[np.number]).columns.tolist()
-        default = numeric_cols[:14] if len(numeric_cols) > 14 else numeric_cols
+        default = numeric_cols
         return ui.input_checkbox_group("selected_vars", "", choices=numeric_cols, selected=default)
 
     # -------------------------------------------------------------------------
@@ -1901,21 +1870,21 @@ def server(input, output, session):
         if gt is None or adj is None or not cols:
             return ui.HTML('<p style="color: var(--gray-400);">Load data first</p>')
 
-        # Define the critical treatment pathway edges (from simcausal ground truth)
+        # Define key demo edges from the many-mediator simcausal ground truth.
         treatment_pathway = [
-            ("Treatment", "Inflammation"),
-            ("Treatment", "Oxygenation"),
-            ("Treatment", "Outcome"),
-            ("Inflammation", "Oxygenation"),
-            ("Inflammation", "Outcome"),
-            ("Oxygenation", "Outcome")
+            ("BaselineSeverity", "AcuteRisk"),
+            ("Inflammation", "AcuteRisk"),
+            ("TreatmentIntensity", "AcuteRisk"),
+            ("PerfusionDeficit", "ShockIndexProxy"),
+            ("EndOrganStress", "CompositeScoreProxy"),
+            ("RescueProxy", "CompositeScoreProxy")
         ]
 
         # Check which variables exist
         pathway_in_data = [(f, t) for f, t in treatment_pathway if f in cols and t in cols]
 
         if not pathway_in_data:
-            return ui.HTML('<div class="info-box">Treatment pathway variables not in selected data</div>')
+            return ui.HTML('<div class="info-box">Demo anchor variables not in selected data</div>')
 
         # Build discovered edges set
         discovered = set()
@@ -1942,7 +1911,7 @@ def server(input, output, session):
 
         html += f'''
             <div style="margin-top: 12px; padding: 8px; background: var(--gray-50); border-radius: 4px; text-align: center;">
-                <span style="color: {summary_color}; font-weight: 600;">{correct}/{len(pathway_in_data)} pathway edges correct ({pct:.0f}%)</span>
+                <span style="color: {summary_color}; font-weight: 600;">{correct}/{len(pathway_in_data)} anchor edges correct ({pct:.0f}%)</span>
             </div>
         '''
 
@@ -2015,23 +1984,13 @@ def server(input, output, session):
     # -------------------------------------------------------------------------
 
     @reactive.Effect
-    @reactive.event(input.dataset_choice, input.selected_vars)
     def _update_shap_selectors():
         df = data_store.get()
         if df.empty:
             return
         cols = df.select_dtypes(include=[np.number]).columns.tolist()
-        # Set defaults based on dataset
-        choice = input.dataset_choice()
-        if choice == "simcausal":
-            outcome_default = "Outcome" if "Outcome" in cols else cols[-1]
-            treatment_default = "Treatment" if "Treatment" in cols else cols[0]
-        elif choice == "mimic":
-            outcome_default = "pri" if "pri" in cols else cols[-1]
-            treatment_default = "Vasopressors" if "Vasopressors" in cols else cols[0]
-        else:
-            outcome_default = cols[-1]
-            treatment_default = cols[0]
+        outcome_default = "AcuteRisk" if "AcuteRisk" in cols else cols[-1]
+        treatment_default = "TreatmentIntensity" if "TreatmentIntensity" in cols else cols[0]
         ui.update_select("shap_outcome", choices=cols, selected=outcome_default)
         ui.update_select("shap_treatment", choices=cols, selected=treatment_default)
 
@@ -2056,9 +2015,7 @@ def server(input, output, session):
         dag_source = input.shap_dag_source()
 
         # Get feature columns
-        selected = list(input.selected_vars()) if input.selected_vars() else []
-        if not selected:
-            selected = df.select_dtypes(include=[np.number]).columns.tolist()
+        selected = df.select_dtypes(include=[np.number]).columns.tolist()
 
         feature_cols = [c for c in selected if c != outcome]
         if not feature_cols:
@@ -2092,13 +2049,12 @@ def server(input, output, session):
             adj = adj_matrix_store.get()
             cols_names = col_names_store.get()
             dag = dag_from_adjacency(adj, cols_names)
-        elif dag_source == "expert" and os.path.exists(MIMIC_EXPERT_DAG_FILE):
-            dag = dag_from_edges_csv(MIMIC_EXPERT_DAG_FILE, feature_cols)
-        elif dag_source == "ground_truth" and os.path.exists(GROUND_TRUTH_FILE):
-            dag = dag_from_edges_csv(GROUND_TRUTH_FILE, feature_cols)
+        elif dag_source == "ground_truth":
+            if os.path.exists(GROUND_TRUTH_FILE):
+                dag = dag_from_edges_csv(GROUND_TRUTH_FILE, feature_cols)
 
         if dag is None and method in ("causal", "compare"):
-            return ui.HTML('<div class="warning-box">No DAG available. Run causal discovery first, or select an expert/ground truth DAG source.</div>')
+            return ui.HTML('<div class="warning-box">No DAG available. Regenerate demo outputs or run discovery first.</div>')
 
         result = {"method": method, "outcome": outcome, "treatment": treatment}
 
@@ -2112,13 +2068,14 @@ def server(input, output, session):
             # Causal SHAP
             if method in ("causal", "compare") and dag is not None:
                 causal_shap_df = compute_causal_shap_fast(
-                    model, analysis_df, dag, feature_cols, outcome, n_perms=n_perms
+                    model, analysis_df, dag, feature_cols, outcome,
+                    n_perms=n_perms, n_background=8, n_instances=12
                 )
                 result["causal_shap"] = causal_shap_df
                 result["causal_importance"] = mean_abs_shap(causal_shap_df).to_dict()
 
             # Adjustment-set SHAP
-            if method in ("adjustment", "compare") and dag is not None:
+            if method == "adjustment" and dag is not None:
                 # Get adjustment set from DAG
                 G_named = nx.DiGraph()
                 for n in dag.nodes():
@@ -2158,8 +2115,7 @@ def server(input, output, session):
             if "standard_importance" in result and "causal_importance" in result:
                 # Check if simcausal for ground truth comparison
                 true_effects = None
-                if input.dataset_choice() == "simcausal":
-                    true_effects = SIMCAUSAL_TRUE_TOTAL_EFFECTS
+                true_effects = SIMCAUSAL_TRUE_TOTAL_EFFECTS
                 std_df = result.get("standard_shap", pd.DataFrame())
                 csl_df = result.get("causal_shap", pd.DataFrame())
                 if not std_df.empty and not csl_df.empty:
@@ -2167,11 +2123,17 @@ def server(input, output, session):
                     result["comparison"] = comparison
 
             # Mediator inflation (simcausal only)
-            if input.dataset_choice() == "simcausal" and "standard_shap" in result and "causal_shap" in result:
+            if "standard_shap" in result and "causal_shap" in result:
                 inflation = mediator_inflation_ratio(
                     result["standard_shap"], result["causal_shap"],
-                    mediator_vars=["Inflammation", "Oxygenation"],
-                    root_cause_vars=["Treatment", "Comorbidity", "Age"]
+                    mediator_vars=[
+                        "ShockIndexProxy", "VasopressorProxy", "MonitoringProxy",
+                        "RescueProxy", "CompositeScoreProxy"
+                    ],
+                    root_cause_vars=[
+                        "BaselineSeverity", "ChronicBurden", "SocialRisk",
+                        "PracticeStyle", "Age", "TreatmentIntensity"
+                    ]
                 )
                 result["mediator_inflation"] = inflation
 
@@ -2270,9 +2232,9 @@ def server(input, output, session):
         inflation = result.get("mediator_inflation", {})
         if "mediator_inflation" in inflation:
             html += f'''<div class="stat-card">
-                <div class="stat-label">Mediator Inflation Ratio</div>
+                <div class="stat-label">Proxy Inflation Ratio</div>
                 <div class="stat-value">{inflation["mediator_inflation"]:.2f}×</div>
-                <div style="font-size:0.8rem;color:var(--gray-500)">Standard SHAP inflates mediators by this factor</div>
+                <div style="font-size:0.8rem;color:var(--gray-500)">Standard SHAP inflates downstream proxies by this factor</div>
             </div>'''
 
         if "root_cause_boost" in inflation:

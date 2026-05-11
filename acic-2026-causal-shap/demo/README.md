@@ -1,8 +1,9 @@
 # simcausal Causal SHAP Demo
 
-This folder contains a reproducible teaching demo for the ACIC 2026 causal SHAP poster.
+This folder contains the reproducible batch demo for the ACIC 2026 causal SHAP poster.
+The public entry page and orientation now live one level up in `../index.html` and `../README.md`.
 
-The demo is intentionally built to make ordinary predictive SHAP look plausible but causally wrong. The simulated DAG has upstream causes, pathophysiologic mediators, and downstream proxy measurements. The proxy variables are highly predictive because they summarize the mediators, but they have no directed path into the outcome. Standard SHAP tends to reward those proxies. Causal SHAP uses the expert DAG to push attribution back toward the variables that carry total causal effects.
+The demo is intentionally built to make ordinary predictive SHAP look plausible but causally wrong. The simulated DAG has upstream causes, pathophysiologic mediators, and downstream proxy measurements. The proxy variables are highly predictive because they summarize the mediators, but they have no directed path into the outcome. Standard SHAP tends to reward those proxies. Causal SHAP uses the known true DAG to push attribution back toward the variables that carry total causal effects.
 
 ## Files
 
@@ -31,12 +32,12 @@ py -3.13 -m ipykernel install --user --name python313 --display-name "Python 3.1
 jupyter notebook demo\causal_shap_simcausal_demo.ipynb
 ```
 
-The Python runner imports `app/causal_shap.py`, so the demo stays aligned with the interactive app rather than maintaining a second causal SHAP implementation. On this workstation, use Python 3.13 for the demo; the default Python 3.14 install currently has an unstable NumPy wheel.
+The Python runner imports `app/causal_shap.py`, so the demo stays aligned with the interactive app rather than maintaining a second causal SHAP implementation. The app also reads these generated outputs, so rerunning this folder refreshes the static page and local app demo data together. On this workstation, use Python 3.13 for the demo; the default Python 3.14 install currently has an unstable NumPy wheel.
 
 ## Generated Outputs
 
 - `simcausal_many_mediators.csv` - observed synthetic training data
-- `ground_truth_edges.csv` - expert DAG edge list with linear coefficients
+- `ground_truth_edges.csv` - true DAG edge list with linear coefficients
 - `node_roles.csv` - root, mediator, proxy, and outcome labels
 - `true_total_effects.csv` - analytic total effects from the linear DAG
 - `shap_feature_rankings.csv` - standard SHAP, causal SHAP, and truth-aligned ranks

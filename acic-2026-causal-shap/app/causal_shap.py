@@ -516,60 +516,31 @@ def mediator_inflation_ratio(standard_shap_df, causal_shap_df,
 
 
 # =============================================================================
-# TRUE TOTAL CAUSAL EFFECTS (for simulation validation)
+# TRUE TOTAL CAUSAL EFFECTS (for the many-mediator simcausal demo)
 # =============================================================================
 
-# Precomputed from dgp_specification.txt structural equations:
-# Outcome = 50 + 5*Treatment - 2*Inflammation + 0.5*Oxygenation - 0.1*Age - 1*Comorbidity
-# Inflammation = 5 - 2*Treatment + 1.5*Comorbidity + 0.1*BMI
-# Oxygenation = 95 + 3*Treatment - 0.05*HR - 0.5*Inflammation
-
-SIMCAUSAL_TRUE_EFFECTS = {
-    # Direct effects on Outcome + indirect paths
-    'Treatment': 5.0 + (-2.0 * -2.0) + (0.5 * 3.0) + (0.5 * (-0.5) * (-2.0)),
-        # direct: +5, via Inflammation: (-2)(-2)=+4, via Oxygenation: (0.5)(3)=+1.5,
-        # via Inflammation->Oxygenation: (0.5)(-0.5)(-2)=+0.5 => total ~11.0
-    'Inflammation': -2.0 + (0.5 * -0.5),
-        # direct: -2, via Oxygenation: (0.5)(-0.5) = -0.25 => total -2.25
-    'Oxygenation': 0.5,
-        # direct only
-    'Age': -0.1 + (-2.0 * 0.0) + (0.5 * -0.05 * 0.0),
-        # direct: -0.1, plus indirect via BMI, SBP, HR, Glucose, Creatinine, Treatment
-        # Age->BMI->Inflammation->Outcome: 0.05 * 0.1 * (-2) = -0.01
-        # Age->Treatment->Outcome (total): 0.02 * 11.0 = 0.22  (via logistic)
-        # Approximate total: ~ -0.1 + small indirect ≈ -0.1
-    'Comorbidity': -1.0 + (-2.0 * 1.5) + (0.5 * -0.5 * 1.5),
-        # direct: -1, via Inflammation: (-2)(1.5)=-3, via Infl->Oxy->Outcome: -0.375
-        # plus via Treatment pathway (confounded) ≈ ~ -4.375
-    'BMI': 0.0 + (-2.0 * 0.1) + (0.5 * -0.5 * 0.1),
-        # No direct effect. Via Inflammation: (-2)(0.1) = -0.2
-        # Via Infl->Oxy: (0.5)(-0.5)(0.1)=-0.025 => total ≈ -0.225
-    'SBP': 0.0,
-        # No direct path to Outcome. Via Treatment (logistic): very small
-    'HR': 0.0 + (0.5 * -0.05),
-        # No direct. Via Oxygenation: (0.5)(-0.05) = -0.025
-    'Glucose': 0.0,
-        # No direct. Via Treatment (logistic): very small
-    'Creatinine': 0.0,
-        # No direct path to Outcome
-    'Sex': 0.0,
-        # No direct. Via BMI->Inflammation chain: very small
-    'Age_approx': -0.1  # Simplified
-}
-
-# Clean version for comparison
+# Precomputed by demo/simcausal_many_mediators.R and checked into
+# demo/output/true_total_effects.csv. Downstream proxy variables have zero
+# total effect by construction, even though they are highly predictive.
 SIMCAUSAL_TRUE_TOTAL_EFFECTS = {
-    'Treatment': 11.0,
-    'Comorbidity': -4.375,
-    'Inflammation': -2.25,
-    'Oxygenation': 0.5,
-    'BMI': -0.225,
-    'Age': -0.1,
-    'HR': -0.025,
-    'SBP': 0.0,
-    'Glucose': 0.0,
-    'Creatinine': 0.0,
-    'Sex': 0.0,
+    'BaselineSeverity': 3.52666965625,
+    'Inflammation': 2.766340625,
+    'ChronicBurden': 1.96463521875,
+    'TreatmentIntensity': -1.81990875,
+    'PerfusionDeficit': 1.7025625,
+    'Lactate': 0.895,
+    'RenalStress': 0.8425,
+    'PracticeStyle': -0.8189589375,
+    'OxygenDeficit': 0.77375,
+    'Coagulation': 0.6775,
+    'EndOrganStress': 0.65,
+    'SocialRisk': 0.45997390625,
+    'Age': 0.308365875,
+    'CompositeScoreProxy': 0.0,
+    'MonitoringProxy': 0.0,
+    'RescueProxy': 0.0,
+    'ShockIndexProxy': 0.0,
+    'VasopressorProxy': 0.0,
 }
 
 

@@ -2,6 +2,7 @@
 .DS_Store
 .turbo/
 __pycache__/
+*.log
 
 # Source material kept out of the public repo (large PPTs, uncleared media)
 ispor-2026-causal-discovery/materials/
