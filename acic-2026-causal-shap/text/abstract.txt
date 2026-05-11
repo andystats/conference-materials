@@ -1,7 +1,0 @@
-Title: Expert-Augmented Causal SHAP: Recovering DAG-Consistent Feature Importance via Iterative Causal Discovery and Domain Knowledge
-
-Feature importance methods such as SHAP are widely used to help explain machine learning models in health research and other areas.  Yet these methods can misattribute feature importance when features have causal structure. Specifically, mediators can absorb credit from upstream causes; a topological artifact that inflates their apparent importance at the expense of upstream causal drivers.
-
-We propose an expert-augmented workflow for DAG-consistent feature attribution that combines constrained causal discovery with an interactive DAG interface to resolve ambiguous edges before computing causal SHAP. The workflow supports iterative refinement through required and forbidden edges and compares standard, DAG-constrained, and adjustment-set SHAP.
-
-We evaluated the approach in synthetic data generated under known DAGs using the R package simcausal and in real-world MIMIC-IV data. In simulations, standard SHAP over-attributed importance to mediators, whereas causal SHAP re-ranked features (Kendall’s τ=0.42 between methods) and reduced mediator inflation. In MIMIC-IV, the expert-informed DAG helped distinguish upstream severity drivers from downstream interventions. These results support expert-guided DAG refinement as a practical route to more causally coherent explanations in structured clinical machine learning.
