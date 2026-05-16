@@ -519,9 +519,8 @@ def mediator_inflation_ratio(standard_shap_df, causal_shap_df,
 # TRUE TOTAL CAUSAL EFFECTS (for the many-mediator simcausal demo)
 # =============================================================================
 
-# Precomputed by demo/simcausal_many_mediators.R and checked into
-# demo/output/true_total_effects.csv. Downstream proxy variables have zero
-# total effect by construction, even though they are highly predictive.
+# Precomputed for the checked-in simcausal data. Downstream proxy variables
+# have zero total effect by construction, even though they are highly predictive.
 SIMCAUSAL_TRUE_TOTAL_EFFECTS = {
     'BaselineSeverity': 3.52666965625,
     'Inflammation': 2.766340625,

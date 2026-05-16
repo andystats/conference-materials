@@ -2,8 +2,6 @@ shiny
 pandas
 numpy
 networkx
-pyvis
-causal-learn
 shap
 scikit-learn
 matplotlib

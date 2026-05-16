@@ -1,122 +1,61 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Conference Materials &mdash; Andy Wilson</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+3:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Conference Materials</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      font-family: 'Source Sans 3', sans-serif;
-      background: #fffdf9;
-      color: #1a202c;
-      line-height: 1.6;
-      min-height: 100vh;
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: #111827;
+      background: #ffffff;
+      line-height: 1.5;
     }
-    header {
-      background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
-      padding: 60px 24px 48px;
-      text-align: center;
-      color: white;
+    main {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 56px 24px;
     }
-    header h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: 2.4rem;
-      font-weight: 700;
-      margin-bottom: 8px;
+    h1 {
+      margin: 0 0 24px;
+      font-size: 2rem;
+      letter-spacing: 0;
     }
-    header p { color: rgba(255,255,255,0.68); font-size: 1rem; max-width: 640px; margin: 0 auto; }
-    main { max-width: 920px; margin: 0 auto; padding: 48px 24px; }
-    section + section { margin-top: 48px; }
+    section {
+      border-top: 1px solid #d1d5db;
+      padding-top: 20px;
+      margin-top: 20px;
+    }
     h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.35rem;
-      letter-spacing: 0.05em;
-      color: #4a5568;
-      text-transform: uppercase;
-      border-bottom: 1px solid #e2e8f0;
-      padding-bottom: 8px;
-      margin-bottom: 18px;
+      margin: 0 0 8px;
+      font-size: 1.1rem;
     }
-    .card {
-      display: block;
-      background: white;
-      border: 1px solid #e2e8f0;
-      border-radius: 12px;
-      padding: 22px 24px;
-      text-decoration: none;
-      color: inherit;
-      transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
-      margin-bottom: 14px;
+    p {
+      margin: 6px 0;
+      color: #4b5563;
     }
-    .card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 18px rgba(0,0,0,0.06);
-      border-color: #008080;
-    }
-    .card-kicker {
-      font-size: 0.74rem;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: #a0aec0;
-      font-weight: 700;
-      margin-bottom: 4px;
-    }
-    .card-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.3rem;
-      font-weight: 700;
-      color: #1a202c;
-      margin-bottom: 6px;
-      line-height: 1.25;
-    }
-    .card-sub {
-      font-size: 0.93rem;
-      color: #4a5568;
-      margin-bottom: 10px;
-    }
-    .card-meta {
-      font-size: 0.82rem;
-      color: #a0aec0;
-    }
-    footer {
-      text-align: center;
-      padding: 28px 24px;
-      border-top: 1px solid #e2e8f0;
-      color: #a0aec0;
-      font-size: 0.82rem;
+    a {
+      color: #2563eb;
+      font-weight: 650;
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Conference Materials</h1>
-    <p>Companion dashboards, posters, and supplements for talks and posters. Built to be linked directly from printed posters via QR code.</p>
-  </header>
-
   <main>
+    <h1>Conference Materials</h1>
+
     <section>
-      <h2>Upcoming</h2>
+      <h2>ACIC 2026 Causal SHAP</h2>
+      <p><a href="https://www.tao-rwd.com/acic-2026/causal-shap">Project page</a></p>
+      <p><a href="acic-2026-causal-shap/poster.pdf">Poster PDF</a></p>
+      <p><a href="acic-2026-causal-shap/">Local app notes</a></p>
+    </section>
 
-      <a class="card" href="acic-2026-causal-shap/">
-        <div class="card-kicker">ACIC 2026 &middot; Poster Session 2 &middot; May 13, 2026</div>
-        <div class="card-title">SHAP has short memory. Causal SHAP remembers the DAG.</div>
-        <div class="card-sub">Expert-Augmented Causal SHAP: recovering DAG-consistent feature importance via iterative causal discovery and domain knowledge.</div>
-        <div class="card-meta">Pasi &middot; Harrison &middot; Ross &middot; Alderden &middot; Wilson &middot; <em>poster, reproducible demo, and local app instructions</em></div>
-      </a>
-
-      <a class="card" href="ispor-2026-causal-discovery/">
-        <div class="card-kicker">ISPOR 2026 &middot; Poster Session 2 &middot; May 18, 2026</div>
-        <div class="card-title">Object-Centric Causal Discovery in MIMIC-IV.</div>
-        <div class="card-sub">A paradigm shift for identifying risk factors for hospital-acquired pressure injuries in real-world clinical data &mdash; hypoalbuminemia surfaced as a candidate upstream driver.</div>
-        <div class="card-meta">Alderden &middot; Haft &middot; Wilson &middot; <em>5 interactive tabs</em></div>
-      </a>
+    <section>
+      <h2>ISPOR 2026 Causal Discovery</h2>
+      <p><a href="ispor-2026-causal-discovery/poster.pdf">Poster PDF</a></p>
     </section>
   </main>
-
-  <footer>
-    Maintained by Andy Wilson &middot; University of Utah / Tao of RWD &middot; <a href="https://github.com/andystats/conference-materials" style="color: #4682B4;">source on GitHub</a>
-  </footer>
 </body>
 </html>
